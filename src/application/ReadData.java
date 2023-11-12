@@ -167,7 +167,7 @@ public class ReadData {
 				employeeCount = Integer.parseInt(projectsIn.readLine());
 				storyCount = Integer.parseInt(projectsIn.readLine());
 				
-				manager.loadNewProject(projectName, employeeCount, storyCount);
+				manager.addNewProject(projectName, employeeCount, storyCount);
 				
 				endString = projectsIn.readLine();
 				
