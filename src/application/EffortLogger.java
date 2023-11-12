@@ -15,13 +15,44 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.TextInputDialog;
-
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.time.format.DateTimeFormatter;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class EffortLogger extends Application {
 
     private boolean isClockRunning = false;
-
+    private ArrayList<String[]> database = new ArrayList<String[]>(); //ArrayList to hold each log entry
+	private int logCounter = 0; //Log counter
+	private DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //Format dates
+	private DateTimeFormatter timeformat = DateTimeFormatter.ofPattern("HH:mm:ss"); //Format time
+	private String startTime;
+	private String endTime;
+	private String date;
+	private String duration;
+	private Instant start;
+	private Instant end;
+	
+	//Gets the local time
+	public String getTime() {
+		LocalDateTime now = LocalDateTime.now();  
+		return timeformat.format(now);  
+	}
+	
+	//Gets the local date
+	public String getDate() {
+		LocalDateTime date = LocalDateTime.now();
+		return dateformat.format(date);  
+	}
+	
+	public void storeLog(String[] log) {
+		database.add(log);
+	}
+    
     public static void main(String[] args) {
         launch(args);
     }
@@ -34,52 +65,80 @@ public class EffortLogger extends Application {
     }
 
     private Scene createEffortLoggerScene() {
-        // BorderPane to organize layout
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
 
-        // Main container for all elements
         VBox centerBox = new VBox(20);
         centerBox.setAlignment(Pos.CENTER);
 
-        // Title for the application
         Text title = new Text("Effort Logger");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 
-        // Text to display the clock status
         Text clockStatus = new Text("Clock is stopped");
         clockStatus.setFill(Color.RED);
 
-        // Section 1: Starting an activity
         Text section1 = new Text("1. When you start an activity press the start activity button.");
 
-        // Button to start the activity
         Button startButton = new Button("Start Activity");
         startButton.setOnAction(e -> {
             isClockRunning = true;
+            startTime = getTime();
+            start = Instant.now();
             clockStatus.setText("Clock is running");
             clockStatus.setFill(Color.GREEN);
         });
 
-        // Section 2: Selecting project, lifecycle step, effort category
         Text section2 = new Text("2. Select the Project, Lifecycle Step, Effort Category from the following lists:");
         section2.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
 
-        // Dropdowns for project, lifecycle, effort category with respective add buttons
         ComboBox<String> projectDropdown = new ComboBox<>();
         projectDropdown.setPromptText("Project");
 
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
+        lifecycleDropdown.getItems().addAll(
+        		"Problem Understanding",
+        		"Conceptual Design Plan",
+        		"Requirements",
+        		"Conceptual Design",
+        		"Conceptual Design Review",
+        		"Detailed Design Plan",
+        		"Detailed Design/Prototype",
+        		"Detailed Design Review",
+        		"Implementation Plan",
+        		"Test Case Generation",
+        		"Solution Specification",
+        		"Solution Review",
+        		"Solution Implementation",
+        		"Unit/System Test",
+        		"Reflection",
+        		"Repository Update",
+        		"Planning",
+        		"Information Gathering",
+        		"Information Understanding",
+        		"Verifying",
+        		"Outlining",
+        		"Drafting",
+        		"Finalizing",
+        		"Team Meeting",
+        		"Coach Meeting",
+        		"Stakeholder Meeting"
+        		);
         lifecycleDropdown.setPromptText("Life Cycle Step");
 
         ComboBox<String> effortCategoryDropdown = new ComboBox<>();
+        effortCategoryDropdown.getItems().addAll(
+        		"Plans",
+        		"Deliverables",
+        		"Interruptions",
+        		"Defects",
+        		"Others"
+        		);
         effortCategoryDropdown.setPromptText("Effort Category");
 
         Button addProjectButton = createAddButton(projectDropdown);
         Button addLifecycleButton = createAddButton(lifecycleDropdown);
         Button addEffortCategoryButton = createAddButton(effortCategoryDropdown);
 
-        // Arranging project and lifecycle in a horizontal box
         HBox projectAndLifecycleBox = new HBox(20);
         projectAndLifecycleBox.setAlignment(Pos.CENTER);
         projectAndLifecycleBox.getChildren().addAll(
@@ -87,29 +146,43 @@ public class EffortLogger extends Application {
                 createLabeledRow("Life Cycle Step:", lifecycleDropdown, addLifecycleButton)
         );
 
-        // Section 3: Stopping the activity
+        VBox effortCategoryBox = createLabeledRow("Effort Category:", effortCategoryDropdown, addEffortCategoryButton);
+        effortCategoryBox.setAlignment(Pos.CENTER);
+
         Text section3 = new Text("3. Press the 'Stop this Activity' button to generate an effort log entry using the attributes above.");
         Button stopButton = new Button("Stop this Activity");
         stopButton.setOnAction(e -> {
             isClockRunning = false;
+            date = getDate();
+            endTime = getTime();
+            end = Instant.now();
+            logCounter++;
+            String[] log = new String[8];
+            log[0] = "" + logCounter;
+            log[1] = date;
+            log[2] = startTime;
+            log[3] = endTime;
+            log[4] = "" + Duration.between(start, end).toMinutes();
+            log[5] = projectDropdown.getValue();
+            log[6] = lifecycleDropdown.getValue();
+            log[7] = effortCategoryDropdown.getValue();
+            database.add(log);
+            System.out.println(Arrays.toString(database.get(logCounter-1)));
             clockStatus.setText("Clock is stopped");
             clockStatus.setFill(Color.RED);
         });
 
-        // Adding all sections and elements to the main container
         centerBox.getChildren().addAll(title, clockStatus, section1, startButton, section2,
                 projectAndLifecycleBox,
-                createLabeledRow("Effort Category:", effortCategoryDropdown, addEffortCategoryButton),
+                effortCategoryBox,
                 section3,
                 stopButton);
 
-        // Setting the main container in the center of the BorderPane
         root.setCenter(centerBox);
 
         return new Scene(root, 600, 600); // Larger window size for Effort Logger
     }
 
-    // Method to create a labeled row for dropdowns and buttons
     private VBox createLabeledRow(String label, ComboBox<String> dropdown, Button addButton) {
         VBox row = new VBox(5);
         row.setAlignment(Pos.CENTER);
@@ -123,7 +196,6 @@ public class EffortLogger extends Application {
         return row;
     }
 
-    // Method to create the add button functionality
     private Button createAddButton(ComboBox<String> dropdown) {
         Button addButton = new Button("+");
         addButton.setOnAction(e -> {
