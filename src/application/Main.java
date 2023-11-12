@@ -35,7 +35,7 @@ public class Main extends Application {
 
             switch (input) {
                 case "1": 
-                	MainApp.launchApp(args);
+                	LogIn.logInPage(args);
                     break;
                 case "2":
                     isRunning = false;

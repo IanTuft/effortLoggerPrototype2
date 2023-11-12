@@ -14,8 +14,8 @@ import javafx.scene.text.FontWeight;
 
 public class MainApp extends Application {
 
-    public static void launchApp(String[] args) {
-        launch(args);
+    public static void launchApp() {
+        launch();
     }
 
     @Override
