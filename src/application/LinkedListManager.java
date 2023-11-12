@@ -12,7 +12,7 @@ public class LinkedListManager {
 	private Scanner scan = new Scanner(System.in); //scanner to receive input
 	private SearchData searchData = new SearchData();
 	
-	//Default constructor. Do not use.
+	//Default constructor. Use this one.
 	public LinkedListManager() {
 		
 		currentUser = null;
@@ -20,29 +20,16 @@ public class LinkedListManager {
 		projectNodeHead = null;
 		locked = 0;
 		
-		System.out.println("WARNING: Not connected to a Linked List. Most functions will not work normally.");
-		
 	}
 	
 	//Additional Constructors
-	
-	//Use this one always
-	public LinkedListManager(UserNode userNodeIn, ProjectNode projectNodeIn) {
-		
-		currentUser = null;
-		userNodeHead = userNodeIn;
-		projectNodeHead = projectNodeIn;
-		locked = 0;
-		
-	}
-	
-	
-	
+	//N/A
+
 	
 	//Public Methods
 	
 	/**
-	 * In the event that the linked list manager is not connected to a list of employees, this can be used to connect it.
+	 * Connect the linked list manager to a list of employees.
 	 * @param listIn The list to connect to.
 	 */
 	public void connectUserList(UserNode listIn) {
@@ -52,7 +39,7 @@ public class LinkedListManager {
 	}
 	
 	/**
-	 * In the event that the linked list manager is not connected to a list of projects, this can be used to connect it.
+	 * Connect the linked list manager to a list of projects.
 	 * @param listIn The list to connect to.
 	 */
 	public void connectProjectList(ProjectNode listIn) {
@@ -63,103 +50,86 @@ public class LinkedListManager {
 	
 	/**
 	 * To add a new employee. Added to front of linked list.
-	 * @param employeeName Name of employee.
-	 * @param employeeID ID number of employee.
+	 * @param employeeNameIn Name of employee. Has built in input checking.
+	 * @param employeeIDIn ID number of employee. No input checking.
+	 * @param passwordIn Password of employee. Has built in input checking.
 	 */
-	public void addNewEmployee(String employeeName, int employeeID, String password) {
+	public void addNewEmployee(String employeeNameIn, int employeeIDIn, String passwordIn) {
 		
-		UserNode newEmployee = new UserNode(employeeName, employeeID, password);
-		userNodeHead.setPrevious(newEmployee);
-		newEmployee.setNext(userNodeHead);
-		userNodeHead = newEmployee;
+		String employeeName = processInput.processString(employeeNameIn, 30);
+		int employeeID = employeeIDIn;	
+		String password = processInput.processString(passwordIn, 30);
+		
+		if(userNodeHead == null) {
+			
+			UserNode firstUser = new UserNode(employeeName, employeeID, password);
+			userNodeHead = firstUser;
+			
+		}
+		else {
+		
+			UserNode newEmployee = new UserNode(employeeName, employeeID, password);
+			userNodeHead.setPrevious(newEmployee);
+			newEmployee.setNext(userNodeHead);
+			userNodeHead = newEmployee;
+		
+		}
 		
 	}
 	
 	/**
 	 * To add a new project. Added to front of linked list.
-	 * @param projectName Name of project.
+	 * Used by ReadData to load the saved project data.
+	 * @param projectName Name of project. Has built in input checking.
+	 * @param employeeCount Number of employees on project. No input checking.
+	 * @param storyCount Number of user stories in project. No input checking.
 	 */
-	public void addNewProject(String projectName) {
+	public void addNewProject(String projectNameIn, int employeeCountIn, int storyCountIn) {
 		
-		ProjectNode newProject = new ProjectNode (projectName);
-		projectNodeHead.setPrevious(newProject);
-		newProject.setNext(projectNodeHead);
-		projectNodeHead = newProject;
+		String projectName = processInput.processString(projectNameIn, 30);
+		int employeeCount = employeeCountIn;
+		int storyCount = storyCountIn;
 		
-	}
-	
-	public void loadNewProject(String projectName, int employeeCount, int storyCount) {
 		
-		ProjectNode loadProject = new ProjectNode(projectName);
-		loadProject.setEmployeeCount(employeeCount);
-		loadProject.setStoryCount(storyCount);
-		projectNodeHead.setPrevious(loadProject);
-		loadProject.setNext(projectNodeHead);
-		projectNodeHead = loadProject;
+		if(projectNodeHead == null) {
+			
+			ProjectNode firstProject = new ProjectNode(projectName);
+			firstProject.setEmployeeCount(employeeCount);
+			firstProject.setStoryCount(storyCount);
+			projectNodeHead = firstProject;
+			
+		}
+		else {
+		
+			ProjectNode loadProject = new ProjectNode(projectName);
+			loadProject.setEmployeeCount(employeeCount);
+			loadProject.setStoryCount(storyCount);
+			projectNodeHead.setPrevious(loadProject);
+			loadProject.setNext(projectNodeHead);
+			projectNodeHead = loadProject;
+		
+		}
 		
 	}
 	
 	/**
 	 * To add data to a project. Can only be done while logged into any user as this also adds
 	 * the data to the user who is logged in.
-	 * Valid inputs are checked for with processInput.
-	 * Asks for Project Name to know which project to add to, time, and defect count.
+	 * No input checking as all input should be coming from a safe source.
+	 * Asks for Project Name to know which project to add to.
+	 * @param name Name of project.
+	 * @param logNumber Log number.
+	 * @param duration Duration to be logged.
+	 * @param date Date of log.
+	 * @param startTime Start time of log.
+	 * @param endTime End time of log.
+	 * @param lifeCycleStep Life cycle step of log.
+	 * @param effortCategory Effort category of log.
+	 * @param etc Various.
+	 * @param primaryTag First tag.
+	 * @param secondaryTag Second tag.
+	 * @param additionalTag Third tag.
 	 * @return returns 1 for success, 0 otherwise.
-	 */
-	public int addNewProjectData() {
-		
-		ProjectNode foundProject = null;
-		String projectName = null;
-		int logNumber = 0;
-		int duration = 0;
-		String date = null;
-		String startTime = null;
-		String endTime = null;
-		String lifeCycleStep = null;
-		String effortCategory = null;
-		String etc = null;
-		
-		if(locked == 0) { //Not logged in.
-			
-			System.out.println("Error. Please login to an account first.");
-			
-			return 0;
-			
-		}
-		else { //Find project to add data to.
-			
-			System.out.println("Please input the project name to add data to.");
-			projectName = processInput.processString(scan.nextLine(), 30);
-			foundProject = findProject(projectName);
-			
-			if(foundProject == null) {
-				
-				System.out.println("Error, please input an existing project name or create a new project with that name.");
-				
-			}
-			else { //Add new information.
-				
-				
-				
-				//Actually create the new data nodes.
-				addNewProjectDataPrivate(projectName, logNumber, duration, date, startTime, endTime,
-						lifeCycleStep, effortCategory, etc, foundProject);
-				
-				return 1;
-				
-			}
-			
-		}
-		return 0;
-	}
-	
-	/**
-	 * Only used to initialize for the demo. Not for normal functional use. 
-	 * Will be deleted later when not needed for demo.
-	 * @param name Name of project
-	 * @param time Time
-	 * @param defect Defect count
-	 * @return
 	 */
 	public int addNewData(String name, int logNumber, int duration, String date, String startTime, 
 			String endTime, String lifeCycleStep, String effortCategory, String etc, String primaryTag,
@@ -203,7 +173,7 @@ public class LinkedListManager {
 	
 	/**
 	 * Log in as a user. Prevents logging in as other users until logged out.
-	 * Has no input scrub. Assumes that the eventual log in mechanic will do the input scrubbing.
+	 * Has no input scrub. Assumes that the eventual log-in mechanic will do the input scrub.
 	 * @param employeeID ID to log in as.
 	 */
 	public void lockUser(int employeeID, String password) {
@@ -257,6 +227,12 @@ public class LinkedListManager {
 		
 	}
 	
+	/**
+	 * Starts the search functionality.
+	 * Use instead of calling SearchData directly.
+	 * Serves as the way to call the search and the logic handler.
+	 * Has no actual functionality.
+	 */
 	public void searchUserData() {
 		
 		String searchTarget = "";
@@ -276,7 +252,7 @@ public class LinkedListManager {
 				
 				searchTarget = processInput.processString(scan.nextLine(), 30);
 				
-				search(currentUser, searchTarget);
+				search(searchTarget);
 				
 			}
 			
@@ -287,7 +263,13 @@ public class LinkedListManager {
 	
 	//Support Methods
 	
-	private void search(UserNode currentUser, String searchTarget) {
+	/**
+	 * The support method for searchUserData().
+	 * Outputs the results to viewData().
+	 * Serves as an intermediary that should not be called outside of searchUserData(). 
+	 * @param searchTarget The target tag to search for.
+	 */
+	private void search(String searchTarget) {
 		
 		DataNode searchedData = null;
 		
@@ -300,27 +282,10 @@ public class LinkedListManager {
 	}
 	
 	/**
-	 * Adds new data to the given project and current user.
-	 * Support method. Has no input scrub.
-	 * @param projectName Name of project to add to.
-	 * @param foundProject Project object to add to.
-	 * @param time Time to add.
-	 * @param defect Defect count to add.
-	 */
-	private void addNewProjectDataPrivate(String name, int logNumber, int duration, String date, String startTime, 
-			String endTime, String lifeCycleStep, String effortCategory, String etc, ProjectNode foundProject) {
-		
-		currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
-				lifeCycleStep, effortCategory, etc);
-		foundProject.addNewData(name, logNumber, duration, date, startTime, endTime,
-				lifeCycleStep, effortCategory, etc);
-		
-	}
-	
-	/**
 	 * Log in as a user.
 	 * Support method. Has no input scrub.
-	 * @param employeeID //User to log in as.
+	 * Does the password check.
+	 * @param employeeID User to log in as.
 	 */
 	private void lockUserPrivate(int employeeID, String password) {
 		
@@ -344,7 +309,7 @@ public class LinkedListManager {
 	
 	/**
 	 * Given an employee ID, sets the current user to the user associated with the ID.
-	 * The log-in mechanic at present.
+	 * The back-end log-in mechanic.
 	 * @param employeeID ID to look for.
 	 */
 	private void findUser(int employeeID) {
@@ -378,7 +343,7 @@ public class LinkedListManager {
 	 * Finds a project in the linked list of projects.
 	 * Support method. No input scrub.
 	 * @param projectName Project to look for.
-	 * @return
+	 * @return Returns the projectNode of interest.
 	 */
 	private ProjectNode findProject(String projectName) {
 		
