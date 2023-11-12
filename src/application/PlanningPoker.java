@@ -54,9 +54,9 @@ public class PlanningPoker extends Application {
         effortCategoryDropdown.setPromptText("Effort Category");
 
         // Reusing the same lists as EffortLogger
-        projectDropdown.getItems().addAll(EffortLogger.projectList);
-        lifecycleDropdown.getItems().addAll(EffortLogger.lifeCycleStepList);
-        effortCategoryDropdown.getItems().addAll(EffortLogger.effortCategoryList);
+        //projectDropdown.getItems().addAll(EffortLogger.projectList);
+        //lifecycleDropdown.getItems().addAll(EffortLogger.lifeCycleStepList);
+        //effortCategoryDropdown.getItems().addAll(EffortLogger.effortCategoryList);
 
         // Section 3: Pick a number 1-10
         Text section3 = new Text("3. Pick a number 1-10:");
