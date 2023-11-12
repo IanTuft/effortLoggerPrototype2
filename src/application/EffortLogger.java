@@ -15,13 +15,44 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.TextInputDialog;
-
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.time.format.DateTimeFormatter;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class EffortLogger extends Application {
 
     private boolean isClockRunning = false;
-
+    private ArrayList<String[]> database = new ArrayList<String[]>(); //ArrayList to hold each log entry
+	private int logCounter = 0; //Log counter
+	private DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //Format dates
+	private DateTimeFormatter timeformat = DateTimeFormatter.ofPattern("HH:mm:ss"); //Format time
+	private String startTime;
+	private String endTime;
+	private String date;
+	private String duration;
+	private Instant start;
+	private Instant end;
+	
+	//Gets the local time
+	public String getTime() {
+		LocalDateTime now = LocalDateTime.now();  
+		return timeformat.format(now);  
+	}
+	
+	//Gets the local date
+	public String getDate() {
+		LocalDateTime date = LocalDateTime.now();
+		return dateformat.format(date);  
+	}
+	
+	public void storeLog(String[] log) {
+		database.add(log);
+	}
+    
     public static void main(String[] args) {
         launch(args);
     }
@@ -51,6 +82,8 @@ public class EffortLogger extends Application {
         Button startButton = new Button("Start Activity");
         startButton.setOnAction(e -> {
             isClockRunning = true;
+            startTime = getTime();
+            start = Instant.now();
             clockStatus.setText("Clock is running");
             clockStatus.setFill(Color.GREEN);
         });
@@ -62,9 +95,44 @@ public class EffortLogger extends Application {
         projectDropdown.setPromptText("Project");
 
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
+        lifecycleDropdown.getItems().addAll(
+        		"Problem Understanding",
+        		"Conceptual Design Plan",
+        		"Requirements",
+        		"Conceptual Design",
+        		"Conceptual Design Review",
+        		"Detailed Design Plan",
+        		"Detailed Design/Prototype",
+        		"Detailed Design Review",
+        		"Implementation Plan",
+        		"Test Case Generation",
+        		"Solution Specification",
+        		"Solution Review",
+        		"Solution Implementation",
+        		"Unit/System Test",
+        		"Reflection",
+        		"Repository Update",
+        		"Planning",
+        		"Information Gathering",
+        		"Information Understanding",
+        		"Verifying",
+        		"Outlining",
+        		"Drafting",
+        		"Finalizing",
+        		"Team Meeting",
+        		"Coach Meeting",
+        		"Stakeholder Meeting"
+        		);
         lifecycleDropdown.setPromptText("Life Cycle Step");
 
         ComboBox<String> effortCategoryDropdown = new ComboBox<>();
+        effortCategoryDropdown.getItems().addAll(
+        		"Plans",
+        		"Deliverables",
+        		"Interruptions",
+        		"Defects",
+        		"Others"
+        		);
         effortCategoryDropdown.setPromptText("Effort Category");
 
         Button addProjectButton = createAddButton(projectDropdown);
@@ -85,6 +153,21 @@ public class EffortLogger extends Application {
         Button stopButton = new Button("Stop this Activity");
         stopButton.setOnAction(e -> {
             isClockRunning = false;
+            date = getDate();
+            endTime = getTime();
+            end = Instant.now();
+            logCounter++;
+            String[] log = new String[8];
+            log[0] = "" + logCounter;
+            log[1] = date;
+            log[2] = startTime;
+            log[3] = endTime;
+            log[4] = "" + Duration.between(start, end).toMinutes();
+            log[5] = projectDropdown.getValue();
+            log[6] = lifecycleDropdown.getValue();
+            log[7] = effortCategoryDropdown.getValue();
+            database.add(log);
+            System.out.println(Arrays.toString(database.get(logCounter-1)));
             clockStatus.setText("Clock is stopped");
             clockStatus.setFill(Color.RED);
         });
