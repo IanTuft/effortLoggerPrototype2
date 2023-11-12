@@ -66,9 +66,9 @@ public class LinkedListManager {
 	 * @param employeeName Name of employee.
 	 * @param employeeID ID number of employee.
 	 */
-	public void addNewEmployee(String employeeName, int employeeID) {
+	public void addNewEmployee(String employeeName, int employeeID, String password) {
 		
-		UserNode newEmployee = new UserNode (employeeName, employeeID);
+		UserNode newEmployee = new UserNode(employeeName, employeeID, password);
 		userNodeHead.setPrevious(newEmployee);
 		newEmployee.setNext(userNodeHead);
 		userNodeHead = newEmployee;
@@ -109,10 +109,15 @@ public class LinkedListManager {
 	public int addNewProjectData() {
 		
 		ProjectNode foundProject = null;
-		int time = 0;
-		int defect = 0;
-		String primaryTag = "";
 		String projectName = null;
+		int logNumber = 0;
+		int duration = 0;
+		String date = null;
+		String startTime = null;
+		String endTime = null;
+		String lifeCycleStep = null;
+		String effortCategory = null;
+		String etc = null;
 		
 		if(locked == 0) { //Not logged in.
 			
@@ -134,15 +139,11 @@ public class LinkedListManager {
 			}
 			else { //Add new information.
 				
-				System.out.println("Please input time count.");
-				time = processInput.processInt(scan.nextLine(), 9);
-				System.out.println("Please input defect count");
-				defect = processInput.processInt(scan.nextLine(), 9);
-				System.out.println("Please input primary tag.");
-				primaryTag = processInput.processString(scan.nextLine(), 30);
+				
 				
 				//Actually create the new data nodes.
-				addNewProjectDataPrivate2(projectName, foundProject, time, defect, primaryTag);
+				addNewProjectDataPrivate(projectName, logNumber, duration, date, startTime, endTime,
+						lifeCycleStep, effortCategory, etc, foundProject);
 				
 				return 1;
 				
@@ -160,7 +161,9 @@ public class LinkedListManager {
 	 * @param defect Defect count
 	 * @return
 	 */
-	public int addNewData(String name, int time, int defect, String primaryTag) {
+	public int addNewData(String name, int logNumber, int duration, String date, String startTime, 
+			String endTime, String lifeCycleStep, String effortCategory, String etc, String primaryTag,
+			String secondaryTag, String additionalTag) {
 		
 		ProjectNode findProject = projectNodeHead;
 		
@@ -177,8 +180,10 @@ public class LinkedListManager {
 				
 				if(findProject.getProjectName().equals(name)) {
 					
-					currentUser.addNewData2(name, time, defect, primaryTag);
-					findProject.addNewData2(name, time, defect, primaryTag);
+					currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
+							lifeCycleStep, effortCategory, etc);
+					findProject.addNewData(name, logNumber, duration, date, startTime, endTime,
+							lifeCycleStep, effortCategory, etc);
 					
 					return 1;
 					
@@ -201,9 +206,9 @@ public class LinkedListManager {
 	 * Has no input scrub. Assumes that the eventual log in mechanic will do the input scrubbing.
 	 * @param employeeID ID to log in as.
 	 */
-	public void lockUser(int employeeID) {
+	public void lockUser(int employeeID, String password) {
 		
-		lockUserPrivate(employeeID);
+		lockUserPrivate(employeeID, password);
 		
 	}
 	
@@ -302,16 +307,13 @@ public class LinkedListManager {
 	 * @param time Time to add.
 	 * @param defect Defect count to add.
 	 */
-	private void addNewProjectDataPrivate2(String projectName, ProjectNode foundProject, int time, int defect, String primaryTag) {
+	private void addNewProjectDataPrivate(String name, int logNumber, int duration, String date, String startTime, 
+			String endTime, String lifeCycleStep, String effortCategory, String etc, ProjectNode foundProject) {
 		
-		currentUser.addNewData2(projectName, time, defect, primaryTag);
-		foundProject.addNewData2(projectName, time, defect, primaryTag);
-		
-	}
-	private void addNewProjectDataPrivate(String projectName, ProjectNode foundProject, int time, int defect) {
-		
-		currentUser.addNewData(projectName, time, defect);
-		foundProject.addNewData(projectName, time, defect);
+		currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
+				lifeCycleStep, effortCategory, etc);
+		foundProject.addNewData(name, logNumber, duration, date, startTime, endTime,
+				lifeCycleStep, effortCategory, etc);
 		
 	}
 	
@@ -320,10 +322,20 @@ public class LinkedListManager {
 	 * Support method. Has no input scrub.
 	 * @param employeeID //User to log in as.
 	 */
-	private void lockUserPrivate(int employeeID) {
+	private void lockUserPrivate(int employeeID, String password) {
 		
-		if(locked == 0)
+		if(locked == 0) {
+			
 			findUser(employeeID);
+			
+			if(!(currentUser.passwordCheck(password))) {
+				
+				currentUser = null;
+				System.out.println("Invalid password.");
+				
+			}
+			
+		}
 		else
 			System.out.println("Already logged into user " + currentUser.getEmployeeName() + ". Please logout"
 					+ "before attempting to access a different user.");

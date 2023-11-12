@@ -59,11 +59,25 @@ public class ReadData {
 	private void addUsers(LinkedListManager manager) {
 		
 		String endString = "";
-		String project = "";
-		int time = 0;
-		int defect = 0;
 		int userCount = 0;
+		
+		String name = "";
+		int id = 0;
+		String password = "";
+		
+		String projectName = "";
+		int logNumber = 0;
+		int duration = 0;
+		String date = "";
+		String startTime = "";
+		String endTime = "";
+		String lifeCycleStep = "";
+		String effortCategory = "";
+		String etc = "";
+		
 		String primaryTag = "";
+		String secondaryTag = "";
+		String additionalTag = "";
 		
 		try {
 			
@@ -80,22 +94,33 @@ public class ReadData {
 			
 			try {
 				
-				String name = usersIn.readLine();
-				int id = Integer.parseInt(usersIn.readLine());
+				name = usersIn.readLine();
+				id = Integer.parseInt(usersIn.readLine());
+				password = usersIn.readLine();
 				
-				manager.addNewEmployee(name, id);
-				manager.lockUser(id);
+				manager.addNewEmployee(name, id, password);
+				manager.lockUser(id, password);
 				
 				endString = usersIn.readLine();
 				
 				while(!endString.equals("NEXT")) {
 					
-					project = endString;
-					time = Integer.parseInt(usersIn.readLine());
-					defect = Integer.parseInt(usersIn.readLine());
-					primaryTag = usersIn.readLine();
+					projectName = endString;
+					logNumber = Integer.parseInt(usersIn.readLine());
+					duration = Integer.parseInt(usersIn.readLine());
+					date = usersIn.readLine();
+					startTime = usersIn.readLine();
+					endTime = usersIn.readLine();
+					lifeCycleStep = usersIn.readLine();
+					effortCategory = usersIn.readLine();
+					etc = usersIn.readLine();
 					
-					manager.addNewData(project, time, defect, primaryTag);
+					primaryTag = usersIn.readLine();
+					secondaryTag = usersIn.readLine();
+					additionalTag = usersIn.readLine();
+					
+					manager.addNewData(projectName, logNumber, duration, date, startTime, endTime,
+							lifeCycleStep, effortCategory, etc, primaryTag, secondaryTag, additionalTag);
 					
 					endString = usersIn.readLine();
 					

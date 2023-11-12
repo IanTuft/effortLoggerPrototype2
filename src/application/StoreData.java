@@ -43,6 +43,7 @@ public class StoreData {
 		try {
 			
 			userWrite.write(userCount);
+			userWrite.write("\n");
 			
 		}
 		catch(IOException e) {
@@ -108,7 +109,8 @@ public class StoreData {
 		
 		try {
 			
-			userWrite.write(projectCount);
+			projectWrite.write(projectCount);
+			projectWrite.write("\n");
 			
 		}
 		catch(IOException e) {
