@@ -233,9 +233,10 @@ public class LinkedListManager {
 	 * Serves as the way to call the search and the logic handler.
 	 * Has no actual functionality.
 	 */
-	public void searchUserData() {
+	public void searchUserData(String tag1, String tag2, String tag3) {
 		
 		String searchTarget = "";
+		DataNode searchedData = null;
 		
 		if(locked == 0) {
 			
@@ -248,11 +249,37 @@ public class LinkedListManager {
 				System.out.println("Invalid user. Please try a different user.");
 			else {
 				
-				System.out.println("Please enter tag to search for.");
+				searchTarget = tag1;				
+				searchData.setDataNode(currentUser.getDataHead());
+				searchedData = searchData.pullPrimary(searchTarget);
 				
-				searchTarget = processInput.processString(scan.nextLine(), 30);
-				
-				search(searchTarget);
+				if(tag2 == null && tag3 == null) {
+					
+					viewData(searchedData);
+					
+				}
+				else {
+					
+					searchTarget = tag2;
+					searchData.setDataNode(searchedData);
+					searchedData = searchData.pullSecondary(searchTarget);
+					
+					if(tag3 == null) {
+						
+						viewData(searchedData);
+						
+					}
+					else {
+						
+						searchTarget = tag3;
+						searchData.setDataNode(searchedData);
+						searchedData = searchData.pullAdditional(searchTarget);
+						
+						viewData(searchedData);
+						
+					}
+					
+				}
 				
 			}
 			
@@ -271,13 +298,7 @@ public class LinkedListManager {
 	 */
 	private void search(String searchTarget) {
 		
-		DataNode searchedData = null;
-		
-		searchData.setDataNode(currentUser.getDataHead());
-		
-		searchedData = searchData.pullTags(searchTarget);
-		
-		viewData(searchedData);
+
 		
 	}
 	
