@@ -291,18 +291,6 @@ public class LinkedListManager {
 	//Support Methods
 	
 	/**
-	 * The support method for searchUserData().
-	 * Outputs the results to viewData().
-	 * Serves as an intermediary that should not be called outside of searchUserData(). 
-	 * @param searchTarget The target tag to search for.
-	 */
-	private void search(String searchTarget) {
-		
-
-		
-	}
-	
-	/**
 	 * Log in as a user.
 	 * Support method. Has no input scrub.
 	 * Does the password check.
