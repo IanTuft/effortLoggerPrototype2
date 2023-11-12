@@ -33,7 +33,6 @@ public class EffortLogger extends Application {
 	private String startTime;
 	private String endTime;
 	private String date;
-	private String duration;
 	private Instant start;
 	private Instant end;
 	
@@ -127,14 +126,39 @@ public class EffortLogger extends Application {
 
         ComboBox<String> effortCategoryDropdown = new ComboBox<>();
         effortCategoryDropdown.getItems().addAll(
-        		"Plans",
-        		"Deliverables",
-        		"Interruptions",
-        		"Defects",
+        		"Project Plan",
+    			"Risk Management Plan",
+    			"Conceptual Design Plan",
+    			"Detailed Design Plan",
+    			"Implementation Plan",
+    			"Conceptual Design",
+    			"Detailed Design",
+    			"Test Cases",
+    			"Solution",
+    			"Reflection",
+    			"Outline",
+    			"Draft",
+    			"Report",
+    			"User Defined",
+    			"Break",
+    			"Phone",
+    			"Teammate",
+    			"Visitor",
+    			"Not specified",
+    			"10 Documentation",
+    			"20 Syntax",
+    			"30 Build, Package",
+    			"40 Assignment",
+    			"50 Interface",
+    			"60 Checking",
+    			"70 Data",
+    			"80 Function",
+    			"90 System",
+    			"100 Environment",
         		"Others"
         		);
         effortCategoryDropdown.setPromptText("Effort Category");
-
+        
         Button addProjectButton = createAddButton(projectDropdown);
         Button addLifecycleButton = createAddButton(lifecycleDropdown);
         Button addEffortCategoryButton = createAddButton(effortCategoryDropdown);
