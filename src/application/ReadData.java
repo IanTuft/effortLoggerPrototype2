@@ -61,6 +61,10 @@ public class ReadData {
 		String endString = "";
 		int userCount = 0;
 		
+		String name = "";
+		int id = 0;
+		String password = "";
+		
 		String projectName = "";
 		int logNumber = 0;
 		int duration = 0;
@@ -90,11 +94,12 @@ public class ReadData {
 			
 			try {
 				
-				String name = usersIn.readLine();
-				int id = Integer.parseInt(usersIn.readLine());
+				name = usersIn.readLine();
+				id = Integer.parseInt(usersIn.readLine());
+				password = usersIn.readLine();
 				
-				manager.addNewEmployee(name, id);
-				manager.lockUser(id);
+				manager.addNewEmployee(name, id, password);
+				manager.lockUser(id, password);
 				
 				endString = usersIn.readLine();
 				

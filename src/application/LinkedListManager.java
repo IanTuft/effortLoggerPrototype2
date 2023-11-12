@@ -66,9 +66,9 @@ public class LinkedListManager {
 	 * @param employeeName Name of employee.
 	 * @param employeeID ID number of employee.
 	 */
-	public void addNewEmployee(String employeeName, int employeeID) {
+	public void addNewEmployee(String employeeName, int employeeID, String password) {
 		
-		UserNode newEmployee = new UserNode (employeeName, employeeID);
+		UserNode newEmployee = new UserNode(employeeName, employeeID, password);
 		userNodeHead.setPrevious(newEmployee);
 		newEmployee.setNext(userNodeHead);
 		userNodeHead = newEmployee;
@@ -139,7 +139,7 @@ public class LinkedListManager {
 			}
 			else { //Add new information.
 				
-				s
+				
 				
 				//Actually create the new data nodes.
 				addNewProjectDataPrivate(projectName, logNumber, duration, date, startTime, endTime,
@@ -206,9 +206,9 @@ public class LinkedListManager {
 	 * Has no input scrub. Assumes that the eventual log in mechanic will do the input scrubbing.
 	 * @param employeeID ID to log in as.
 	 */
-	public void lockUser(int employeeID) {
+	public void lockUser(int employeeID, String password) {
 		
-		lockUserPrivate(employeeID);
+		lockUserPrivate(employeeID, password);
 		
 	}
 	
@@ -322,10 +322,20 @@ public class LinkedListManager {
 	 * Support method. Has no input scrub.
 	 * @param employeeID //User to log in as.
 	 */
-	private void lockUserPrivate(int employeeID) {
+	private void lockUserPrivate(int employeeID, String password) {
 		
-		if(locked == 0)
+		if(locked == 0) {
+			
 			findUser(employeeID);
+			
+			if(!(currentUser.passwordCheck(password))) {
+				
+				currentUser = null;
+				System.out.println("Invalid password.");
+				
+			}
+			
+		}
 		else
 			System.out.println("Already logged into user " + currentUser.getEmployeeName() + ". Please logout"
 					+ "before attempting to access a different user.");

@@ -7,6 +7,7 @@ public class UserNode {
 	private DataNode dataHead; //The head of the data linked list the user will be attached to.
 	private UserNode next; //The next user in the linked list of users.
 	private UserNode previous; //The previous user in the linked list of users.
+	private String password;
 	
 	//Default constructor. Never use.
 	public UserNode() {
@@ -16,19 +17,21 @@ public class UserNode {
 		dataHead = null;
 		next = null;
 		previous = null;
+		password = null;
 		
 	}
 	
 	//Additional Constructors
 	
 	//Primary constructor. Always use.
-	public UserNode(String nameIn, int idIn) {
+	public UserNode(String nameIn, int idIn, String passwordIn) {
 		
 		employeeName = nameIn;
 		employeeID = idIn;
 		dataHead = null;
 		next = null;
 		previous = null;
+		password = passwordIn;
 		
 	}
 	
@@ -77,11 +80,23 @@ public class UserNode {
 		
 	}
 	
+	public boolean passwordCheck(String passwordCheck) {
+		
+		boolean check = false;
+		
+		if(this.password.equals(passwordCheck))
+			check = true;
+		
+		
+		return check;
+		
+	}
+	
 	public String save() {
 		
 		String out = "";
 		
-		out = this.employeeName + "\n" + this.employeeID + "\n";
+		out = this.employeeName + "\n" + this.employeeID + "\n" + this.password + "\n";
 		
 		return out;
 		
