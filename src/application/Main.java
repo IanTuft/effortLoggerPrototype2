@@ -1,51 +1,56 @@
 package application;
 	
 import javafx.application.Application;
-import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import java.util.Scanner;
-
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
+import javafx.geometry.Insets;
 
 public class Main extends Application {
-	@Override
-	public void start(Stage primaryStage) {
-		try {
-			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,400);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setScene(scene);
-			primaryStage.show();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		//prompts user to access different sections of the prototype
-        System.out.println("Welcome to the Planning Poker / Effort Logger App!");
-        System.out.println("Press 1 to access the login screen.");
-        System.out.println("Press 2 to exit.");
 
-        boolean isRunning = true;
+    private Stage primaryStage;
 
-        while (isRunning) {
-            String input = scanner.nextLine();
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-            switch (input) {
-                case "1": 
-                	LogIn.logInPage(args);
-                    break;
-                case "2":
-                    isRunning = false;
-                    break;
-                default:
-                    System.out.println("Invalid input. Please try again."); //ensure only valid inputs are accepted
-            }
-        }
+    @Override
+    public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        openLoginPage();
+    }
 
-        System.out.println("Goodbye!");
-        System.exit(0);
-	}
+    private void openLoginPage() {
+        LogIn login = new LogIn();
+        login.start(new Stage());
+
+        login.setLoginSuccessCallback(this::openMainApp);
+    }
+
+    private void openMainApp() {
+        MainApp mainApp = new MainApp();
+        mainApp.start(primaryStage);
+
+        mainApp.setEffortLoggerCallback(this::openEffortLogger);
+        mainApp.setPlanningPokerCallback(this::openPlanningPoker);
+    }
+
+    private void openEffortLogger() {
+    	EffortLogger effortLogger = new EffortLogger();
+        Stage effortLoggerStage = new Stage();
+        effortLogger.start(effortLoggerStage);
+
+        // Ensure MainApp window remains open
+        primaryStage.show();
+
+        // Set the EffortLogger callback to re-open EffortLogger
+        effortLogger.setEffortLoggerCallback(this::openEffortLogger);
+    }
+
+    private void openPlanningPoker() {
+        PlanningPoker planningPoker = new PlanningPoker();
+        planningPoker.start(new Stage());
+    }
 }

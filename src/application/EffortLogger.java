@@ -15,6 +15,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.TextInputDialog;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +31,7 @@ import java.time.Instant;
 
 public class EffortLogger extends Application {
 
-    private boolean isClockRunning = false;
+	private boolean isClockRunning = false;
     private ArrayList<String[]> database = new ArrayList<String[]>(); //ArrayList to hold each log entry
 	private int logCounter = 0; //Log counter
 	private DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //Format dates
@@ -47,6 +53,13 @@ public class EffortLogger extends Application {
 		LocalDateTime date = LocalDateTime.now();
 		return dateformat.format(date);  
 	}
+	
+    private Runnable effortLoggerCallback;
+
+	public void storeLog(String[] log) {
+		database.add(log);
+	}
+
     
     public static void main(String[] args) {
         launch(args);
@@ -58,7 +71,7 @@ public class EffortLogger extends Application {
         primaryStage.setScene(createEffortLoggerScene());
         primaryStage.show();
     }
-
+    
     private Scene createEffortLoggerScene() {
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
@@ -151,6 +164,10 @@ public class EffortLogger extends Application {
     			"80 Function",
     			"90 System",
     			"100 Environment",
+        		"Plans",
+        		"Deliverables",
+        		"Interruptions",
+        		"Defects",
         		"Others"
         		);
         effortCategoryDropdown.setPromptText("Effort Category");
@@ -230,5 +247,9 @@ public class EffortLogger extends Application {
             });
         });
         return addButton;
+    }
+    
+    public void setEffortLoggerCallback(Runnable callback) {
+        this.effortLoggerCallback = callback;
     }
 }
