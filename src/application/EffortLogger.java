@@ -21,6 +21,7 @@ import java.util.Optional;
 public class EffortLogger extends Application {
 
     private boolean isClockRunning = false;
+    private Runnable effortLoggerCallback;
 
     public static void main(String[] args) {
         launch(args);
@@ -29,13 +30,11 @@ public class EffortLogger extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Effort Logger");
-        primaryStage.setScene(createEffortLoggerScene());
-        primaryStage.show();
-    }
 
-    private Scene createEffortLoggerScene() {
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
+        
+        primaryStage.setScene(new Scene(root, 600, 600));
 
         VBox centerBox = new VBox(20);
         centerBox.setAlignment(Pos.CENTER);
@@ -97,7 +96,7 @@ public class EffortLogger extends Application {
 
         root.setCenter(centerBox);
 
-        return new Scene(root, 600, 600); // Larger window size for Effort Logger
+        return;
     }
 
     private VBox createLabeledRow(String label, ComboBox<String> dropdown, Button addButton) {
@@ -127,5 +126,9 @@ public class EffortLogger extends Application {
             });
         });
         return addButton;
+    }
+    
+    public void setEffortLoggerCallback(Runnable callback) {
+        this.effortLoggerCallback = callback;
     }
 }

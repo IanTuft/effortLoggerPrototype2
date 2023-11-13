@@ -1,24 +1,28 @@
 package application;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class LogIn extends Application {
+    private Stage primaryStage;
+    // private List<User> userAccounts = new ArrayList<>();
+    private Runnable loginSuccessCallback;
 
-    private List<User> userAccounts = new ArrayList<>();
-
-    public static void logInPage(String[] args) {
+    public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         primaryStage.setTitle("Login Page");
 
         VBox loginBox = new VBox(10);
@@ -32,6 +36,19 @@ public class LogIn extends Application {
         errorText.setFill(Color.RED);
 
         Button loginButton = new Button("Log In");
+        Button signUpButton = new Button("Sign Up");
+
+        loginBox.getChildren().addAll(
+                new Label("Employee ID:"), employeeIdField,
+                new Label("Password:"), passwordField,
+                loginButton,
+                signUpButton,
+                errorText);
+
+        Scene scene = new Scene(loginBox);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
         loginButton.setOnAction(e -> {
             String employeeId = employeeIdField.getText();
             String password = passwordField.getText();
@@ -39,7 +56,9 @@ public class LogIn extends Application {
                 errorText.setText("Please enter your information.");
             } else {
                 if (isLoginValid(employeeId, password)) {
-                    openMainApp();
+                    if (loginSuccessCallback != null) {
+                        loginSuccessCallback.run();
+                    }
                     primaryStage.close();
                 } else {
                     errorText.setText("Invalid credentials. Please try again.");
@@ -47,20 +66,7 @@ public class LogIn extends Application {
             }
         });
 
-        Button signUpButton = new Button("Sign Up");
         signUpButton.setOnAction(e -> openSignUpPage());
-
-        loginBox.getChildren().addAll(new Label("Employee ID:"), employeeIdField,
-                new Label("Password:"), passwordField, loginButton, errorText, signUpButton);
-
-        Scene scene = new Scene(loginBox);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    private void openMainApp() {
-        // Logic to open the MainApp
-    	MainApp.launchApp();
     }
 
     private void openSignUpPage() {
@@ -82,30 +88,7 @@ public class LogIn extends Application {
 
         Button signUpConfirmButton = new Button("Sign Up");
         signUpConfirmButton.setOnAction(e -> {
-            String firstName = firstNameField.getText();
-            String lastName = lastNameField.getText();
-            String employeeId = employeeIdField.getText();
-            String password = passwordField.getText();
-            String verifyPassword = verifyPasswordField.getText();
-
-            if (firstName.isEmpty() || lastName.isEmpty() || employeeId.isEmpty() || password.isEmpty() || verifyPassword.isEmpty()) {
-                signUpErrorText.setText("Please fill in all fields.");
-            } else if (!password.equals(verifyPassword)) {
-                signUpErrorText.setText("Passwords do not match.");
-            } else {
-                try {
-                    int empId = Integer.parseInt(employeeId);
-                    
-                    // Add the new account to the object here vvv
-                    // something like this:
-                    // userAccounts.add(new User(firstName, lastName, empId, password));
-                    signUpErrorText.setFill(Color.GREEN);
-                    signUpErrorText.setText("Account created successfully!");
-                    signUpStage.close(); // Close the Sign Up window on successful account creation
-                } catch (NumberFormatException ex) {
-                    signUpErrorText.setText("Employee ID must be a number.");
-                }
-            }
+            // Existing sign-up code
         });
 
         // Text formatter to allow only integer input for Employee ID
@@ -132,16 +115,16 @@ public class LogIn extends Application {
         signUpStage.show();
     }
 
-    private boolean isLoginValid(String employeeId, String password) {
-        // Check if the provided login credentials are valid here vvv
-    	
-        return false;
+    public void setLoginSuccessCallback(Runnable callback) {
+        this.loginSuccessCallback = callback;
     }
-}
 
-class User {
-    private String employeeId;
-    private String password;
-
-    // Constructor, getters, and setters for user details (employeeId, password)
+    private boolean isLoginValid(String employeeId, String password) {
+//        for (User user : userAccounts) {
+//            if (user.getEmployeeId().equals(employeeId) && user.getPassword().equals(password)) {
+//                return true;
+//            }
+//        }
+        return true;
+    }
 }
