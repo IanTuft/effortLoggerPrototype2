@@ -10,6 +10,9 @@ public class ReadData {
 	private FileReader users;
 	private FileReader projects;
 	
+	private File userTest;
+	private File projectTest;
+	
 	//Default Constructor. DO NOT USE.
 	
 	public ReadData() {
@@ -42,7 +45,8 @@ public class ReadData {
 			
 			usersIn = new BufferedReader(users);
 			
-			addUsers(manager);
+			if(userTest.length() != 0)
+				addUsers(manager);
 			
 		}
 		catch(FileNotFoundException e) {
@@ -57,7 +61,8 @@ public class ReadData {
 			
 			projectsIn = new BufferedReader(projects);
 			
-			addProjects(manager);
+			if(projectTest.length() != 0)
+				addProjects(manager);
 			
 		}
 		catch(FileNotFoundException e) {
