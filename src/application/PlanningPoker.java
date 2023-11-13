@@ -51,6 +51,7 @@ public class PlanningPoker extends Application {
         ComboBox<String> effortCategoryDropdown = new ComboBox<>();
         effortCategoryDropdown.setPromptText("Effort Category");
 
+
         Text section2 = new Text("2. Search up to 3 tags separated by a comma to find relative data.");
         section2.setFont(javafx.scene.text.Font.font("Arial", FontWeight.NORMAL, 14));
 

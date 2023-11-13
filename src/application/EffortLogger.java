@@ -15,7 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.TextInputDialog;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -23,6 +22,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.time.format.DateTimeFormatter;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class EffortLogger extends Application {
 
@@ -34,6 +39,7 @@ public class EffortLogger extends Application {
 	private String startTime;
 	private String endTime;
 	private String date;
+	private String duration;
 	private Instant start;
 	private Instant end;
 	
@@ -51,6 +57,10 @@ public class EffortLogger extends Application {
 	
     private Runnable effortLoggerCallback;
 
+	public void storeLog(String[] log) {
+		database.add(log);
+	}
+    
     public static void main(String[] args) {
         launch(args);
     }
@@ -154,6 +164,10 @@ public class EffortLogger extends Application {
     			"80 Function",
     			"90 System",
     			"100 Environment",
+        		"Plans",
+        		"Deliverables",
+        		"Interruptions",
+        		"Defects",
         		"Others"
         		);
         effortCategoryDropdown.setPromptText("Effort Category");
