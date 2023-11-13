@@ -39,7 +39,6 @@ public class EffortLogger extends Application {
 	private String startTime;
 	private String endTime;
 	private String date;
-	private String duration;
 	private Instant start;
 	private Instant end;
 	
@@ -60,6 +59,7 @@ public class EffortLogger extends Application {
 	public void storeLog(String[] log) {
 		database.add(log);
 	}
+
     
     public static void main(String[] args) {
         launch(args);

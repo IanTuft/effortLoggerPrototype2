@@ -11,6 +11,7 @@ public class LinkedListManager {
 	private ProcessInput processInput = new ProcessInput(); //to process input for bad input
 	private Scanner scan = new Scanner(System.in); //scanner to receive input
 	private SearchData searchData = new SearchData();
+	private StoreData save = new StoreData();
 	
 	//Default constructor. Use this one.
 	public LinkedListManager() {
@@ -48,6 +49,13 @@ public class LinkedListManager {
 		
 	}
 	
+	public void save() {
+		
+		save.saveUsers(userNodeHead);
+		save.saveProject(projectNodeHead);
+		
+	}
+	
 	/**
 	 * To add a new employee. Added to front of linked list.
 	 * @param employeeNameIn Name of employee. Has built in input checking.
@@ -74,6 +82,40 @@ public class LinkedListManager {
 			userNodeHead = newEmployee;
 		
 		}
+		
+	}
+	
+	public void addNewEmployeeLogin(String firstName, String lastName, int employeeIDIn, String passwordIn) {
+		
+		String employeeName = processInput.processString(firstName, 30) + " " + processInput.processString(lastName, 30);
+		int employeeID = employeeIDIn;	
+		String password = processInput.processString(passwordIn, 30);
+		
+		if(userNodeHead == null) {
+			
+			UserNode firstUser = new UserNode(employeeName, employeeID, password);
+			userNodeHead = firstUser;
+			
+		}
+		else {
+		
+			UserNode newEmployee = new UserNode(employeeName, employeeID, password);
+			userNodeHead.setPrevious(newEmployee);
+			newEmployee.setNext(userNodeHead);
+			userNodeHead = newEmployee;
+		
+		}
+		
+	}
+	
+	public void addNewStory(String projectNameIn, String storyTitleIn, String storyIn) {
+		
+		String projectName = processInput.processString(projectNameIn, 30);
+		ProjectNode foundProject = findProject(projectName);
+		
+		UserStory newStory = new UserStory(projectNameIn, storyTitleIn, storyIn);
+		
+		foundProject.addUserStory(newStory);
 		
 	}
 	
@@ -176,9 +218,9 @@ public class LinkedListManager {
 	 * Has no input scrub. Assumes that the eventual log-in mechanic will do the input scrub.
 	 * @param employeeID ID to log in as.
 	 */
-	public void lockUser(int employeeID, String password) {
+	public boolean lockUser(int employeeID, String password) {
 		
-		lockUserPrivate(employeeID, password);
+		return lockUserPrivate(employeeID, password);
 		
 	}
 	
@@ -233,9 +275,10 @@ public class LinkedListManager {
 	 * Serves as the way to call the search and the logic handler.
 	 * Has no actual functionality.
 	 */
-	public void searchUserData() {
+	public void searchUserData(String tag1, String tag2, String tag3) {
 		
 		String searchTarget = "";
+		DataNode searchedData = null;
 		
 		if(locked == 0) {
 			
@@ -248,11 +291,37 @@ public class LinkedListManager {
 				System.out.println("Invalid user. Please try a different user.");
 			else {
 				
-				System.out.println("Please enter tag to search for.");
+				searchTarget = tag1;				
+				searchData.setDataNode(currentUser.getDataHead());
+				searchedData = searchData.pullPrimary(searchTarget);
 				
-				searchTarget = processInput.processString(scan.nextLine(), 30);
-				
-				search(searchTarget);
+				if(tag2 == null && tag3 == null) {
+					
+					viewData(searchedData);
+					
+				}
+				else {
+					
+					searchTarget = tag2;
+					searchData.setDataNode(searchedData);
+					searchedData = searchData.pullSecondary(searchTarget);
+					
+					if(tag3 == null) {
+						
+						viewData(searchedData);
+						
+					}
+					else {
+						
+						searchTarget = tag3;
+						searchData.setDataNode(searchedData);
+						searchedData = searchData.pullAdditional(searchTarget);
+						
+						viewData(searchedData);
+						
+					}
+					
+				}
 				
 			}
 			
@@ -264,30 +333,12 @@ public class LinkedListManager {
 	//Support Methods
 	
 	/**
-	 * The support method for searchUserData().
-	 * Outputs the results to viewData().
-	 * Serves as an intermediary that should not be called outside of searchUserData(). 
-	 * @param searchTarget The target tag to search for.
-	 */
-	private void search(String searchTarget) {
-		
-		DataNode searchedData = null;
-		
-		searchData.setDataNode(currentUser.getDataHead());
-		
-		searchedData = searchData.pullTags(searchTarget);
-		
-		viewData(searchedData);
-		
-	}
-	
-	/**
 	 * Log in as a user.
 	 * Support method. Has no input scrub.
 	 * Does the password check.
 	 * @param employeeID User to log in as.
 	 */
-	private void lockUserPrivate(int employeeID, String password) {
+	private boolean lockUserPrivate(int employeeID, String password) {
 		
 		if(locked == 0) {
 			
@@ -300,10 +351,17 @@ public class LinkedListManager {
 				
 			}
 			
+			return true;
+			
 		}
-		else
+		else {
+			
 			System.out.println("Already logged into user " + currentUser.getEmployeeName() + ". Please logout"
 					+ "before attempting to access a different user.");
+			
+			return false;
+			
+		}
 		
 	}
 	
