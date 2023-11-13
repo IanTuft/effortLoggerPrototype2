@@ -74,7 +74,7 @@ public class StoreData {
 		
 	}
 	
-	public void saveUsersData(DataNode dataNodeHead) {
+	private void saveUsersData(DataNode dataNodeHead) {
 		
 		while(dataNodeHead.getNext() != null) {
 			
@@ -145,7 +145,7 @@ public class StoreData {
 		
 	}
 	
-	public void saveStories(UserStory userStoryHead) {
+	private void saveStories(UserStory userStoryHead) {
 		
 		while(userStoryHead.getNext() != null) {
 			
@@ -166,7 +166,7 @@ public class StoreData {
 		
 	}
 	
-	public void saveProjectData(DataNode dataNodeHead) {
+	private void saveProjectData(DataNode dataNodeHead) {
 		
 		while(dataNodeHead.getNext() != null) {
 			
@@ -186,8 +186,5 @@ public class StoreData {
 		}
 		
 	}
-	
-	
-	//Private/Helper Methods
 
 }

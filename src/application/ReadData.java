@@ -39,18 +39,30 @@ public class ReadData {
 		try {
 			
 			users = new FileReader("users.txt");
-			projects = new FileReader("projects.txt");
 			
 			usersIn = new BufferedReader(users);
-			projectsIn = new BufferedReader(projects);
 			
 			addUsers(manager);
+			
+		}
+		catch(FileNotFoundException e) {
+		
+			System.out.println("users.txt not found.");
+		
+		}
+		
+		try {
+			
+			projects = new FileReader("projects.txt");
+			
+			projectsIn = new BufferedReader(projects);
+			
 			addProjects(manager);
 			
 		}
 		catch(FileNotFoundException e) {
 		
-			System.out.println("One or more files not found.");
+			System.out.println("projects.txt not found.");
 		
 		}
 		
@@ -148,6 +160,21 @@ public class ReadData {
 		
 		int projectCount = 0;
 		
+		String storyTitle = "";
+		String story = "";
+		
+		int logNumber = 0;
+		int duration = 0;
+		String date = "";
+		String startTime = "";
+		String endTime = "";
+		String lifeCycleStep = "";
+		String effortCategory = "";
+		String etc = "";
+		String primaryTag = "";
+		String secondaryTag = "";
+		String additionalTag = "";
+		
 		try {
 			
 			projectCount = Integer.parseInt(projectsIn.readLine());
@@ -173,9 +200,11 @@ public class ReadData {
 				
 				while(!endString.equals("NEXT")) {
 					
-					//story variables
+					projectName = projectsIn.readLine();
+					storyTitle = projectsIn.readLine();
+					story = projectsIn.readLine();
 					
-					//add the story
+					manager.addNewStory(projectName, storyTitle, story);
 					
 					endString = projectsIn.readLine();
 					
@@ -185,9 +214,22 @@ public class ReadData {
 				
 				while(!endString.equals("NEXT")) {
 					
-					//data variables
+					projectName = endString;
+					logNumber = Integer.parseInt(usersIn.readLine());
+					duration = Integer.parseInt(usersIn.readLine());
+					date = usersIn.readLine();
+					startTime = usersIn.readLine();
+					endTime = usersIn.readLine();
+					lifeCycleStep = usersIn.readLine();
+					effortCategory = usersIn.readLine();
+					etc = usersIn.readLine();
 					
-					//add data
+					primaryTag = usersIn.readLine();
+					secondaryTag = usersIn.readLine();
+					additionalTag = usersIn.readLine();
+					
+					manager.addNewData(projectName, logNumber, duration, date, startTime, endTime,
+							lifeCycleStep, effortCategory, etc, primaryTag, secondaryTag, additionalTag);
 					
 					endString = projectsIn.readLine();
 					

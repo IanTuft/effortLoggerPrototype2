@@ -11,6 +11,7 @@ public class LinkedListManager {
 	private ProcessInput processInput = new ProcessInput(); //to process input for bad input
 	private Scanner scan = new Scanner(System.in); //scanner to receive input
 	private SearchData searchData = new SearchData();
+	private StoreData save = new StoreData();
 	
 	//Default constructor. Use this one.
 	public LinkedListManager() {
@@ -48,6 +49,13 @@ public class LinkedListManager {
 		
 	}
 	
+	public void save() {
+		
+		save.saveUsers(userNodeHead);
+		save.saveProject(projectNodeHead);
+		
+	}
+	
 	/**
 	 * To add a new employee. Added to front of linked list.
 	 * @param employeeNameIn Name of employee. Has built in input checking.
@@ -74,6 +82,40 @@ public class LinkedListManager {
 			userNodeHead = newEmployee;
 		
 		}
+		
+	}
+	
+	public void addNewEmployeeLogin(String firstName, String lastName, int employeeIDIn, String passwordIn) {
+		
+		String employeeName = processInput.processString(firstName, 30) + " " + processInput.processString(lastName, 30);
+		int employeeID = employeeIDIn;	
+		String password = processInput.processString(passwordIn, 30);
+		
+		if(userNodeHead == null) {
+			
+			UserNode firstUser = new UserNode(employeeName, employeeID, password);
+			userNodeHead = firstUser;
+			
+		}
+		else {
+		
+			UserNode newEmployee = new UserNode(employeeName, employeeID, password);
+			userNodeHead.setPrevious(newEmployee);
+			newEmployee.setNext(userNodeHead);
+			userNodeHead = newEmployee;
+		
+		}
+		
+	}
+	
+	public void addNewStory(String projectNameIn, String storyTitleIn, String storyIn) {
+		
+		String projectName = processInput.processString(projectNameIn, 30);
+		ProjectNode foundProject = findProject(projectName);
+		
+		UserStory newStory = new UserStory(projectNameIn, storyTitleIn, storyIn);
+		
+		foundProject.addUserStory(newStory);
 		
 	}
 	
@@ -176,9 +218,9 @@ public class LinkedListManager {
 	 * Has no input scrub. Assumes that the eventual log-in mechanic will do the input scrub.
 	 * @param employeeID ID to log in as.
 	 */
-	public void lockUser(int employeeID, String password) {
+	public boolean lockUser(int employeeID, String password) {
 		
-		lockUserPrivate(employeeID, password);
+		return lockUserPrivate(employeeID, password);
 		
 	}
 	
@@ -296,7 +338,7 @@ public class LinkedListManager {
 	 * Does the password check.
 	 * @param employeeID User to log in as.
 	 */
-	private void lockUserPrivate(int employeeID, String password) {
+	private boolean lockUserPrivate(int employeeID, String password) {
 		
 		if(locked == 0) {
 			
@@ -309,10 +351,17 @@ public class LinkedListManager {
 				
 			}
 			
+			return true;
+			
 		}
-		else
+		else {
+			
 			System.out.println("Already logged into user " + currentUser.getEmployeeName() + ". Please logout"
 					+ "before attempting to access a different user.");
+			
+			return false;
+			
+		}
 		
 	}
 	
