@@ -47,10 +47,6 @@ public class EffortLogger extends Application {
 		LocalDateTime date = LocalDateTime.now();
 		return dateformat.format(date);  
 	}
-	
-	public void storeLog(String[] log) {
-		database.add(log);
-	}
     
     public static void main(String[] args) {
         launch(args);
