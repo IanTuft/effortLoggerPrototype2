@@ -16,11 +16,39 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.TextInputDialog;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 public class EffortLogger extends Application {
 
-    private boolean isClockRunning = false;
+	private boolean isClockRunning = false;
+    private ArrayList<String[]> database = new ArrayList<String[]>(); //ArrayList to hold each log entry
+	private int logCounter = 0; //Log counter
+	private DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //Format dates
+	private DateTimeFormatter timeformat = DateTimeFormatter.ofPattern("HH:mm:ss"); //Format time
+	private String startTime;
+	private String endTime;
+	private String date;
+	private Instant start;
+	private Instant end;
+	
+	//Gets the local time
+	public String getTime() {
+		LocalDateTime now = LocalDateTime.now();  
+		return timeformat.format(now);  
+	}
+	
+	//Gets the local date
+	public String getDate() {
+		LocalDateTime date = LocalDateTime.now();
+		return dateformat.format(date);  
+	}
+	
     private Runnable effortLoggerCallback;
 
     public static void main(String[] args) {
@@ -30,11 +58,13 @@ public class EffortLogger extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Effort Logger");
-
+        primaryStage.setScene(createEffortLoggerScene());
+        primaryStage.show();
+    }
+    
+    private Scene createEffortLoggerScene() {
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
-        
-        primaryStage.setScene(new Scene(root, 600, 600));
 
         VBox centerBox = new VBox(20);
         centerBox.setAlignment(Pos.CENTER);
@@ -50,6 +80,8 @@ public class EffortLogger extends Application {
         Button startButton = new Button("Start Activity");
         startButton.setOnAction(e -> {
             isClockRunning = true;
+            startTime = getTime();
+            start = Instant.now();
             clockStatus.setText("Clock is running");
             clockStatus.setFill(Color.GREEN);
         });
@@ -61,11 +93,71 @@ public class EffortLogger extends Application {
         projectDropdown.setPromptText("Project");
 
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
+        lifecycleDropdown.getItems().addAll(
+        		"Problem Understanding",
+        		"Conceptual Design Plan",
+        		"Requirements",
+        		"Conceptual Design",
+        		"Conceptual Design Review",
+        		"Detailed Design Plan",
+        		"Detailed Design/Prototype",
+        		"Detailed Design Review",
+        		"Implementation Plan",
+        		"Test Case Generation",
+        		"Solution Specification",
+        		"Solution Review",
+        		"Solution Implementation",
+        		"Unit/System Test",
+        		"Reflection",
+        		"Repository Update",
+        		"Planning",
+        		"Information Gathering",
+        		"Information Understanding",
+        		"Verifying",
+        		"Outlining",
+        		"Drafting",
+        		"Finalizing",
+        		"Team Meeting",
+        		"Coach Meeting",
+        		"Stakeholder Meeting"
+        		);
         lifecycleDropdown.setPromptText("Life Cycle Step");
 
         ComboBox<String> effortCategoryDropdown = new ComboBox<>();
+        effortCategoryDropdown.getItems().addAll(
+        		"Project Plan",
+    			"Risk Management Plan",
+    			"Conceptual Design Plan",
+    			"Detailed Design Plan",
+    			"Implementation Plan",
+    			"Conceptual Design",
+    			"Detailed Design",
+    			"Test Cases",
+    			"Solution",
+    			"Reflection",
+    			"Outline",
+    			"Draft",
+    			"Report",
+    			"User Defined",
+    			"Break",
+    			"Phone",
+    			"Teammate",
+    			"Visitor",
+    			"Not specified",
+    			"10 Documentation",
+    			"20 Syntax",
+    			"30 Build, Package",
+    			"40 Assignment",
+    			"50 Interface",
+    			"60 Checking",
+    			"70 Data",
+    			"80 Function",
+    			"90 System",
+    			"100 Environment",
+        		"Others"
+        		);
         effortCategoryDropdown.setPromptText("Effort Category");
-
+        
         Button addProjectButton = createAddButton(projectDropdown);
         Button addLifecycleButton = createAddButton(lifecycleDropdown);
         Button addEffortCategoryButton = createAddButton(effortCategoryDropdown);
@@ -84,6 +176,21 @@ public class EffortLogger extends Application {
         Button stopButton = new Button("Stop this Activity");
         stopButton.setOnAction(e -> {
             isClockRunning = false;
+            date = getDate();
+            endTime = getTime();
+            end = Instant.now();
+            logCounter++;
+            String[] log = new String[8];
+            log[0] = "" + logCounter;
+            log[1] = date;
+            log[2] = startTime;
+            log[3] = endTime;
+            log[4] = "" + Duration.between(start, end).toMinutes();
+            log[5] = projectDropdown.getValue();
+            log[6] = lifecycleDropdown.getValue();
+            log[7] = effortCategoryDropdown.getValue();
+            database.add(log);
+            System.out.println(Arrays.toString(database.get(logCounter-1)));
             clockStatus.setText("Clock is stopped");
             clockStatus.setFill(Color.RED);
         });
@@ -96,7 +203,7 @@ public class EffortLogger extends Application {
 
         root.setCenter(centerBox);
 
-        return;
+        return new Scene(root, 600, 600); // Larger window size for Effort Logger
     }
 
     private VBox createLabeledRow(String label, ComboBox<String> dropdown, Button addButton) {

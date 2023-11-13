@@ -17,7 +17,7 @@ public class MainApp extends Application {
 	
 	private Stage primaryStage;
     private Runnable effortLoggerSuccessCallback;
-    private Runnable planningPokerCallback;
+    private Runnable planningPokerSuccessCallback;
 
     public static void launchApp() {
         launch();
@@ -37,7 +37,7 @@ public class MainApp extends Application {
         // Create box for Planning Poker (traditional poker colors)
         VBox planningPokerBox = createClickableBox("Planning Poker", Color.DARKGREEN, Color.LIGHTGREEN, Color.WHITE);
         planningPokerBox.setOnMouseClicked(e -> {
-        	openPlanningPoker();
+        	planningPokerSuccessCallback.run();
         });
 
         // Create box for Effort Logger (complementary colors)
@@ -59,17 +59,17 @@ public class MainApp extends Application {
 //        effortLogger.start(primaryStage);
 //    }
 
-    private void openPlanningPoker() {
-        PlanningPoker planningPoker = new PlanningPoker();
-        planningPoker.start(primaryStage);
-    }
+//    private void openPlanningPoker() {
+//        PlanningPoker planningPoker = new PlanningPoker();
+//        planningPoker.start(primaryStage);
+//    }
 
     public void setEffortLoggerCallback(Runnable callback) {
         this.effortLoggerSuccessCallback = callback;
     }
 
     public void setPlanningPokerCallback(Runnable callback) {
-        this.planningPokerCallback = callback;
+        this.planningPokerSuccessCallback = callback;
     }
     
     private VBox createClickableBox(String text, Color bgColor, Color borderColor, Color textColor) {
