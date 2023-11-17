@@ -9,11 +9,21 @@ import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
 public class Main extends Application {
+	
+	public static LinkedListManager llm;
 
     private Stage primaryStage;
 
     public static void main(String[] args) {
-        launch(args);
+        
+    	if(llm == null) {
+    		
+    		llm = new LinkedListManager();
+    		//ReadData readData = new ReadData(llm);
+    		
+    	}
+    	
+    	launch(args);
     }
 
     @Override

@@ -15,6 +15,8 @@ public class LogIn extends Application {
     private Stage primaryStage;
     // private List<User> userAccounts = new ArrayList<>();
     private Runnable loginSuccessCallback;
+    
+    private ProcessInput processInput = new ProcessInput();
 
     public static void main(String[] args) {
         launch(args);
@@ -125,6 +127,10 @@ public class LogIn extends Application {
 //                return true;
 //            }
 //        }
-        return true;
+    	boolean credentials = false;
+    	
+    	credentials = Main.llm.lockUser(processInput.processInt(employeeId, 9), password);
+    	
+    	return credentials;
     }
 }
