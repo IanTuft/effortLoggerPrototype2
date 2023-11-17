@@ -10,9 +10,6 @@ public class ReadData {
 	private FileReader users;
 	private FileReader projects;
 	
-	private File userTest;
-	private File projectTest;
-	
 	//Default Constructor. DO NOT USE.
 	
 	public ReadData() {
@@ -44,8 +41,8 @@ public class ReadData {
 			users = new FileReader("users.txt");
 			
 			usersIn = new BufferedReader(users);
-			
-			if(userTest.length() != 0)
+
+			if(usersIn.readLine() != null)
 				addUsers(manager);
 			
 		}
@@ -54,6 +51,11 @@ public class ReadData {
 			System.out.println("users.txt not found.");
 		
 		}
+		catch(IOException e) {
+			
+			System.out.println("IO");
+			
+		}
 		
 		try {
 			
@@ -61,7 +63,7 @@ public class ReadData {
 			
 			projectsIn = new BufferedReader(projects);
 			
-			if(projectTest.length() != 0)
+			if(projectsIn.readLine() != null)
 				addProjects(manager);
 			
 		}
@@ -69,6 +71,11 @@ public class ReadData {
 		
 			System.out.println("projects.txt not found.");
 		
+		}
+		catch(IOException e) {
+			
+			System.out.println("IO");
+			
 		}
 		
 	}
@@ -153,6 +160,18 @@ public class ReadData {
 			}
 			
 		}
+		
+		try{
+			
+			usersIn.close();
+			
+		}
+		catch(IOException e) {
+			
+			System.out.println("uh...");
+			
+		}
+		
 		
 	}
 	
@@ -246,6 +265,17 @@ public class ReadData {
 				System.out.println("Unexpected read error. Position: load users.");
 				
 			}
+			
+		}
+		
+		try{
+			
+			projectsIn.close();
+			
+		}
+		catch(IOException e) {
+			
+			System.out.println("uh...");
 			
 		}
 		

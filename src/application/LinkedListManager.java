@@ -11,7 +11,7 @@ public class LinkedListManager {
 	private ProcessInput processInput = new ProcessInput(); //to process input for bad input
 	private Scanner scan = new Scanner(System.in); //scanner to receive input
 	private SearchData searchData = new SearchData();
-	private StoreData save = new StoreData();
+	private StoreData save;
 	
 	//Default constructor. Use this one.
 	public LinkedListManager() {
@@ -51,6 +51,8 @@ public class LinkedListManager {
 	
 	public void save() {
 		
+		save = new StoreData();
+		
 		save.saveUsers(userNodeHead);
 		save.saveProject(projectNodeHead);
 		
@@ -85,6 +87,13 @@ public class LinkedListManager {
 		
 	}
 	
+	/**
+	 * To add a new employee for the login screen. Combines first name and last name into one string.
+	 * @param firstName
+	 * @param lastName
+	 * @param employeeIDIn
+	 * @param passwordIn
+	 */
 	public void addNewEmployeeLogin(String firstName, String lastName, int employeeIDIn, String passwordIn) {
 		
 		String employeeName = processInput.processString(firstName, 30) + " " + processInput.processString(lastName, 30);
@@ -344,15 +353,22 @@ public class LinkedListManager {
 			
 			findUser(employeeID);
 			
-			if(!(currentUser.passwordCheck(password))) {
+			if(currentUser != null) {
+			
+				if(!(currentUser.passwordCheck(password))) {
+					
+					currentUser = null;
+					System.out.println("Invalid password.");
+					
+					return false;
+					
+				}
 				
-				currentUser = null;
-				System.out.println("Invalid password.");
+				return true;
 				
 			}
 			
-			return true;
-			
+			return false;
 		}
 		else {
 			
@@ -364,6 +380,7 @@ public class LinkedListManager {
 		}
 		
 	}
+		
 	
 	/**
 	 * Given an employee ID, sets the current user to the user associated with the ID.
@@ -374,24 +391,28 @@ public class LinkedListManager {
 		
 		UserNode foundUser = userNodeHead;
 		int findSuccess = 0;
+		
+		if(foundUser != null) {
 
-		while(foundUser.getNext() != null && findSuccess == 0) { //Search for user in the linked list.
-			
-			if(foundUser.getEmployeeID() == employeeID){
+			while(foundUser.getNext() != null && findSuccess == 0) { //Search for user in the linked list.
 				
-				findSuccess = 1;
-				locked = 1;
-				System.out.println("Log in with user ID: " + foundUser.getEmployeeID() + " successful.");
+				if(foundUser.getEmployeeID() == employeeID){
+					
+					findSuccess = 1;
+					locked = 1;
+					System.out.println("Log in with user ID: " + foundUser.getEmployeeID() + " successful.");
+					
+				}
+				else
+					foundUser = foundUser.getNext();
 				
 			}
-			else
-				foundUser = foundUser.getNext();
-			
-		}
 		
 		//If user doesn't exist.
 		if(foundUser.getNext() == null && findSuccess == 0)
 			System.out.println("The searched for user does not exist.");
+		
+		}
 		
 		currentUser = foundUser;
 		

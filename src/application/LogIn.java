@@ -91,6 +91,10 @@ public class LogIn extends Application {
         Button signUpConfirmButton = new Button("Sign Up");
         signUpConfirmButton.setOnAction(e -> {
             // Existing sign-up code
+        	//Andrew's Work Zone
+        	Main.llm.addNewEmployeeLogin(firstNameField.getText(), lastNameField.getText(), 
+        			processInput.processInt(employeeIdField.getText(), 9), passwordField.getText());
+        	//End Andrew's Work Zone
         });
 
         // Text formatter to allow only integer input for Employee ID
