@@ -103,6 +103,7 @@ public class EffortLogger extends Application {
 
         ComboBox<String> projectDropdown = new ComboBox<>();
         projectDropdown.setPromptText("Project");
+        //need to load in existing projects from saved info here
 
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
         lifecycleDropdown.getItems().addAll(
@@ -207,7 +208,12 @@ public class EffortLogger extends Application {
             log[7] = effortCategoryDropdown.getValue();
             database.add(log);
             //Andrew's Work Zone
-            Main.llm.addNewProject(log[5], 0, 0);
+            if(!Main.llm.checkDuplicateProject(log[5])) {
+            	
+                Main.llm.addNewProject(log[5], 0, 0);
+            	
+            }
+
             Main.llm.addNewData(log[5], logCounter, processInput.processInt(log[4], 9), date, startTime, endTime, 
             		log[6], log[7], date, log[5], log[6], log[7]);
             //End Andrew's Work Zone

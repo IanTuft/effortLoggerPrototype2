@@ -163,6 +163,41 @@ public class LinkedListManager {
 		
 	}
 	
+	
+	public boolean checkDuplicateProject(String nameToCheck) {
+		
+		ProjectNode findProject = projectNodeHead;
+		
+		if(findProject != null) {
+			
+			if(findProject.getNext() == null && findProject.getProjectName().equals(nameToCheck)) {
+				
+				return true;
+				
+			}
+			
+			while(findProject.getNext() != null) {
+				
+				if(findProject.getProjectName().equals(nameToCheck)) {
+					
+					return true;
+					
+				}
+				
+			}
+			
+			if(findProject.getNext() == null && findProject.getProjectName().equals(nameToCheck)) {
+				
+				return true;
+				
+			}
+		
+		}
+		
+		return false;
+		
+	}
+	
 	/**
 	 * To add data to a project. Can only be done while logged into any user as this also adds
 	 * the data to the user who is logged in.
@@ -197,6 +232,17 @@ public class LinkedListManager {
 		}
 		else {
 			
+			if(findProject.getNext() == null && findProject.getProjectName().equals(name)) {
+				
+				currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
+						lifeCycleStep, effortCategory, etc);
+				findProject.addNewData(name, logNumber, duration, date, startTime, endTime,
+						lifeCycleStep, effortCategory, etc);
+				
+				return 1;
+				
+			}
+			
 			while(findProject.getNext() != null) {
 				
 				if(findProject.getProjectName().equals(name)) {
@@ -212,6 +258,17 @@ public class LinkedListManager {
 				else
 					findProject.getNext();
 			
+			}
+			
+			if(findProject.getNext() == null && findProject.getProjectName().equals(name)) {
+				
+				currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
+						lifeCycleStep, effortCategory, etc);
+				findProject.addNewData(name, logNumber, duration, date, startTime, endTime,
+						lifeCycleStep, effortCategory, etc);
+				
+				return 1;
+				
 			}
 			
 			System.out.println("No project with name: " + name + " found. Please try a new name or create a project with that name.\n");
@@ -351,7 +408,7 @@ public class LinkedListManager {
 		
 		if(locked == 0) {
 			
-			findUser(employeeID);
+			currentUser = findUser(employeeID);
 			
 			if(currentUser != null) {
 			
@@ -387,12 +444,22 @@ public class LinkedListManager {
 	 * The back-end log-in mechanic.
 	 * @param employeeID ID to look for.
 	 */
-	private void findUser(int employeeID) {
+	private UserNode findUser(int employeeID) {
 		
 		UserNode foundUser = userNodeHead;
 		int findSuccess = 0;
 		
 		if(foundUser != null) {
+			
+			if(foundUser.getNext() == null && foundUser.getEmployeeID() == employeeID) {
+				
+				findSuccess = 1;
+				locked = 1;
+				System.out.println("Log in with user ID: " + foundUser.getEmployeeID() + " successful.");
+				
+				return foundUser;
+				
+			}
 
 			while(foundUser.getNext() != null && findSuccess == 0) { //Search for user in the linked list.
 				
@@ -402,9 +469,21 @@ public class LinkedListManager {
 					locked = 1;
 					System.out.println("Log in with user ID: " + foundUser.getEmployeeID() + " successful.");
 					
+					return foundUser;
+					
 				}
 				else
 					foundUser = foundUser.getNext();
+				
+			}
+			
+			if(foundUser.getEmployeeID() == employeeID) {
+				
+				findSuccess = 1;
+				locked = 1;
+				System.out.println("Log in with user ID: " + foundUser.getEmployeeID() + " successful.");
+				
+				return foundUser;
 				
 			}
 		
@@ -414,7 +493,7 @@ public class LinkedListManager {
 		
 		}
 		
-		currentUser = foundUser;
+		return null;
 		
 	}
 	
