@@ -6,7 +6,7 @@ public class SearchData {
 	private DataNode temp;
 	
 	
-	//Default Constructor. DO NOT USE.
+	//Default Constructor.
 	
 	SearchData(){
 		
@@ -32,17 +32,49 @@ public class SearchData {
 	
 	//Public Methods
 	
-	public DataNode pullPrimary(String tagIn) {
+	public DataNode findProjects(String projectName) {
 		
-		DataNode nodeReturn = new DataNode();
+		DataNode nodeReturn = null;
 		temp = dataNodeHead;
 		
-		while(temp.getNext() != null) {
+		if(temp != null) {
 			
-			if(temp.getPrimaryTag().equals(tagIn)) {
+			if(temp.getNext() == null && temp.getProjectName().equals(projectName)) {
 				
-				if(nodeReturn.getPrimaryTag().equals("NULL"))
-					nodeReturn.copy(temp);
+				return temp;
+				
+			}
+		
+			while(temp.getNext() != null) {
+				
+				if(temp.getProjectName().equals(projectName)) {
+					
+					if(nodeReturn == null)
+						nodeReturn = temp;
+					else {
+						DataNode additionalNode = new DataNode();
+						
+						additionalNode.copy(temp);
+						
+						nodeReturn.setPrevious(additionalNode);
+						additionalNode.setNext(nodeReturn);
+						additionalNode.setPrevious(null);
+	
+						nodeReturn = additionalNode;
+						
+					}
+					
+				}
+				
+				
+				temp = temp.getNext();
+				
+			}
+			
+			if(temp.getNext() == null && temp.getProjectName().equals(projectName)) {
+				
+				if(nodeReturn == null)
+					nodeReturn = temp;
 				else {
 					DataNode additionalNode = new DataNode();
 					
@@ -57,30 +89,56 @@ public class SearchData {
 				}
 				
 			}
-			
-			
-			temp = temp.getNext();
-			
-		}
 		
-		if(nodeReturn.getPrimaryTag().equals("NULL"))
-			return null;
+		}
 		
 		return nodeReturn;
 		
 	}
 	
-	public DataNode pullSecondary(String tagIn) {
+	public DataNode findLifecycles(String lifecycle) {
 		
-		DataNode nodeReturn = new DataNode();
+		DataNode nodeReturn = null;
 		temp = dataNodeHead;
 		
-		while(temp.getNext() != null) {
+		if(temp != null) {
 			
-			if(temp.getSecondaryTag().equals(tagIn)) {
+			if(temp.getNext() == null && temp.getLifeCycleStep().equals(lifecycle)) {
 				
-				if(nodeReturn.getSecondaryTag().equals("NULL"))
-					nodeReturn.copy(temp);
+				return temp;
+				
+			}
+		
+			while(temp.getNext() != null) {
+				
+				if(temp.getLifeCycleStep().equals(lifecycle)) {
+					
+					if(nodeReturn == null)
+						nodeReturn = temp;
+					else {
+						DataNode additionalNode = new DataNode();
+						
+						additionalNode.copy(temp);
+						
+						nodeReturn.setPrevious(additionalNode);
+						additionalNode.setNext(nodeReturn);
+						additionalNode.setPrevious(null);
+	
+						nodeReturn = additionalNode;
+						
+					}
+					
+				}
+				
+				
+				temp = temp.getNext();
+				
+			}
+			
+			if(temp.getNext() == null && temp.getLifeCycleStep().equals(lifecycle)) {
+				
+				if(nodeReturn == null)
+					nodeReturn = temp;
 				else {
 					DataNode additionalNode = new DataNode();
 					
@@ -95,30 +153,56 @@ public class SearchData {
 				}
 				
 			}
-			
-			
-			temp = temp.getNext();
-			
-		}
 		
-		if(nodeReturn.getSecondaryTag().equals("NULL"))
-			return null;
+		}
 		
 		return nodeReturn;
 		
 	}
 	
-	public DataNode pullAdditional(String tagIn) {
+	public DataNode findEfforts(String effort) {
 		
-		DataNode nodeReturn = new DataNode();
+		DataNode nodeReturn = null;
 		temp = dataNodeHead;
 		
-		while(temp.getNext() != null) {
+		if(temp != null) {
 			
-			if(temp.getAdditionalTag().equals(tagIn)) {
+			if(temp.getNext() == null && temp.getEffortCategory().equals(effort)) {
 				
-				if(nodeReturn.getAdditionalTag().equals("NULL"))
-					nodeReturn.copy(temp);
+				return temp;
+				
+			}
+		
+			while(temp.getNext() != null) {
+				
+				if(temp.getEffortCategory().equals(effort)) {
+					
+					if(nodeReturn == null)
+						nodeReturn = temp;
+					else {
+						DataNode additionalNode = new DataNode();
+						
+						additionalNode.copy(temp);
+						
+						nodeReturn.setPrevious(additionalNode);
+						additionalNode.setNext(nodeReturn);
+						additionalNode.setPrevious(null);
+	
+						nodeReturn = additionalNode;
+						
+					}
+					
+				}
+				
+				
+				temp = temp.getNext();
+				
+			}
+			
+			if(temp.getNext() == null && temp.getEffortCategory().equals(effort)) {
+				
+				if(nodeReturn == null)
+					nodeReturn = temp;
 				else {
 					DataNode additionalNode = new DataNode();
 					
@@ -133,17 +217,11 @@ public class SearchData {
 				}
 				
 			}
-			
-			
-			temp = temp.getNext();
-			
+		
 		}
 		
-		if(nodeReturn.getAdditionalTag().equals("NULL"))
-			return null;
-		
 		return nodeReturn;
-		
-	}
 
+	}
+	
 }

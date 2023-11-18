@@ -10,6 +10,7 @@ public class ProjectNode {
 	private UserNode userNodeHead;
 	private int employeeCount;
 	private int storyCount;
+	private int projectID;
 	
 	//Default constructor. Will not be used.
 	public ProjectNode() {
@@ -20,6 +21,7 @@ public class ProjectNode {
 		userNodeHead = null;
 		employeeCount = 0;
 		storyCount = 0;
+		projectID = 0;
 		
 		next = null;
 		previous = null;
@@ -36,6 +38,7 @@ public class ProjectNode {
 		userNodeHead = null;
 		employeeCount = 0;
 		storyCount = 0;
+		projectID = 0;
 		
 		next = null;
 		previous = null;
@@ -55,6 +58,7 @@ public class ProjectNode {
 	public void setUserNodeHead(UserNode userNodeIn) {this.userNodeHead = userNodeIn;}
 	public void setEmployeeCount(int employeeCountIn) {this.employeeCount = employeeCountIn;}
 	public void setStoryCount(int storyCountIn) {this.storyCount = storyCountIn;}
+	public void setProjectID(int projectIDIn) {this.projectID = projectIDIn;}
 	
 	public ProjectNode getNext() {return next;}
 	public ProjectNode getPrevious() {return previous;}
@@ -63,6 +67,7 @@ public class ProjectNode {
 	public UserNode getUserNodeHead() {return userNodeHead;}
 	public int getEmployeeCount() {return employeeCount;}
 	public int getStoryCount() {return storyCount;}
+	public int getProjectID() {return projectID;}
 	
 	
 	public String save() {

@@ -3,6 +3,7 @@ package application;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -30,6 +31,11 @@ public class PlanningPoker extends Application {
     }
 
     private Scene createPlanningPokerScene() {
+    	
+    	String projectNameDefault = "Project";
+    	String lifecycleDefault = "Life Cycle Step";
+    	String effortDefault = "Effort Category";
+    	
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
 
@@ -43,16 +49,125 @@ public class PlanningPoker extends Application {
         section1.setFont(javafx.scene.text.Font.font("Arial", FontWeight.NORMAL, 14));
 
         ComboBox<String> projectDropdown = new ComboBox<>();
-        projectDropdown.setPromptText("Project");
+        projectDropdown.setPromptText(projectNameDefault);
+        
+        String[] currentProjects = new String[Main.llm.getProjectCount()];
+        
+        for(int i = 0; i < Main.llm.getProjectCount(); i++) {
+        	
+        	currentProjects[i] = Main.llm.getProjectName(i);
+        	
+        }
+        
+        projectDropdown.getItems().addAll(currentProjects);
 
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
-        lifecycleDropdown.setPromptText("Life Cycle Step");
+        lifecycleDropdown.setPromptText(lifecycleDefault);
+        lifecycleDropdown.getItems().addAll(
+        		"Problem Understanding",
+        		"Conceptual Design Plan",
+        		"Requirements",
+        		"Conceptual Design",
+        		"Conceptual Design Review",
+        		"Detailed Design Plan",
+        		"Detailed Design/Prototype",
+        		"Detailed Design Review",
+        		"Implementation Plan",
+        		"Test Case Generation",
+        		"Solution Specification",
+        		"Solution Review",
+        		"Solution Implementation",
+        		"Unit/System Test",
+        		"Reflection",
+        		"Repository Update",
+        		"Planning",
+        		"Information Gathering",
+        		"Information Understanding",
+        		"Verifying",
+        		"Outlining",
+        		"Drafting",
+        		"Finalizing",
+        		"Team Meeting",
+        		"Coach Meeting",
+        		"Stakeholder Meeting"
+        		);
 
         ComboBox<String> effortCategoryDropdown = new ComboBox<>();
-        effortCategoryDropdown.setPromptText("Effort Category");
+        effortCategoryDropdown.setPromptText(effortDefault);
+        effortCategoryDropdown.getItems().addAll(
+        		"Project Plan",
+    			"Risk Management Plan",
+    			"Conceptual Design Plan",
+    			"Detailed Design Plan",
+    			"Implementation Plan",
+    			"Conceptual Design",
+    			"Detailed Design",
+    			"Test Cases",
+    			"Solution",
+    			"Reflection",
+    			"Outline",
+    			"Draft",
+    			"Report",
+    			"User Defined",
+    			"Break",
+    			"Phone",
+    			"Teammate",
+    			"Visitor",
+    			"Not specified",
+    			"10 Documentation",
+    			"20 Syntax",
+    			"30 Build, Package",
+    			"40 Assignment",
+    			"50 Interface",
+    			"60 Checking",
+    			"70 Data",
+    			"80 Function",
+    			"90 System",
+    			"100 Environment",
+        		"Plans",
+        		"Deliverables",
+        		"Interruptions",
+        		"Defects",
+        		"Others"
+        		);
+        
+        //TextField tagInput = new TextField();
+        //tagInput.setPromptText("Enter tags separated by commas");
+        
+        Button nextButton = new Button("Next");
+        Button prevButton = new Button("Previous");
+        
+        HBox nextAndPrevButton = new HBox(20);
+        nextAndPrevButton.setAlignment(Pos.CENTER);
+        nextAndPrevButton.getChildren().addAll(
+                nextButton, prevButton
+        );
+
+        Text output = new Text();
+
+        Button searchButton = new Button("Search");
+
+        searchButton.setOnAction(e -> {
+            
+        	Main.llm.searchUserData(projectDropdown.getValue(), lifecycleDropdown.getValue(), effortCategoryDropdown.getValue(),
+        			projectNameDefault, lifecycleDefault, effortDefault);
+            
+        });
+        
+        nextButton.setOnAction(e -> {
+        	
+        	
+        	
+        });
+        
+        prevButton.setOnAction(e -> {
+        	
+        	
+        	
+        });
 
 
-        Text section2 = new Text("2. Search up to 3 tags separated by a comma to find relative data.");
+        /*Text section2 = new Text("2. Search up to 3 tags separated by a comma to find relative data.");
         section2.setFont(javafx.scene.text.Font.font("Arial", FontWeight.NORMAL, 14));
 
         TextField tagInput = new TextField();
@@ -85,7 +200,7 @@ public class PlanningPoker extends Application {
                 }
                 output.setText("Tags: " + Arrays.toString(tags));
             }
-        });
+        });*/
 
         Text section3 = new Text("3. Pick a number 1-10:");
         ChoiceBox<Integer> numberChoiceBox = new ChoiceBox<>();
@@ -113,7 +228,7 @@ public class PlanningPoker extends Application {
         centerBox.getChildren().addAll(title, section1, createLabeledRow("Project:", projectDropdown),
                 createLabeledRow("Life Cycle Step:", lifecycleDropdown),
                 createLabeledRow("Effort Category:", effortCategoryDropdown),
-                section2, tagInput, searchButton, output, section3, numberChoiceBox, submitButton);
+                /*section2,*/ /*tagInput,*/ searchButton, output, nextAndPrevButton, section3, numberChoiceBox, submitButton);
 
         root.setCenter(centerBox);
 

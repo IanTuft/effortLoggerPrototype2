@@ -12,6 +12,8 @@ public class LinkedListManager {
 	private Scanner scan = new Scanner(System.in); //scanner to receive input
 	private SearchData searchData = new SearchData();
 	private StoreData save;
+	private int projectCount;
+	private int employeeCount;
 	
 	//Default constructor. Use this one.
 	public LinkedListManager() {
@@ -28,26 +30,6 @@ public class LinkedListManager {
 
 	
 	//Public Methods
-	
-	/**
-	 * Connect the linked list manager to a list of employees.
-	 * @param listIn The list to connect to.
-	 */
-	public void connectUserList(UserNode listIn) {
-		
-		userNodeHead = listIn;
-		
-	}
-	
-	/**
-	 * Connect the linked list manager to a list of projects.
-	 * @param listIn The list to connect to.
-	 */
-	public void connectProjectList(ProjectNode listIn) {
-		
-		projectNodeHead = listIn;
-		
-	}
 	
 	public void save() {
 		
@@ -75,6 +57,8 @@ public class LinkedListManager {
 			UserNode firstUser = new UserNode(employeeName, employeeID, password);
 			userNodeHead = firstUser;
 			
+			employeeCount++;
+			
 		}
 		else {
 		
@@ -82,6 +66,8 @@ public class LinkedListManager {
 			userNodeHead.setPrevious(newEmployee);
 			newEmployee.setNext(userNodeHead);
 			userNodeHead = newEmployee;
+			
+			employeeCount++;
 		
 		}
 		
@@ -105,6 +91,8 @@ public class LinkedListManager {
 			UserNode firstUser = new UserNode(employeeName, employeeID, password);
 			userNodeHead = firstUser;
 			
+			employeeCount++;
+			
 		}
 		else {
 		
@@ -112,6 +100,8 @@ public class LinkedListManager {
 			userNodeHead.setPrevious(newEmployee);
 			newEmployee.setNext(userNodeHead);
 			userNodeHead = newEmployee;
+			
+			employeeCount++;
 		
 		}
 		
@@ -144,17 +134,23 @@ public class LinkedListManager {
 		
 		if(projectNodeHead == null) {
 			
+			projectCount++;
+			
 			ProjectNode firstProject = new ProjectNode(projectName);
 			firstProject.setEmployeeCount(employeeCount);
 			firstProject.setStoryCount(storyCount);
+			firstProject.setProjectID(projectCount);
 			projectNodeHead = firstProject;
 			
 		}
 		else {
 		
+			projectCount++;
+			
 			ProjectNode loadProject = new ProjectNode(projectName);
 			loadProject.setEmployeeCount(employeeCount);
 			loadProject.setStoryCount(storyCount);
+			loadProject.setProjectID(projectCount);
 			projectNodeHead.setPrevious(loadProject);
 			loadProject.setNext(projectNodeHead);
 			projectNodeHead = loadProject;
@@ -163,6 +159,44 @@ public class LinkedListManager {
 		
 	}
 	
+	public String getProjectName(int projectID) {
+		
+		ProjectNode temp = projectNodeHead;
+		
+		if(temp != null) {
+			
+			if(temp.getNext() == null && temp.getProjectID() == projectID) {
+				
+				return temp.getProjectName();
+				
+			}
+			
+			while(temp.getNext() != null) {
+				
+				if(temp.getProjectID() == projectID) {
+					
+					return temp.getProjectName();
+					
+				}
+				else {
+					
+					temp = temp.getNext();
+					
+				}
+				
+			}
+			
+			if(temp.getNext() == null && temp.getProjectID() == projectID) {
+				
+				return temp.getProjectName();
+				
+			}
+			
+		}
+		
+		return null;
+		
+	}
 	
 	public boolean checkDuplicateProject(String nameToCheck) {
 		
@@ -341,9 +375,9 @@ public class LinkedListManager {
 	 * Serves as the way to call the search and the logic handler.
 	 * Has no actual functionality.
 	 */
-	public void searchUserData(String tag1, String tag2, String tag3) {
+	public void searchUserData(String projectName, String lifecycle, String effort, 
+			String projectNameDefault, String lifecycleDefault, String effortDefault) {
 		
-		String searchTarget = "";
 		DataNode searchedData = null;
 		
 		if(locked == 0) {
@@ -357,37 +391,26 @@ public class LinkedListManager {
 				System.out.println("Invalid user. Please try a different user.");
 			else {
 				
-				searchTarget = tag1;				
-				searchData.setDataNode(currentUser.getDataHead());
-				searchedData = searchData.pullPrimary(searchTarget);
-				
-				if(tag2 == null && tag3 == null) {
+				if(projectName != null) {
 					
-					viewData(searchedData);
+					searchData.setDataNode(currentUser.getDataHead());
+					searchedData = searchData.findLifecycles(lifecycle);
 					
 				}
-				else {
+				if(lifecycle != null) {
 					
-					searchTarget = tag2;
 					searchData.setDataNode(searchedData);
-					searchedData = searchData.pullSecondary(searchTarget);
-					
-					if(tag3 == null) {
-						
-						viewData(searchedData);
-						
-					}
-					else {
-						
-						searchTarget = tag3;
-						searchData.setDataNode(searchedData);
-						searchedData = searchData.pullAdditional(searchTarget);
-						
-						viewData(searchedData);
-						
-					}
+					searchedData = searchData.findLifecycles(lifecycle);
 					
 				}
+				if(effort != null) {
+					
+					searchData.setDataNode(searchedData);
+					searchedData = searchData.findLifecycles(lifecycle);
+					
+				}
+				
+				viewData(searchedData);
 				
 			}
 			
@@ -608,5 +631,7 @@ public class LinkedListManager {
 	//Getters and Setters
 	//There are intentionally few of these to preserve the data security of this class.
 	public UserNode getCurrentUser() {return currentUser;} //check who is currently logged in.
+	public int getProjectCount() {return projectCount;}
+	public int getEmployeeCount() {return employeeCount;}
 
 }
