@@ -217,6 +217,11 @@ public class LinkedListManager {
 					return true;
 					
 				}
+				else {
+					
+					findProject = findProject.getNext();
+					
+				}
 				
 			}
 			

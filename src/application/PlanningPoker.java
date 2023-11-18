@@ -53,9 +53,9 @@ public class PlanningPoker extends Application {
         
         String[] currentProjects = new String[Main.llm.getProjectCount()];
         
-        for(int i = 0; i < Main.llm.getProjectCount(); i++) {
+        for(int i = 0; i < (Main.llm.getProjectCount()); i++) {
         	
-        	currentProjects[i] = Main.llm.getProjectName(i);
+        	currentProjects[i] = Main.llm.getProjectName(i+1);
         	
         }
         
