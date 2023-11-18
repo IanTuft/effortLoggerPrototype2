@@ -295,7 +295,7 @@ public class LinkedListManager {
 					
 				}
 				else
-					findProject.getNext();
+					findProject = findProject.getNext();
 			
 			}
 			
@@ -399,7 +399,7 @@ public class LinkedListManager {
 				if(projectName != null) {
 					
 					searchData.setDataNode(currentUser.getDataHead());
-					searchedData = searchData.findLifecycles(lifecycle);
+					searchedData = searchData.findProjects(lifecycle);
 					
 				}
 				if(lifecycle != null) {
@@ -411,7 +411,7 @@ public class LinkedListManager {
 				if(effort != null) {
 					
 					searchData.setDataNode(searchedData);
-					searchedData = searchData.findLifecycles(lifecycle);
+					searchedData = searchData.findEfforts(lifecycle);
 					
 				}
 				
@@ -535,13 +535,29 @@ public class LinkedListManager {
 		
 		ProjectNode foundProject = projectNodeHead;	
 		
-		while(foundProject.getNext() != null) {
-			
-			if(foundProject.getProjectName().compareTo(projectName) == 0)
+		if(foundProject != null) {
+		
+			if(foundProject.getNext() == null && foundProject.getProjectName().equals(projectName)) {
+				
 				return foundProject;
-			else
-				foundProject = foundProject.getNext();
+				
+			}
 			
+			while(foundProject.getNext() != null) {
+				
+				if(foundProject.getProjectName().compareTo(projectName) == 0)
+					return foundProject;
+				else
+					foundProject = foundProject.getNext();
+				
+			}
+			
+			if(foundProject.getNext() == null && foundProject.getProjectName().equals(projectName)) {
+				
+				return foundProject;
+				
+			}
+		
 		}
 		
 		return null;

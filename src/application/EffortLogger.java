@@ -75,7 +75,11 @@ public class EffortLogger extends Application {
     }
     
     private Scene createEffortLoggerScene() {
-        BorderPane root = new BorderPane();
+        
+        Button stopButton = new Button("Stop this Activity");
+        stopButton.setDisable(true);
+    	
+    	BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
 
         VBox centerBox = new VBox(20);
@@ -91,11 +95,13 @@ public class EffortLogger extends Application {
 
         Button startButton = new Button("Start Activity");
         startButton.setOnAction(e -> {
-            isClockRunning = true;
+        	stopButton.setDisable(false);
+        	isClockRunning = true;
             startTime = getTime();
             start = Instant.now();
             clockStatus.setText("Clock is running");
             clockStatus.setFill(Color.GREEN);
+            startButton.setDisable(true);
         });
 
         Text section2 = new Text("2. Select the Project, Lifecycle Step, Effort Category from the following lists:");
@@ -190,9 +196,9 @@ public class EffortLogger extends Application {
         effortCategoryBox.setAlignment(Pos.CENTER);
 
         Text section3 = new Text("3. Press the 'Stop this Activity' button to generate an effort log entry using the attributes above.");
-        Button stopButton = new Button("Stop this Activity");
         stopButton.setOnAction(e -> {
-            isClockRunning = false;
+            startButton.setDisable(false);
+        	isClockRunning = false;
             date = getDate();
             endTime = getTime();
             end = Instant.now();
@@ -208,18 +214,23 @@ public class EffortLogger extends Application {
             log[7] = effortCategoryDropdown.getValue();
             database.add(log);
             //Andrew's Work Zone
-            if(!Main.llm.checkDuplicateProject(log[5])) {
+            if(log[5] != null) {
             	
-                Main.llm.addNewProject(log[5], 0, 0);
-            	
+	            if(!Main.llm.checkDuplicateProject(log[5])) {
+	            	
+	                Main.llm.addNewProject(log[5], 0, 0);
+	            	
+	            }
+	
+	            Main.llm.addNewData(log[5], logCounter, processInput.processInt(log[4], 9), date, startTime, endTime, 
+	            		log[6], log[7], date, log[5], log[6], log[7]);
+	            
             }
-
-            Main.llm.addNewData(log[5], logCounter, processInput.processInt(log[4], 9), date, startTime, endTime, 
-            		log[6], log[7], date, log[5], log[6], log[7]);
             //End Andrew's Work Zone
             System.out.println(Arrays.toString(database.get(logCounter-1)));
             clockStatus.setText("Clock is stopped");
             clockStatus.setFill(Color.RED);
+            stopButton.setDisable(true);
         });
 
         centerBox.getChildren().addAll(title, clockStatus, section1, startButton, section2,
