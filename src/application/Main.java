@@ -50,6 +50,16 @@ public class Main extends Application {
     }
 
     private void openPlanningPoker() {
+
+    	PlanningPoker planningPoker = new PlanningPoker();
+        Stage planningPokerStage = new Stage();
+        planningPoker.start(planningPokerStage);
+        
+     // Ensure MainApp window remains open
+        primaryStage.show();
+        
+     // Set the EffortLogger callback to re-open EffortLogger
+        planningPoker.setPlanningPokerCallback(this::openEffortLogger);   
         PlanningPoker planningPoker = new PlanningPoker();
         planningPoker.start(new Stage());
     }

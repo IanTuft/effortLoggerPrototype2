@@ -17,6 +17,8 @@ import javafx.geometry.Insets;
 import java.util.Arrays;
 
 public class PlanningPoker extends Application {
+	
+	private Runnable planningPokerCallback;
 
     public static void main(String[] args) {
         launch(args);
@@ -96,6 +98,10 @@ public class PlanningPoker extends Application {
         Button submitButton = new Button("Submit");
         
         submitButton.setOnAction(e -> {
+        	
+        	//Call on save function here
+        	//save()
+        	
             Stage successStage = new Stage();
             successStage.setTitle("Success");
             VBox successBox = new VBox(20);
@@ -109,6 +115,8 @@ public class PlanningPoker extends Application {
             Stage currentStage = (Stage) submitButton.getScene().getWindow();
             currentStage.close();
         });
+        
+        
 
         centerBox.getChildren().addAll(title, section1, createLabeledRow("Project:", projectDropdown),
                 createLabeledRow("Life Cycle Step:", lifecycleDropdown),
@@ -128,5 +136,10 @@ public class PlanningPoker extends Application {
         row.getChildren().addAll(labelText, dropdown);
 
         return row;
+    }
+    
+    
+    public void setPlanningPokerCallback(Runnable callback) {
+        this.planningPokerCallback = callback;
     }
 }

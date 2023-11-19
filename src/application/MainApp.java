@@ -54,16 +54,6 @@ public class MainApp extends Application {
         primaryStage.show();
     }
     
-//    private void openEffortLogger() {
-//        EffortLogger effortLogger = new EffortLogger();
-//        effortLogger.start(primaryStage);
-//    }
-
-//    private void openPlanningPoker() {
-//        PlanningPoker planningPoker = new PlanningPoker();
-//        planningPoker.start(primaryStage);
-//    }
-
     public void setEffortLoggerCallback(Runnable callback) {
         this.effortLoggerSuccessCallback = callback;
     }
@@ -72,6 +62,7 @@ public class MainApp extends Application {
         this.planningPokerSuccessCallback = callback;
     }
     
+
     private VBox createClickableBox(String text, Color bgColor, Color borderColor, Color textColor) {
         VBox box = new VBox();
         box.setAlignment(Pos.CENTER);

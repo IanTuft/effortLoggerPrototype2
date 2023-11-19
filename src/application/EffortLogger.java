@@ -208,16 +208,32 @@ public class EffortLogger extends Application {
             clockStatus.setText("Clock is stopped");
             clockStatus.setFill(Color.RED);
         });
+        
+        Button exitButton = new Button("Save and Quit");
+        exitButton.setOnAction(e -> {
+            //save(); // Call the save function before exiting
+            ((Stage) exitButton.getScene().getWindow()).close(); // Close the current stage
+        });
+        
+        VBox bottomRightBox = createBottomRightBox(exitButton);
 
         centerBox.getChildren().addAll(title, clockStatus, section1, startButton, section2,
                 projectAndLifecycleBox,
                 effortCategoryBox,
                 section3,
                 stopButton);
+        centerBox.getChildren().add(bottomRightBox);
 
         root.setCenter(centerBox);
 
         return new Scene(root, 600, 600); // Larger window size for Effort Logger
+    }
+    
+    private VBox createBottomRightBox(Button exitButton) {
+    	VBox bottomRightBox = new VBox(5);
+        bottomRightBox.setAlignment(Pos.BOTTOM_RIGHT);
+        bottomRightBox.getChildren().add(exitButton);
+        return bottomRightBox;
     }
 
     private VBox createLabeledRow(String label, ComboBox<String> dropdown, Button addButton) {

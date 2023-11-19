@@ -15,13 +15,22 @@ public class LogIn extends Application {
     private Stage primaryStage;
     // private List<User> userAccounts = new ArrayList<>();
     private Runnable loginSuccessCallback;
+    private LinkedListManager lm;
+
 
     public static void main(String[] args) {
         launch(args);
     }
+    
+    
 
     @Override
     public void start(Stage primaryStage) {
+    	loginPage(primaryStage, lm);
+    }
+    
+    public void loginPage (Stage primaryStage, LinkedListManager lm) {
+
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Login Page");
 
@@ -89,6 +98,8 @@ public class LogIn extends Application {
         Button signUpConfirmButton = new Button("Sign Up");
         signUpConfirmButton.setOnAction(e -> {
             // Existing sign-up code
+        	//add save function  for sign up here
+
         });
 
         // Text formatter to allow only integer input for Employee ID
