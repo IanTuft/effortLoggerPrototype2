@@ -50,6 +50,17 @@ public class MainApp extends Application {
         primaryStage.show();
     }
 
+<<<<<<< Updated upstream
+=======
+    public void setEffortLoggerCallback(Runnable callback) {
+        this.effortLoggerSuccessCallback = callback;
+    }
+
+    public void setPlanningPokerCallback(Runnable callback) {
+        this.planningPokerSuccessCallback = callback;
+    }
+    
+>>>>>>> Stashed changes
     private VBox createClickableBox(String text, Color bgColor, Color borderColor, Color textColor) {
         VBox box = new VBox();
         box.setAlignment(Pos.CENTER);
