@@ -78,6 +78,8 @@ public class EffortLogger extends Application {
         
         Button stopButton = new Button("Stop this Activity");
         stopButton.setDisable(true);
+        
+        Button exitButton = new Button("EXIT");
     	
     	BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
@@ -223,7 +225,7 @@ public class EffortLogger extends Application {
 	            }
 	
 	            Main.llm.addNewData(log[5], logCounter, processInput.processInt(log[4], 9), date, startTime, endTime, 
-	            		log[6], log[7], date, log[5], log[6], log[7]);
+	            		log[6], log[7], date);
 	            
             }
             //End Andrew's Work Zone
@@ -232,8 +234,16 @@ public class EffortLogger extends Application {
             clockStatus.setFill(Color.RED);
             stopButton.setDisable(true);
         });
+        
+        exitButton.setOnAction(e -> {
+        	
+        	Main.llm.save();
+        	System.exit(0);
+        	
+        });
 
-        centerBox.getChildren().addAll(title, clockStatus, section1, startButton, section2,
+
+        centerBox.getChildren().addAll(exitButton, title, clockStatus, section1, startButton, section2,
                 projectAndLifecycleBox,
                 effortCategoryBox,
                 section3,

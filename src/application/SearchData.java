@@ -52,6 +52,7 @@ public class SearchData {
 					if(nodeReturn == null)
 						nodeReturn = temp;
 					else {
+						
 						DataNode additionalNode = new DataNode();
 						
 						additionalNode.copy(temp);
@@ -76,6 +77,7 @@ public class SearchData {
 				if(nodeReturn == null)
 					nodeReturn = temp;
 				else {
+					
 					DataNode additionalNode = new DataNode();
 					
 					additionalNode.copy(temp);
@@ -116,6 +118,7 @@ public class SearchData {
 					if(nodeReturn == null)
 						nodeReturn = temp;
 					else {
+						
 						DataNode additionalNode = new DataNode();
 						
 						additionalNode.copy(temp);
@@ -140,6 +143,7 @@ public class SearchData {
 				if(nodeReturn == null)
 					nodeReturn = temp;
 				else {
+					
 					DataNode additionalNode = new DataNode();
 					
 					additionalNode.copy(temp);
@@ -180,6 +184,7 @@ public class SearchData {
 					if(nodeReturn == null)
 						nodeReturn = temp;
 					else {
+						
 						DataNode additionalNode = new DataNode();
 						
 						additionalNode.copy(temp);
@@ -204,6 +209,7 @@ public class SearchData {
 				if(nodeReturn == null)
 					nodeReturn = temp;
 				else {
+					
 					DataNode additionalNode = new DataNode();
 					
 					additionalNode.copy(temp);

@@ -99,10 +99,6 @@ public class ReadData {
 		String effortCategory = "";
 		String etc = "";
 		
-		String primaryTag = "";
-		String secondaryTag = "";
-		String additionalTag = "";
-		
 		try {
 			
 			userCount = Integer.parseInt(usersIn.readLine());
@@ -139,12 +135,8 @@ public class ReadData {
 					effortCategory = usersIn.readLine();
 					etc = usersIn.readLine();
 					
-					primaryTag = usersIn.readLine();
-					secondaryTag = usersIn.readLine();
-					additionalTag = usersIn.readLine();
-					
 					manager.addNewData(projectName, logNumber, duration, date, startTime, endTime,
-							lifeCycleStep, effortCategory, etc, primaryTag, secondaryTag, additionalTag);
+							lifeCycleStep, effortCategory, etc);
 					
 					endString = usersIn.readLine();
 					
@@ -195,9 +187,6 @@ public class ReadData {
 		String lifeCycleStep = "";
 		String effortCategory = "";
 		String etc = "";
-		String primaryTag = "";
-		String secondaryTag = "";
-		String additionalTag = "";
 		
 		try {
 			
@@ -248,12 +237,8 @@ public class ReadData {
 					effortCategory = usersIn.readLine();
 					etc = usersIn.readLine();
 					
-					primaryTag = usersIn.readLine();
-					secondaryTag = usersIn.readLine();
-					additionalTag = usersIn.readLine();
-					
 					manager.addNewData(projectName, logNumber, duration, date, startTime, endTime,
-							lifeCycleStep, effortCategory, etc, primaryTag, secondaryTag, additionalTag);
+							lifeCycleStep, effortCategory, etc);
 					
 					endString = projectsIn.readLine();
 					

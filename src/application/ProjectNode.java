@@ -100,12 +100,15 @@ public class ProjectNode {
 			dataHead = projectData;
 			
 		}
+		else {
+			
+			DataNode projectData = new DataNode(name, logNumber, duration, date, startTime, endTime,
+					lifeCycleStep, effortCategory, etc);
+			dataHead.setPrevious(projectData);
+			projectData.setNext(dataHead);
+			dataHead = projectData;
 		
-		DataNode projectData = new DataNode(name, logNumber, duration, date, startTime, endTime,
-				lifeCycleStep, effortCategory, etc);
-		dataHead.setPrevious(projectData);
-		projectData.setNext(dataHead);
-		dataHead = projectData;
+		}
 		
 	}
 	

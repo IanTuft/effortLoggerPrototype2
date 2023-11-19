@@ -251,14 +251,10 @@ public class LinkedListManager {
 	 * @param lifeCycleStep Life cycle step of log.
 	 * @param effortCategory Effort category of log.
 	 * @param etc Various.
-	 * @param primaryTag First tag.
-	 * @param secondaryTag Second tag.
-	 * @param additionalTag Third tag.
 	 * @return returns 1 for success, 0 otherwise.
 	 */
 	public int addNewData(String name, int logNumber, int duration, String date, String startTime, 
-			String endTime, String lifeCycleStep, String effortCategory, String etc, String primaryTag,
-			String secondaryTag, String additionalTag) {
+			String endTime, String lifeCycleStep, String effortCategory, String etc) {
 		
 		ProjectNode findProject = projectNodeHead;
 		
@@ -270,6 +266,12 @@ public class LinkedListManager {
 			
 		}
 		else {
+			
+			if(findProject == null) {
+				
+				return 0;
+				
+			}
 			
 			if(findProject.getNext() == null && findProject.getProjectName().equals(name)) {
 				
@@ -384,6 +386,7 @@ public class LinkedListManager {
 			String projectNameDefault, String lifecycleDefault, String effortDefault) {
 		
 		DataNode searchedData = null;
+		System.out.println("Passed in: projectName: " + projectName + " lifecycle: " + lifecycle + " effort: " +effort);
 		
 		if(locked == 0) {
 			
@@ -399,19 +402,39 @@ public class LinkedListManager {
 				if(projectName != null) {
 					
 					searchData.setDataNode(currentUser.getDataHead());
-					searchedData = searchData.findProjects(lifecycle);
+					searchedData = searchData.findProjects(projectName);
 					
 				}
 				if(lifecycle != null) {
 					
-					searchData.setDataNode(searchedData);
-					searchedData = searchData.findLifecycles(lifecycle);
+					if(searchedData == null) {
+						
+						searchData.setDataNode(currentUser.getDataHead());
+						searchedData = searchData.findLifecycles(lifecycle);
+						
+					}
+					else {
+						
+						searchData.setDataNode(searchedData);
+						searchedData = searchData.findLifecycles(lifecycle);
+					
+					}
 					
 				}
 				if(effort != null) {
 					
-					searchData.setDataNode(searchedData);
-					searchedData = searchData.findEfforts(lifecycle);
+					if(searchedData == null) {
+						
+						searchData.setDataNode(currentUser.getDataHead());
+						searchedData = searchData.findEfforts(effort);
+						
+					}
+					else {
+						
+						searchData.setDataNode(searchedData);
+						searchedData = searchData.findEfforts(effort);
+					
+					}
 					
 				}
 				
@@ -615,7 +638,7 @@ public class LinkedListManager {
 			if(accessedData == null)
 				{System.out.println("No current data."); loopControl = 1;}
 			else {
-				System.out.println(accessedData.toString());
+				System.out.println(accessedData.display());
 				System.out.println("Enter 1 for previous, 2 for next, 0 for exit.");
 				//data to process, first read in, number of characters to return
 				userInput = processInput.processInt(scan.nextLine(), 1);

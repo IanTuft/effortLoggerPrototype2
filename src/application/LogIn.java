@@ -26,6 +26,8 @@ public class LogIn extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Login Page");
+        
+        Button exitButton = new Button("EXIT");
 
         VBox loginBox = new VBox(10);
         loginBox.setMinSize(300, 200);
@@ -39,9 +41,18 @@ public class LogIn extends Application {
 
         Button loginButton = new Button("Log In");
         Button signUpButton = new Button("Sign Up");
+        
+        exitButton.setOnAction(e -> {
+        	
+        	Main.llm.save();
+        	System.exit(0);
+        	
+        });
+
 
         loginBox.getChildren().addAll(
-                new Label("Employee ID:"), employeeIdField,
+                exitButton,
+        		new Label("Employee ID:"), employeeIdField,
                 new Label("Password:"), passwordField,
                 loginButton,
                 signUpButton,

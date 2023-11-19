@@ -36,6 +36,8 @@ public class PlanningPoker extends Application {
     	String lifecycleDefault = "Life Cycle Step";
     	String effortDefault = "Effort Category";
     	
+    	Button exitButton = new Button("EXIT");
+    	
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
 
@@ -165,6 +167,13 @@ public class PlanningPoker extends Application {
         	
         	
         });
+        
+        exitButton.setOnAction(e -> {
+        	
+        	Main.llm.save();
+        	System.exit(0);
+        	
+        });
 
 
         /*Text section2 = new Text("2. Search up to 3 tags separated by a comma to find relative data.");
@@ -225,7 +234,7 @@ public class PlanningPoker extends Application {
             currentStage.close();
         });
 
-        centerBox.getChildren().addAll(title, section1, createLabeledRow("Project:", projectDropdown),
+        centerBox.getChildren().addAll(exitButton, title, section1, createLabeledRow("Project:", projectDropdown),
                 createLabeledRow("Life Cycle Step:", lifecycleDropdown),
                 createLabeledRow("Effort Category:", effortCategoryDropdown),
                 /*section2,*/ /*tagInput,*/ searchButton, output, nextAndPrevButton, section3, numberChoiceBox, submitButton);

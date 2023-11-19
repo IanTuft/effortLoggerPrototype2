@@ -33,42 +33,65 @@ public class StoreData {
 		int userCount = 0;
 		UserNode temp = userNodeHead;
 		
-		while(temp.getNext() != null) {
+		if(temp != null) {
+		
+			while(temp.getNext() != null) {
+				
+				userCount++;
+				temp = temp.getNext();
+				
+			}
+			if(temp.getNext() == null) {
+				
+				userCount++;
+				
+			}
 			
-			userCount++;
-			temp = temp.getNext();
+			try {
+				
+				userWrite.write(userCount);
+				userWrite.write("\n");
+				
+			}
+			catch(IOException e) {
+				
+				System.out.println("ERROR writing user count to file.");
+				
+			}
 			
+			for(int i = 0; i < userCount; i++) {
+				
+				try {
+					
+					userWrite.write(userNodeHead.save());
+					saveUsersData(userNodeHead.getDataHead());
+					
+					userWrite.write("NEXT");
+					
+				}
+				catch(IOException e){
+					
+					System.out.println("ERROR writing users to file.");
+					
+				}
+				
+				if(userNodeHead.getNext() != null) {
+				
+					userNodeHead = userNodeHead.getNext();
+				
+				}
+			}
+		
 		}
 		
 		try {
 			
-			userWrite.write(userCount);
-			userWrite.write("\n");
+			userWrite.close();
 			
 		}
 		catch(IOException e) {
 			
-			System.out.println("ERROR writing user count to file.");
-			
-		}
-		
-		for(int i = 0; i < userCount; i++) {
-			
-			try {
-				
-				userWrite.write(userNodeHead.save());
-				saveUsersData(userNodeHead.getDataHead());
-				
-				userWrite.write("NEXT");
-				
-			}
-			catch(IOException e){
-				
-				System.out.println("ERROR writing users to file.");
-				
-			}
-			
-			userNodeHead = userNodeHead.getNext();
+			System.out.println("close user file issue");
 			
 		}
 		
@@ -76,21 +99,40 @@ public class StoreData {
 	
 	private void saveUsersData(DataNode dataNodeHead) {
 		
-		while(dataNodeHead.getNext() != null) {
-			
-			try {
+		if(dataNodeHead != null) {
+		
+			while(dataNodeHead.getNext() != null) {
 				
-				userWrite.write(dataNodeHead.save());
+				try {
+					
+					userWrite.write(dataNodeHead.save());
+					
+				}
+				catch(IOException e) {
+					
+					System.out.println("ERROR writing user data to file.");
+					
+				}
+				
+				dataNodeHead = dataNodeHead.getNext();
 				
 			}
-			catch(IOException e) {
+			
+			if(dataNodeHead.getNext() == null) {
 				
-				System.out.println("ERROR writing user data to file.");
+				try {
+					
+					userWrite.write(dataNodeHead.save());
+					
+				}
+				catch(IOException e) {
+					
+					System.out.println("ERROR writing user data to file.");
+					
+				}
 				
 			}
-			
-			dataNodeHead = dataNodeHead.getNext();
-			
+		
 		}
 		
 	}
@@ -100,46 +142,70 @@ public class StoreData {
 		int projectCount = 0;
 		ProjectNode temp = projectNodeHead;
 		
-		while(temp.getNext() != null) {
-			
-			projectCount++;
-			temp = temp.getNext();
-			
-		}
+		if(temp != null) {
 		
-		try {
-			
-			projectWrite.write(projectCount);
-			projectWrite.write("\n");
-			
-		}
-		catch(IOException e) {
-			
-			System.out.println("ERROR writing project count to file.");
-			
-		}
-		
-		for(int i = 0; i < projectCount; i++) {
+			while(temp.getNext() != null) {
+				
+				projectCount++;
+				temp = temp.getNext();
+				
+			}
+			if(temp.getNext() == null) {
+				
+				projectCount++;
+				
+			}
 			
 			try {
 				
-				projectWrite.write(projectNodeHead.save());
-				
-				saveStories(projectNodeHead.getUserStory());
-				projectWrite.write("NEXT");
-				
-				saveProjectData(projectNodeHead.getDataHead());
-				
-				projectWrite.write("NEXT");
+				projectWrite.write(projectCount);
+				projectWrite.write("\n");
 				
 			}
 			catch(IOException e) {
 				
-				System.out.println("ERROR writing projects to file.");
+				System.out.println("ERROR writing project count to file.");
 				
 			}
 			
-			projectNodeHead = projectNodeHead.getNext();
+			for(int i = 0; i < projectCount; i++) {
+				
+				try {
+					
+					projectWrite.write(projectNodeHead.save());
+					
+					saveStories(projectNodeHead.getUserStory());
+					projectWrite.write("NEXT");
+					
+					saveProjectData(projectNodeHead.getDataHead());
+					
+					projectWrite.write("NEXT");
+					
+				}
+				catch(IOException e) {
+					
+					System.out.println("ERROR writing projects to file.");
+					
+				}
+				
+				if(projectNodeHead.getNext() != null) {
+				
+					projectNodeHead = projectNodeHead.getNext();
+				
+				}
+				
+			}
+		
+		}
+		
+		try {
+			
+			projectWrite.close();
+			
+		}
+		catch(IOException e) {
+			
+			System.out.println("close project file issue");
 			
 		}
 		
@@ -147,42 +213,80 @@ public class StoreData {
 	
 	private void saveStories(UserStory userStoryHead) {
 		
-		while(userStoryHead.getNext() != null) {
-			
-			try {
+		if(userStoryHead != null) {
+		
+			while(userStoryHead.getNext() != null) {
 				
-				projectWrite.write(userStoryHead.save());
+				try {
+					
+					projectWrite.write(userStoryHead.save());
+					
+				}
+				catch(IOException e) {
+					
+					System.out.println("ERROR writing stories to file.");
+					
+				}
+				
+				userStoryHead = userStoryHead.getNext();
 				
 			}
-			catch(IOException e) {
+			
+			if(userStoryHead.getNext() == null) {
 				
-				System.out.println("ERROR writing stories to file.");
+				try {
+					
+					projectWrite.write(userStoryHead.save());
+					
+				}
+				catch(IOException e) {
+					
+					System.out.println("ERROR writing stories to file.");
+					
+				}
 				
 			}
-			
-			userStoryHead = userStoryHead.getNext();
-			
+		
 		}
 		
 	}
 	
 	private void saveProjectData(DataNode dataNodeHead) {
 		
-		while(dataNodeHead.getNext() != null) {
-			
-			try {
+		if(dataNodeHead != null) {
+		
+			while(dataNodeHead.getNext() != null) {
 				
-				projectWrite.write(dataNodeHead.save());
+				try {
+					
+					projectWrite.write(dataNodeHead.save());
+					
+				}
+				catch(IOException e) {
+					
+					System.out.println("ERROR writing project data to file.");
+					
+				}
+				
+				dataNodeHead = dataNodeHead.getNext();
 				
 			}
-			catch(IOException e) {
+			
+			if(dataNodeHead.getNext() == null) {
 				
-				System.out.println("ERROR writing project data to file.");
+				try {
+					
+					projectWrite.write(dataNodeHead.save());
+					
+				}
+				catch(IOException e) {
+					
+					System.out.println("ERROR writing project data to file.");
+					
+				}
 				
 			}
-			
-			dataNodeHead = dataNodeHead.getNext();
-			
+		
 		}
 		
 	}
