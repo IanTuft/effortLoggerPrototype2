@@ -17,6 +17,7 @@ public class LogIn extends Application {
     private Runnable loginSuccessCallback;
     private LinkedListManager lm;
 
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -29,6 +30,7 @@ public class LogIn extends Application {
     }
     
     public void loginPage (Stage primaryStage, LinkedListManager lm) {
+
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Login Page");
 
@@ -97,6 +99,7 @@ public class LogIn extends Application {
         signUpConfirmButton.setOnAction(e -> {
             // Existing sign-up code
         	//add save function  for sign up here
+
         });
 
         // Text formatter to allow only integer input for Employee ID
