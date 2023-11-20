@@ -155,6 +155,9 @@ public class PlanningPoker extends Application {
         Button searchButton = new Button("Search");
 
         searchButton.setOnAction(e -> {
+        	
+        	nextButton.setDisable(true);
+        	prevButton.setDisable(true);
             
         	searching = Main.llm.searchUserData(projectDropdown.getValue(), lifecycleDropdown.getValue(), effortCategoryDropdown.getValue());
         	

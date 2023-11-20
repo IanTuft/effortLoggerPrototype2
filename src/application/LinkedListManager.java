@@ -107,6 +107,45 @@ public class LinkedListManager {
 		
 	}
 	
+	public boolean checkDuplicateEmployee(int idCheck) {
+		
+		UserNode findUser = userNodeHead;
+		
+		if(findUser != null) {
+			
+			if(findUser.getNext() == null && findUser.getEmployeeID() == idCheck) {
+				
+				return true;
+				
+			}
+			
+			while(findUser.getNext() != null) {
+				
+				if(findUser.getEmployeeID() == idCheck) {
+					
+					return true;
+					
+				}
+				else {
+					
+					findUser = findUser.getNext();
+					
+				}
+				
+			}
+			
+			if(findUser.getNext() == null && findUser.getEmployeeID() == idCheck) {
+				
+				return true;
+				
+			}
+		
+		}
+		
+		return false;
+		
+	}
+	
 	public void addNewStory(String projectNameIn, String storyTitleIn, String storyIn) {
 		
 		String projectName = processInput.processString(projectNameIn, 30);
@@ -156,6 +195,46 @@ public class LinkedListManager {
 			projectNodeHead = loadProject;
 		
 		}
+		
+	}
+	
+	public int getLogCount(String projectName) {
+		
+		DataNode findData = userNodeHead.getDataHead();
+		
+		int out = 0;
+		
+		if(findData != null) {
+			
+			if(findData.getNext() == null && findData.getProjectName().equals(projectName)) {
+				
+				out = 1;
+				return out;
+				
+			}
+			
+			while(findData.getNext() != null) {
+				
+				if(findData.getProjectName().equals(projectName)) {
+					
+					out++;
+					
+				}
+				
+				findData = findData.getNext();
+				
+			}
+			
+			if(findData.getNext() == null && findData.getProjectName().equals(projectName)) {
+				
+				out++;
+				return out;
+				
+			}
+			
+		}
+		
+		return out;
 		
 	}
 	

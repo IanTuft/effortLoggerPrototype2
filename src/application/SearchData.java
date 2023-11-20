@@ -41,8 +41,14 @@ public class SearchData {
 		if(temp != null) {
 			
 			if(temp.getNext() == null && temp.getProjectName().equals(projectName)) {
-				System.out.println("only 1 data to return");
-				return temp;
+				
+				firstNode.copy(temp);
+				
+				nodeReturn = firstNode;
+				nodeReturn.setNext(null);
+				nodeReturn.setPrevious(null);
+				
+				return nodeReturn;
 				
 			}
 		
@@ -123,7 +129,13 @@ public class SearchData {
 			
 			if(temp.getNext() == null && temp.getLifeCycleStep().equals(lifecycle)) {
 				
-				return temp;
+				firstNode.copy(temp);
+				
+				nodeReturn = firstNode;
+				nodeReturn.setNext(null);
+				nodeReturn.setPrevious(null);
+				
+				return nodeReturn;
 				
 			}
 		
@@ -204,7 +216,13 @@ public class SearchData {
 			
 			if(temp.getNext() == null && temp.getEffortCategory().equals(effort)) {
 				
-				return temp;
+				firstNode.copy(temp);
+				
+				nodeReturn = firstNode;
+				nodeReturn.setNext(null);
+				nodeReturn.setPrevious(null);
+				
+				return nodeReturn;
 				
 			}
 		

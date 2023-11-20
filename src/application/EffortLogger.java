@@ -205,6 +205,12 @@ public class EffortLogger extends Application {
 
         VBox effortCategoryBox = createLabeledRow("Effort Category:", effortCategoryDropdown, addEffortCategoryButton);
         effortCategoryBox.setAlignment(Pos.CENTER);
+        
+        projectDropdown.setOnAction(e -> {
+        	
+        	logCounter = Main.llm.getLogCount(projectDropdown.getValue());
+        	
+        });
 
         Text section3 = new Text("3. Press the 'Stop this Activity' button to generate an effort log entry using the attributes above.");
         stopButton.setOnAction(e -> {
@@ -223,7 +229,7 @@ public class EffortLogger extends Application {
             log[5] = projectDropdown.getValue();
             log[6] = lifecycleDropdown.getValue();
             log[7] = effortCategoryDropdown.getValue();
-            database.add(log);
+            //database.add(log);
             //Andrew's Work Zone
             if(log[5] != null) {
             	
@@ -238,7 +244,7 @@ public class EffortLogger extends Application {
 	            
             }
             //End Andrew's Work Zone
-            System.out.println(Arrays.toString(database.get(logCounter-1)));
+            //System.out.println(Arrays.toString(database.get(logCounter-1)));
             clockStatus.setText("Clock is stopped");
             clockStatus.setFill(Color.RED);
             stopButton.setDisable(true);

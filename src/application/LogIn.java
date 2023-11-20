@@ -83,6 +83,10 @@ public class LogIn extends Application {
     }
 
     private void openSignUpPage() {
+    	
+    	Text duplicateEmployee = new Text();
+    	duplicateEmployee.setFill(Color.RED);
+    	
         Stage signUpStage = new Stage();
         signUpStage.setTitle("Sign Up");
 
@@ -96,15 +100,26 @@ public class LogIn extends Application {
         TextField employeeIdField = new TextField();
         PasswordField passwordField = new PasswordField();
         PasswordField verifyPasswordField = new PasswordField();
-        Text signUpErrorText = new Text("");
-        signUpErrorText.setFill(Color.RED);
 
         Button signUpConfirmButton = new Button("Sign Up");
         signUpConfirmButton.setOnAction(e -> {
             // Existing sign-up code
         	//Andrew's Work Zone
-        	Main.llm.addNewEmployeeLogin(firstNameField.getText(), lastNameField.getText(), 
-        			processInput.processInt(employeeIdField.getText(), 9), passwordField.getText());
+        	
+        	if(!Main.llm.checkDuplicateEmployee(processInput.processInt(employeeIdField.getText(), 9))) {
+        		
+            	Main.llm.addNewEmployeeLogin(firstNameField.getText(), lastNameField.getText(), 
+            			processInput.processInt(employeeIdField.getText(), 9), passwordField.getText());
+            	
+            	signUpStage.close();
+        		
+        	}
+        	else {
+        		
+        		duplicateEmployee.setText("Employee already exists.");
+        		
+        	}
+
         	//End Andrew's Work Zone
         });
 
@@ -125,7 +140,7 @@ public class LogIn extends Application {
                 new Label("Password:"), passwordField,
                 new Label("Verify Password:"), verifyPasswordField,
                 signUpConfirmButton,
-                signUpErrorText);
+                duplicateEmployee);
 
         Scene signUpScene = new Scene(signUpBox);
         signUpStage.setScene(signUpScene);
