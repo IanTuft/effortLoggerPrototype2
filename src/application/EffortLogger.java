@@ -111,7 +111,16 @@ public class EffortLogger extends Application {
 
         ComboBox<String> projectDropdown = new ComboBox<>();
         projectDropdown.setPromptText("Project");
-        //need to load in existing projects from saved info here
+
+        String[] currentProjects = new String[Main.llm.getProjectCount()];
+        
+        for(int i = 0; i < (Main.llm.getProjectCount()); i++) {
+        	
+        	currentProjects[i] = Main.llm.getProjectName(i+1); //adding "project" somewhere by accident...
+        	
+        }
+        
+        projectDropdown.getItems().addAll(currentProjects);
 
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
         lifecycleDropdown.getItems().addAll(

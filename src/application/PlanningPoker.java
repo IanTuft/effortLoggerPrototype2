@@ -141,6 +141,9 @@ public class PlanningPoker extends Application {
         Button nextButton = new Button("Next");
         Button prevButton = new Button("Previous");
         
+        nextButton.setDisable(true);
+        prevButton.setDisable(true);
+        
         HBox nextAndPrevButton = new HBox(20);
         nextAndPrevButton.setAlignment(Pos.CENTER);
         nextAndPrevButton.getChildren().addAll(
@@ -154,7 +157,20 @@ public class PlanningPoker extends Application {
         searchButton.setOnAction(e -> {
             
         	searching = Main.llm.searchUserData(projectDropdown.getValue(), lifecycleDropdown.getValue(), effortCategoryDropdown.getValue());
-        	output.setText(searching.display());
+        	
+        	if(searching != null) {
+        		
+        		output.setText(searching.display());
+        		
+        		if(searching.getNext() != null) {
+        			
+        			nextButton.setDisable(false);
+        			
+        		}
+        		
+        	}
+        	else
+        		output.setText("No matches!");
             
         });
         
@@ -164,6 +180,18 @@ public class PlanningPoker extends Application {
         		
         		searching = searching.getNext();
         		output.setText(searching.display());
+        		
+        		if(searching.getNext() == null) {
+        			
+        			nextButton.setDisable(true);
+        			
+        		}
+        		
+        		if(searching.getPrevious() != null) {
+        			
+        			prevButton.setDisable(false);
+        			
+        		}
         		
         	}
         	else {
@@ -180,6 +208,18 @@ public class PlanningPoker extends Application {
         		
         		searching = searching.getPrevious();
         		output.setText(searching.display());
+        		
+        		if(searching.getPrevious() == null) {
+        			
+        			prevButton.setDisable(true);
+        			
+        		}
+        		
+        		if(searching.getNext() != null) {
+        			
+        			nextButton.setDisable(false);
+        			
+        		}
         		
         	}
         	else {

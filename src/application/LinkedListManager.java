@@ -441,7 +441,7 @@ public class LinkedListManager {
 					}
 					
 				}
-				
+
 				return searchedData;
 				
 			}
@@ -631,25 +631,25 @@ public class LinkedListManager {
 	 * Views only the data chain of the passed in node.
 	 * @param dataNodeTarget Beginning of linked list of dataNodes to view.
 	 */
-	private String viewData(DataNode dataNodeTarget) {
+	private void viewData(DataNode dataNodeTarget) {
 		
 		DataNode accessedData = dataNodeTarget;
 		int loopControl = 0;
 		int userInput = 0;
 		
-		//while(loopControl == 0) { //Menu loop
+		while(loopControl == 0) { //Menu loop
 			
 			if(accessedData == null) {
 				
-				return "No current data.";
+				//return "No current data.";
 				
 				//System.out.println("No current data."); loopControl = 1;
 				
 			}
 			else {
 				
-				return accessedData.display();
-				/*System.out.println(accessedData.display());
+				//return accessedData.display();
+				System.out.println(accessedData.display());
 				System.out.println("Enter 1 for previous, 2 for next, 0 for exit.");
 				//data to process, first read in, number of characters to return
 				userInput = processInput.processInt(scan.nextLine(), 1);
@@ -674,11 +674,11 @@ public class LinkedListManager {
 					else
 						accessedData = accessedData.getNext();
 					
-				}*/
+				}
 				
 			}
 			
-		//}
+		}
 		
 	}
 	

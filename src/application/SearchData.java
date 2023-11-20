@@ -35,6 +35,7 @@ public class SearchData {
 	public DataNode findProjects(String projectName) {
 		int count = 0;
 		DataNode nodeReturn = null;
+		DataNode firstNode = new DataNode();
 		temp = dataNodeHead;
 		
 		if(temp != null) {
@@ -49,14 +50,21 @@ public class SearchData {
 				
 				if(temp.getProjectName().equals(projectName)) {
 					
-					if(nodeReturn == null)
-						nodeReturn = temp;
+					if(nodeReturn == null) {
+						
+						firstNode.copy(temp);
+						nodeReturn = firstNode;
+						nodeReturn.setPrevious(null);
+						nodeReturn.setNext(null);
+						System.out.println("Just added: " + nodeReturn.display());
+						
+					}
 					else {
 						
 						DataNode additionalNode = new DataNode();
 						
 						additionalNode.copy(temp);
-						
+						System.out.println("Just copied: " + additionalNode.display());
 						nodeReturn.setPrevious(additionalNode);
 						additionalNode.setNext(nodeReturn);
 						additionalNode.setPrevious(null);
@@ -74,14 +82,21 @@ public class SearchData {
 			
 			if(temp.getNext() == null && temp.getProjectName().equals(projectName)) {
 				
-				if(nodeReturn == null)
-					nodeReturn = temp;
+				if(nodeReturn == null) {
+					
+					firstNode.copy(temp);
+					nodeReturn = firstNode;
+					nodeReturn.setPrevious(null);
+					nodeReturn.setNext(null);
+					System.out.println("Just added: " + nodeReturn.display());
+					
+				}
 				else {
 					
 					DataNode additionalNode = new DataNode();
 					
 					additionalNode.copy(temp);
-					
+					System.out.println("Finally: " + nodeReturn.display());
 					nodeReturn.setPrevious(additionalNode);
 					additionalNode.setNext(nodeReturn);
 					additionalNode.setPrevious(null);
@@ -101,6 +116,7 @@ public class SearchData {
 	public DataNode findLifecycles(String lifecycle) {
 		
 		DataNode nodeReturn = null;
+		DataNode firstNode = new DataNode();
 		temp = dataNodeHead;
 		
 		if(temp != null) {
@@ -115,8 +131,15 @@ public class SearchData {
 				
 				if(temp.getLifeCycleStep().equals(lifecycle)) {
 					
-					if(nodeReturn == null)
-						nodeReturn = temp;
+					if(nodeReturn == null) {
+						
+						firstNode.copy(temp);
+						nodeReturn = firstNode;
+						nodeReturn.setPrevious(null);
+						nodeReturn.setNext(null);
+						System.out.println("Just added: " + nodeReturn.display());
+						
+					}
 					else {
 						
 						DataNode additionalNode = new DataNode();
@@ -140,8 +163,15 @@ public class SearchData {
 			
 			if(temp.getNext() == null && temp.getLifeCycleStep().equals(lifecycle)) {
 				
-				if(nodeReturn == null)
-					nodeReturn = temp;
+				if(nodeReturn == null) {
+					
+					firstNode.copy(temp);
+					nodeReturn = firstNode;
+					nodeReturn.setPrevious(null);
+					nodeReturn.setNext(null);
+					System.out.println("Just added: " + nodeReturn.display());
+					
+				}
 				else {
 					
 					DataNode additionalNode = new DataNode();
@@ -167,6 +197,7 @@ public class SearchData {
 	public DataNode findEfforts(String effort) {
 		
 		DataNode nodeReturn = null;
+		DataNode firstNode = new DataNode();
 		temp = dataNodeHead;
 		
 		if(temp != null) {
@@ -181,8 +212,15 @@ public class SearchData {
 				
 				if(temp.getEffortCategory().equals(effort)) {
 					
-					if(nodeReturn == null)
-						nodeReturn = temp;
+					if(nodeReturn == null) {
+						
+						firstNode.copy(temp);
+						nodeReturn = firstNode;
+						nodeReturn.setPrevious(null);
+						nodeReturn.setNext(null);
+						System.out.println("Just added: " + nodeReturn.display());
+						
+					}
 					else {
 						
 						DataNode additionalNode = new DataNode();
@@ -206,8 +244,15 @@ public class SearchData {
 			
 			if(temp.getNext() == null && temp.getEffortCategory().equals(effort)) {
 				
-				if(nodeReturn == null)
-					nodeReturn = temp;
+				if(nodeReturn == null) {
+					
+					firstNode.copy(temp);
+					nodeReturn = firstNode;
+					nodeReturn.setPrevious(null);
+					nodeReturn.setNext(null);
+					System.out.println("Just added: " + nodeReturn.display());
+					
+				}
 				else {
 					
 					DataNode additionalNode = new DataNode();
