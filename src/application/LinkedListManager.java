@@ -382,21 +382,25 @@ public class LinkedListManager {
 	 * Serves as the way to call the search and the logic handler.
 	 * Has no actual functionality.
 	 */
-	public void searchUserData(String projectName, String lifecycle, String effort, 
-			String projectNameDefault, String lifecycleDefault, String effortDefault) {
+	public DataNode searchUserData(String projectName, String lifecycle, String effort) {
 		
 		DataNode searchedData = null;
 		System.out.println("Passed in: projectName: " + projectName + " lifecycle: " + lifecycle + " effort: " +effort);
 		
 		if(locked == 0) {
 			
-			System.out.println("Error. Please login to an account first.");
+			return null;
+			//System.out.println("Error. Please login to an account first.");
 			
 		}
 		else {
 			
-			if(currentUser == null)
-				System.out.println("Invalid user. Please try a different user.");
+			if(currentUser == null) {
+				
+				return null;
+				//System.out.println("Invalid user. Please try a different user.");
+				
+			}
 			else {
 				
 				if(projectName != null) {
@@ -438,7 +442,7 @@ public class LinkedListManager {
 					
 				}
 				
-				viewData(searchedData);
+				return searchedData;
 				
 			}
 			
@@ -627,18 +631,25 @@ public class LinkedListManager {
 	 * Views only the data chain of the passed in node.
 	 * @param dataNodeTarget Beginning of linked list of dataNodes to view.
 	 */
-	private void viewData(DataNode dataNodeTarget) {
+	private String viewData(DataNode dataNodeTarget) {
 		
 		DataNode accessedData = dataNodeTarget;
 		int loopControl = 0;
 		int userInput = 0;
 		
-		while(loopControl == 0) { //Menu loop
+		//while(loopControl == 0) { //Menu loop
 			
-			if(accessedData == null)
-				{System.out.println("No current data."); loopControl = 1;}
+			if(accessedData == null) {
+				
+				return "No current data.";
+				
+				//System.out.println("No current data."); loopControl = 1;
+				
+			}
 			else {
-				System.out.println(accessedData.display());
+				
+				return accessedData.display();
+				/*System.out.println(accessedData.display());
 				System.out.println("Enter 1 for previous, 2 for next, 0 for exit.");
 				//data to process, first read in, number of characters to return
 				userInput = processInput.processInt(scan.nextLine(), 1);
@@ -663,11 +674,11 @@ public class LinkedListManager {
 					else
 						accessedData = accessedData.getNext();
 					
-				}
+				}*/
 				
 			}
 			
-		}
+		//}
 		
 	}
 	

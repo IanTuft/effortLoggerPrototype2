@@ -7,6 +7,9 @@ public class StoreData {
 	private FileWriter userWrite;
 	private FileWriter projectWrite;
 	
+	private BufferedWriter user;
+	private BufferedWriter project;
+	
 	//Default Constructor.
 	StoreData(){
 		
@@ -14,6 +17,9 @@ public class StoreData {
 			
 			userWrite = new FileWriter("users.txt");
 			projectWrite = new FileWriter("projects.txt");
+			
+			user = new BufferedWriter(userWrite);
+			project = new BufferedWriter(projectWrite);
 			
 		}
 		catch(IOException e) {
@@ -49,8 +55,9 @@ public class StoreData {
 			
 			try {
 				
-				userWrite.write(userCount);
-				userWrite.write("\n");
+				user.write("0 \n");
+				user.write(Integer.toString(userCount));
+				user.write("\n");
 				
 			}
 			catch(IOException e) {
@@ -63,10 +70,10 @@ public class StoreData {
 				
 				try {
 					
-					userWrite.write(userNodeHead.save());
+					user.write(userNodeHead.save());
 					saveUsersData(userNodeHead.getDataHead());
 					
-					userWrite.write("NEXT");
+					user.write("NEXT\n");
 					
 				}
 				catch(IOException e){
@@ -86,6 +93,7 @@ public class StoreData {
 		
 		try {
 			
+			user.close();
 			userWrite.close();
 			
 		}
@@ -105,7 +113,7 @@ public class StoreData {
 				
 				try {
 					
-					userWrite.write(dataNodeHead.save());
+					user.write(dataNodeHead.save());
 					
 				}
 				catch(IOException e) {
@@ -122,7 +130,7 @@ public class StoreData {
 				
 				try {
 					
-					userWrite.write(dataNodeHead.save());
+					user.write(dataNodeHead.save());
 					
 				}
 				catch(IOException e) {
@@ -158,8 +166,9 @@ public class StoreData {
 			
 			try {
 				
-				projectWrite.write(projectCount);
-				projectWrite.write("\n");
+				project.write("0 \n");
+				project.write(Integer.toString(projectCount));
+				project.write("\n");
 				
 			}
 			catch(IOException e) {
@@ -172,14 +181,14 @@ public class StoreData {
 				
 				try {
 					
-					projectWrite.write(projectNodeHead.save());
+					project.write(projectNodeHead.save());
 					
 					saveStories(projectNodeHead.getUserStory());
-					projectWrite.write("NEXT");
+					project.write("NEXT\n");
 					
-					saveProjectData(projectNodeHead.getDataHead());
+					//saveProjectData(projectNodeHead.getDataHead());
 					
-					projectWrite.write("NEXT");
+					project.write("NEXT\n");
 					
 				}
 				catch(IOException e) {
@@ -200,6 +209,7 @@ public class StoreData {
 		
 		try {
 			
+			project.close();
 			projectWrite.close();
 			
 		}
@@ -219,7 +229,7 @@ public class StoreData {
 				
 				try {
 					
-					projectWrite.write(userStoryHead.save());
+					project.write(userStoryHead.save());
 					
 				}
 				catch(IOException e) {
@@ -236,7 +246,7 @@ public class StoreData {
 				
 				try {
 					
-					projectWrite.write(userStoryHead.save());
+					project.write(userStoryHead.save());
 					
 				}
 				catch(IOException e) {
@@ -251,7 +261,7 @@ public class StoreData {
 		
 	}
 	
-	private void saveProjectData(DataNode dataNodeHead) {
+/*	private void saveProjectData(DataNode dataNodeHead) {
 		
 		if(dataNodeHead != null) {
 		
@@ -259,7 +269,7 @@ public class StoreData {
 				
 				try {
 					
-					projectWrite.write(dataNodeHead.save());
+					project.write(dataNodeHead.save());
 					
 				}
 				catch(IOException e) {
@@ -276,7 +286,7 @@ public class StoreData {
 				
 				try {
 					
-					projectWrite.write(dataNodeHead.save());
+					project.write(dataNodeHead.save());
 					
 				}
 				catch(IOException e) {
@@ -289,6 +299,6 @@ public class StoreData {
 		
 		}
 		
-	}
+	}*/
 
 }

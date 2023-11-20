@@ -33,14 +33,14 @@ public class SearchData {
 	//Public Methods
 	
 	public DataNode findProjects(String projectName) {
-		
+		int count = 0;
 		DataNode nodeReturn = null;
 		temp = dataNodeHead;
 		
 		if(temp != null) {
 			
 			if(temp.getNext() == null && temp.getProjectName().equals(projectName)) {
-				
+				System.out.println("only 1 data to return");
 				return temp;
 				
 			}
@@ -64,7 +64,7 @@ public class SearchData {
 						nodeReturn = additionalNode;
 						
 					}
-					
+					count++;
 				}
 				
 				
@@ -89,11 +89,11 @@ public class SearchData {
 					nodeReturn = additionalNode;
 					
 				}
-				
+				count++;
 			}
 		
 		}
-		
+		System.out.println("count is: " + count);
 		return nodeReturn;
 		
 	}

@@ -38,27 +38,6 @@ public class ReadData {
 		
 		try {
 			
-			users = new FileReader("users.txt");
-			
-			usersIn = new BufferedReader(users);
-
-			if(usersIn.readLine() != null)
-				addUsers(manager);
-			
-		}
-		catch(FileNotFoundException e) {
-		
-			System.out.println("users.txt not found.");
-		
-		}
-		catch(IOException e) {
-			
-			System.out.println("IO");
-			
-		}
-		
-		try {
-			
 			projects = new FileReader("projects.txt");
 			
 			projectsIn = new BufferedReader(projects);
@@ -70,6 +49,27 @@ public class ReadData {
 		catch(FileNotFoundException e) {
 		
 			System.out.println("projects.txt not found.");
+		
+		}
+		catch(IOException e) {
+			
+			System.out.println("IO");
+			
+		}
+		
+		try {
+			
+			users = new FileReader("users.txt");
+			
+			usersIn = new BufferedReader(users);
+
+			if(usersIn.readLine() != null)
+				addUsers(manager);
+			
+		}
+		catch(FileNotFoundException e) {
+		
+			System.out.println("users.txt not found.");
 		
 		}
 		catch(IOException e) {

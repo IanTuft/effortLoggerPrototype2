@@ -18,6 +18,8 @@ import javafx.geometry.Insets;
 import java.util.Arrays;
 
 public class PlanningPoker extends Application {
+	
+	DataNode searching = null;
 
     public static void main(String[] args) {
         launch(args);
@@ -142,7 +144,7 @@ public class PlanningPoker extends Application {
         HBox nextAndPrevButton = new HBox(20);
         nextAndPrevButton.setAlignment(Pos.CENTER);
         nextAndPrevButton.getChildren().addAll(
-                nextButton, prevButton
+                prevButton, nextButton
         );
 
         Text output = new Text();
@@ -151,20 +153,40 @@ public class PlanningPoker extends Application {
 
         searchButton.setOnAction(e -> {
             
-        	Main.llm.searchUserData(projectDropdown.getValue(), lifecycleDropdown.getValue(), effortCategoryDropdown.getValue(),
-        			projectNameDefault, lifecycleDefault, effortDefault);
+        	searching = Main.llm.searchUserData(projectDropdown.getValue(), lifecycleDropdown.getValue(), effortCategoryDropdown.getValue());
+        	output.setText(searching.display());
             
         });
         
         nextButton.setOnAction(e -> {
         	
-        	
+        	if(searching.getNext() != null) {
+        		
+        		searching = searching.getNext();
+        		output.setText(searching.display());
+        		
+        	}
+        	else {
+        		
+        		output.setText("No data entries this direction.");
+        		
+        	}
         	
         });
         
         prevButton.setOnAction(e -> {
         	
-        	
+        	if(searching.getPrevious() != null) {
+        		
+        		searching = searching.getPrevious();
+        		output.setText(searching.display());
+        		
+        	}
+        	else {
+        		
+        		output.setText("No data entries this direction.");
+        		
+        	}
         	
         });
         
@@ -241,7 +263,7 @@ public class PlanningPoker extends Application {
 
         root.setCenter(centerBox);
 
-        return new Scene(root, 600, 600);
+        return new Scene(root, 600, 900);
     }
 
     private VBox createLabeledRow(String label, ComboBox<String> dropdown) {
