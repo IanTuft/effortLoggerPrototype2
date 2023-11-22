@@ -13,7 +13,6 @@ public class DataNode {
 	private String endTime;
 	private String lifeCycleStep;
 	private String effortCategory;
-	private String etc;
 	
 	//Linked List management variables.
 	private DataNode next;
@@ -32,7 +31,6 @@ public class DataNode {
 		endTime = "NULL";
 		lifeCycleStep = "NULL";
 		effortCategory = "NULL";
-		etc = "NULL";
 		
 		next = null;
 		previous = null;
@@ -43,8 +41,7 @@ public class DataNode {
 	
 	//Primary constructor. Always use.
 	public DataNode(String nameIn, int logNumberIn, int durationIn, 
-			String dateIn, String startTimeIn, String endTimeIn, String lifeCycleStepIn, String effortCategoryIn,
-			String etcIn) {
+			String dateIn, String startTimeIn, String endTimeIn, String lifeCycleStepIn, String effortCategoryIn) {
 		
 		projectName = nameIn;
 		
@@ -56,7 +53,6 @@ public class DataNode {
 		endTime = endTimeIn;
 		lifeCycleStep = lifeCycleStepIn;
 		effortCategory = effortCategoryIn;
-		etc = etcIn;
 		
 		next = null;
 		previous = null;
@@ -72,7 +68,6 @@ public class DataNode {
 	public void setEndTime(String endIn) {this.endTime = endIn;}
 	public void setLifeCycleStep(String cycleIn) {this.lifeCycleStep = cycleIn;}
 	public void setEffortCategory(String effortIn) {this.effortCategory = effortIn;}
-	public void setEtc(String etcIn) {this.etc = etcIn;}
 	
 	public String getProjectName() {return projectName;}
 	public int getLogNumber() {return logNumber;}
@@ -82,7 +77,6 @@ public class DataNode {
 	public String getEndTime() {return endTime;}
 	public String getLifeCycleStep() {return lifeCycleStep;}
 	public String getEffortCategory() {return effortCategory;}
-	public String getEtc() {return etc;}
 	
 	public void setNext(DataNode nodeInNext) {this.next = nodeInNext;}
 	public void setPrevious(DataNode nodeInPrevious) {this.previous = nodeInPrevious;}
@@ -96,7 +90,7 @@ public class DataNode {
 		String out = "";
 		
 		out = this.projectName + "\n" + this.logNumber + "\n" + this.duration + "\n" + this.date + "\n" + this.startTime + 
-				"\n" + this.endTime + "\n" + this.lifeCycleStep + "\n" + this.effortCategory + "\n" + this.etc + "\n";
+				"\n" + this.endTime + "\n" + this.lifeCycleStep + "\n" + this.effortCategory + "\n";
 		
 		return out;
 		
@@ -108,9 +102,8 @@ public class DataNode {
 		
 		out = "Project: " + this.projectName + "\n" + "Log Number: " + this.logNumber + "\n" + "Duration: " + this.duration + "\n" 
 		+ "Date: " + this.date + "\n" + "Start Time: " + this.startTime + "\n" + "End Time: " + this.endTime + "\n" + 
-				"Lifecycle Step: " +this.lifeCycleStep + "\n" + "Effort Category: " + this.effortCategory + "\n" 
-		+ "Etc: " + this.etc + "\n";
-		
+				"Lifecycle Step: " +this.lifeCycleStep + "\n" + "Effort Category: " + this.effortCategory + "\n";
+				
 		return out;
 		
 	}
@@ -125,7 +118,6 @@ public class DataNode {
 		this.endTime = nodeIn.getEndTime();
 		this.lifeCycleStep = nodeIn.getLifeCycleStep();
 		this.effortCategory = nodeIn.getEffortCategory();
-		this.etc = nodeIn.getEtc();
 		
 	}
 	

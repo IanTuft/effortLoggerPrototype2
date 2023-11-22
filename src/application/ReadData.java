@@ -97,7 +97,6 @@ public class ReadData {
 		String endTime = "";
 		String lifeCycleStep = "";
 		String effortCategory = "";
-		String etc = "";
 		
 		try {
 			
@@ -133,10 +132,9 @@ public class ReadData {
 					endTime = usersIn.readLine();
 					lifeCycleStep = usersIn.readLine();
 					effortCategory = usersIn.readLine();
-					etc = usersIn.readLine();
 					
 					manager.addNewData(projectName, logNumber, duration, date, startTime, endTime,
-							lifeCycleStep, effortCategory, etc);
+							lifeCycleStep, effortCategory);
 					
 					endString = usersIn.readLine();
 					
@@ -186,7 +184,6 @@ public class ReadData {
 		String endTime = "";
 		String lifeCycleStep = "";
 		String effortCategory = "";
-		String etc = "";
 		
 		try {
 			
@@ -235,10 +232,9 @@ public class ReadData {
 					endTime = usersIn.readLine();
 					lifeCycleStep = usersIn.readLine();
 					effortCategory = usersIn.readLine();
-					etc = usersIn.readLine();
 					
 					manager.addNewData(projectName, logNumber, duration, date, startTime, endTime,
-							lifeCycleStep, effortCategory, etc);
+							lifeCycleStep, effortCategory);
 					
 					endString = projectsIn.readLine();
 					

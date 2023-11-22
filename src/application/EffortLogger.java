@@ -70,16 +70,17 @@ public class EffortLogger extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Effort Logger");
-        primaryStage.setScene(createEffortLoggerScene());
+        primaryStage.setScene(createEffortLoggerScene(primaryStage));
         primaryStage.show();
     }
     
-    private Scene createEffortLoggerScene() {
+    private Scene createEffortLoggerScene(Stage primaryStage) {
         
         Button stopButton = new Button("Stop this Activity");
         stopButton.setDisable(true);
         
         Button exitButton = new Button("EXIT");
+        Button backButton = new Button("Back");
     	
     	BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
@@ -240,7 +241,7 @@ public class EffortLogger extends Application {
 	            }
 	
 	            Main.llm.addNewData(log[5], logCounter, processInput.processInt(log[4], 9), date, startTime, endTime, 
-	            		log[6], log[7], date);
+	            		log[6], log[7]);
 	            
             }
             //End Andrew's Work Zone
@@ -256,9 +257,15 @@ public class EffortLogger extends Application {
         	System.exit(0);
         	
         });
+        
+        backButton.setOnAction(e -> {
+        	
+        	primaryStage.close();
+        	
+        });
 
 
-        centerBox.getChildren().addAll(exitButton, title, clockStatus, section1, startButton, section2,
+        centerBox.getChildren().addAll(exitButton, backButton, title, clockStatus, section1, startButton, section2,
                 projectAndLifecycleBox,
                 effortCategoryBox,
                 section3,

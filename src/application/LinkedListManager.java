@@ -333,7 +333,7 @@ public class LinkedListManager {
 	 * @return returns 1 for success, 0 otherwise.
 	 */
 	public int addNewData(String name, int logNumber, int duration, String date, String startTime, 
-			String endTime, String lifeCycleStep, String effortCategory, String etc) {
+			String endTime, String lifeCycleStep, String effortCategory) {
 		
 		ProjectNode findProject = projectNodeHead;
 		
@@ -355,9 +355,9 @@ public class LinkedListManager {
 			if(findProject.getNext() == null && findProject.getProjectName().equals(name)) {
 				
 				currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
-						lifeCycleStep, effortCategory, etc);
+						lifeCycleStep, effortCategory);
 				findProject.addNewData(name, logNumber, duration, date, startTime, endTime,
-						lifeCycleStep, effortCategory, etc);
+						lifeCycleStep, effortCategory);
 				
 				return 1;
 				
@@ -368,9 +368,9 @@ public class LinkedListManager {
 				if(findProject.getProjectName().equals(name)) {
 					
 					currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
-							lifeCycleStep, effortCategory, etc);
+							lifeCycleStep, effortCategory);
 					findProject.addNewData(name, logNumber, duration, date, startTime, endTime,
-							lifeCycleStep, effortCategory, etc);
+							lifeCycleStep, effortCategory);
 					
 					return 1;
 					
@@ -383,9 +383,9 @@ public class LinkedListManager {
 			if(findProject.getNext() == null && findProject.getProjectName().equals(name)) {
 				
 				currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
-						lifeCycleStep, effortCategory, etc);
+						lifeCycleStep, effortCategory);
 				findProject.addNewData(name, logNumber, duration, date, startTime, endTime,
-						lifeCycleStep, effortCategory, etc);
+						lifeCycleStep, effortCategory);
 				
 				return 1;
 				

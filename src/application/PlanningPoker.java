@@ -28,17 +28,19 @@ public class PlanningPoker extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Planning Poker");
-        primaryStage.setScene(createPlanningPokerScene());
+        primaryStage.setScene(createPlanningPokerScene(primaryStage));
         primaryStage.show();
     }
 
-    private Scene createPlanningPokerScene() {
+    private Scene createPlanningPokerScene(Stage primaryStage) {
     	
     	String projectNameDefault = "Project";
     	String lifecycleDefault = "Life Cycle Step";
     	String effortDefault = "Effort Category";
     	
     	Button exitButton = new Button("EXIT");
+    	Button backButton = new Button("Back");
+    	Button clearButton = new Button("Clear search terms");
     	
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
@@ -233,10 +235,24 @@ public class PlanningPoker extends Application {
         	
         });
         
+        clearButton.setOnAction(e -> {
+        	
+        	projectDropdown.setValue(null);
+        	lifecycleDropdown.setValue(null);
+        	effortCategoryDropdown.setValue(null);
+        	
+        });
+        
         exitButton.setOnAction(e -> {
         	
         	Main.llm.save();
         	System.exit(0);
+        	
+        });
+        
+        backButton.setOnAction(e -> {
+        	
+        	primaryStage.close();
         	
         });
 
@@ -299,10 +315,10 @@ public class PlanningPoker extends Application {
             currentStage.close();
         });
 
-        centerBox.getChildren().addAll(exitButton, title, section1, createLabeledRow("Project:", projectDropdown),
+        centerBox.getChildren().addAll(exitButton, backButton, title, section1, createLabeledRow("Project:", projectDropdown),
                 createLabeledRow("Life Cycle Step:", lifecycleDropdown),
                 createLabeledRow("Effort Category:", effortCategoryDropdown),
-                /*section2,*/ /*tagInput,*/ searchButton, output, nextAndPrevButton, section3, numberChoiceBox, submitButton);
+                /*section2,*/ /*tagInput,*/ searchButton, clearButton, output, nextAndPrevButton, section3, numberChoiceBox, submitButton);
 
         root.setCenter(centerBox);
 

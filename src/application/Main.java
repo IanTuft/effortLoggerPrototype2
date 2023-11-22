@@ -20,8 +20,6 @@ public class Main extends Application {
     		
     		llm = new LinkedListManager();
     		ReadData readData = new ReadData(llm);
-    		//llm.lockUser(1, "12");
-    		//llm.searchUserData("1", null, null);
     		
     	}
     	
