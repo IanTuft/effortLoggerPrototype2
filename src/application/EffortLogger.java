@@ -231,7 +231,7 @@ public class EffortLogger extends Application {
             	
 	            if(!Main.llm.checkDuplicateProject(log[5])) {
 	            	
-	                Main.llm.addNewProject(log[5], 0, 0);
+	                Main.llm.addNewProject(log[5]);
 	            	
 	            }
 	

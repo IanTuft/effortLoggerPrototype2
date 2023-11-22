@@ -167,23 +167,9 @@ public class ReadData {
 	
 	private void addProjects(LinkedListManager manager) {
 		
-		String endString = "";
 		String projectName = "";
-		int employeeCount = 0;
-		int storyCount = 0;
 		
 		int projectCount = 0;
-		
-		String storyTitle = "";
-		String story = "";
-		
-		int logNumber = 0;
-		int duration = 0;
-		String date = "";
-		String startTime = "";
-		String endTime = "";
-		String lifeCycleStep = "";
-		String effortCategory = "";
 		
 		try {
 			
@@ -201,44 +187,8 @@ public class ReadData {
 			try {
 				
 				projectName = projectsIn.readLine();
-				employeeCount = Integer.parseInt(projectsIn.readLine());
-				storyCount = Integer.parseInt(projectsIn.readLine());
 				
-				manager.addNewProject(projectName, employeeCount, storyCount);
-				
-				endString = projectsIn.readLine();
-				
-				while(!endString.equals("NEXT")) {
-					
-					projectName = projectsIn.readLine();
-					storyTitle = projectsIn.readLine();
-					story = projectsIn.readLine();
-					
-					manager.addNewStory(projectName, storyTitle, story);
-					
-					endString = projectsIn.readLine();
-					
-				}
-				
-				endString = projectsIn.readLine();
-				
-				while(!endString.equals("NEXT")) {
-					
-					projectName = endString;
-					logNumber = Integer.parseInt(usersIn.readLine());
-					duration = Integer.parseInt(usersIn.readLine());
-					date = usersIn.readLine();
-					startTime = usersIn.readLine();
-					endTime = usersIn.readLine();
-					lifeCycleStep = usersIn.readLine();
-					effortCategory = usersIn.readLine();
-					
-					manager.addNewData(projectName, logNumber, duration, date, startTime, endTime,
-							lifeCycleStep, effortCategory);
-					
-					endString = projectsIn.readLine();
-					
-				}
+				manager.addNewProject(projectName);
 				
 			}
 			catch(IOException e) {

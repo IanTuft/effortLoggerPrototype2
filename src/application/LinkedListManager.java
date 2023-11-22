@@ -1,7 +1,5 @@
 package application;
 
-import java.util.Scanner;
-
 public class LinkedListManager {
 	
 	private UserNode currentUser; //for who is logged in presently
@@ -9,7 +7,6 @@ public class LinkedListManager {
 	private ProjectNode projectNodeHead; //for managing the linked list of projects
 	private int locked; //for if someone is currently logged in
 	private ProcessInput processInput = new ProcessInput(); //to process input for bad input
-	private Scanner scan = new Scanner(System.in); //scanner to receive input
 	private SearchData searchData = new SearchData();
 	private StoreData save;
 	private int projectCount;
@@ -146,17 +143,6 @@ public class LinkedListManager {
 		
 	}
 	
-	public void addNewStory(String projectNameIn, String storyTitleIn, String storyIn) {
-		
-		String projectName = processInput.processString(projectNameIn, 30);
-		ProjectNode foundProject = findProject(projectName);
-		
-		UserStory newStory = new UserStory(projectNameIn, storyTitleIn, storyIn);
-		
-		foundProject.addUserStory(newStory);
-		
-	}
-	
 	/**
 	 * To add a new project. Added to front of linked list.
 	 * Used by ReadData to load the saved project data.
@@ -164,20 +150,15 @@ public class LinkedListManager {
 	 * @param employeeCount Number of employees on project. No input checking.
 	 * @param storyCount Number of user stories in project. No input checking.
 	 */
-	public void addNewProject(String projectNameIn, int employeeCountIn, int storyCountIn) {
+	public void addNewProject(String projectNameIn) {
 		
-		String projectName = processInput.processString(projectNameIn, 30);
-		int employeeCount = employeeCountIn;
-		int storyCount = storyCountIn;
-		
+		String projectName = processInput.processString(projectNameIn, 30);		
 		
 		if(projectNodeHead == null) {
 			
 			projectCount++;
 			
 			ProjectNode firstProject = new ProjectNode(projectName);
-			firstProject.setEmployeeCount(employeeCount);
-			firstProject.setStoryCount(storyCount);
 			firstProject.setProjectID(projectCount);
 			projectNodeHead = firstProject;
 			
@@ -187,8 +168,6 @@ public class LinkedListManager {
 			projectCount++;
 			
 			ProjectNode loadProject = new ProjectNode(projectName);
-			loadProject.setEmployeeCount(employeeCount);
-			loadProject.setStoryCount(storyCount);
 			loadProject.setProjectID(projectCount);
 			projectNodeHead.setPrevious(loadProject);
 			loadProject.setNext(projectNodeHead);
@@ -356,8 +335,6 @@ public class LinkedListManager {
 				
 				currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
 						lifeCycleStep, effortCategory);
-				findProject.addNewData(name, logNumber, duration, date, startTime, endTime,
-						lifeCycleStep, effortCategory);
 				
 				return 1;
 				
@@ -368,8 +345,6 @@ public class LinkedListManager {
 				if(findProject.getProjectName().equals(name)) {
 					
 					currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
-							lifeCycleStep, effortCategory);
-					findProject.addNewData(name, logNumber, duration, date, startTime, endTime,
 							lifeCycleStep, effortCategory);
 					
 					return 1;
@@ -384,14 +359,13 @@ public class LinkedListManager {
 				
 				currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
 						lifeCycleStep, effortCategory);
-				findProject.addNewData(name, logNumber, duration, date, startTime, endTime,
-						lifeCycleStep, effortCategory);
 				
 				return 1;
 				
 			}
 			
-			System.out.println("No project with name: " + name + " found. Please try a new name or create a project with that name.\n");
+			System.out.println("No project with name: " + name + " found. "
+					+ "Please try a new name or create a project with that name.\n");
 			
 			return 0;
 			
@@ -420,42 +394,6 @@ public class LinkedListManager {
 	}
 	
 	/**
-	 * Access data of a project by name. Displays one data node at a time.
-	 * @param projectName Name to access.
-	 */
-	public void accessProjectData(String projectName) {
-		
-		ProjectNode foundProject = findProject(projectName);
-		
-		if(foundProject == null)
-			System.out.println("Invalid project name. Please try a different name.");
-		else
-			viewProjectData(foundProject);
-		
-	}
-	
-	/**
-	 * Access data of a user. Only works if logged in. Displays one data node at a time.
-	 */
-	public void accessUserData() {
-		
-		if(locked == 0) {
-			
-			System.out.println("Error. Please login to an account first.");
-			
-		}
-		else {
-			
-			if(currentUser == null)
-				System.out.println("Invalid user. Please try a different user.");
-			else
-				viewUserData(currentUser);
-			
-		}
-		
-	}
-	
-	/**
 	 * Starts the search functionality.
 	 * Use instead of calling SearchData directly.
 	 * Serves as the way to call the search and the logic handler.
@@ -469,7 +407,6 @@ public class LinkedListManager {
 		if(locked == 0) {
 			
 			return null;
-			//System.out.println("Error. Please login to an account first.");
 			
 		}
 		else {
@@ -477,7 +414,6 @@ public class LinkedListManager {
 			if(currentUser == null) {
 				
 				return null;
-				//System.out.println("Invalid user. Please try a different user.");
 				
 			}
 			else {
@@ -678,86 +614,6 @@ public class LinkedListManager {
 		currentUser = null;
 		
 		locked = 0;
-		
-	}
-	
-	/**
-	 * Support method to view the data in a specified projectNode.
-	 * No data scrub. A transfer method to convert from projectNode to dataNode.
-	 * @param projectNodeTarget The project to access data from.
-	 */
-	private void viewProjectData(ProjectNode projectNodeTarget) {
-			
-			DataNode accessedData = projectNodeTarget.getDataHead();
-			viewData(accessedData);
-	}
-	
-	/**
-	 * Support method to view the data in a specified userNode.
-	 * No data scrub. A transfer method to convert from userNode to dataNode.
-	 * @param userNodeTarget The project to access data from.
-	 */
-	private void viewUserData(UserNode userNodeTarget) {
-			
-			DataNode accessedData = userNodeTarget.getDataHead();
-			viewData(accessedData);
-		
-	}
-	
-	/**
-	 * The support method to view data in the target data chain.
-	 * Has built in menu functions and input scrub.
-	 * Views only the data chain of the passed in node.
-	 * @param dataNodeTarget Beginning of linked list of dataNodes to view.
-	 */
-	private void viewData(DataNode dataNodeTarget) {
-		
-		DataNode accessedData = dataNodeTarget;
-		int loopControl = 0;
-		int userInput = 0;
-		
-		while(loopControl == 0) { //Menu loop
-			
-			if(accessedData == null) {
-				
-				//return "No current data.";
-				
-				//System.out.println("No current data."); loopControl = 1;
-				
-			}
-			else {
-				
-				//return accessedData.display();
-				System.out.println(accessedData.display());
-				System.out.println("Enter 1 for previous, 2 for next, 0 for exit.");
-				//data to process, first read in, number of characters to return
-				userInput = processInput.processInt(scan.nextLine(), 1);
-				if(userInput == 0) {
-					
-					loopControl = 1;
-					System.out.println("Exit successful.");
-					
-				}
-				else if(userInput == 1) {
-					
-					if(accessedData.getPrevious() == null)
-						System.out.println("No data entries this direction.");
-					else
-						accessedData = accessedData.getPrevious();
-					
-				}
-				else if(userInput == 2) {
-					
-					if(accessedData.getNext() == null)
-						System.out.println("No data entries this direction.");
-					else
-						accessedData = accessedData.getNext();
-					
-				}
-				
-			}
-			
-		}
 		
 	}
 	
