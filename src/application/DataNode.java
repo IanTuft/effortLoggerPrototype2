@@ -121,12 +121,4 @@ public class DataNode {
 		
 	}
 	
-	
-	@Override
-	public String toString() {//Modified for output for display of contained data in one command.
-		
-		return "Project Name: " + projectName + "\n";
-		
-	}
-	
 }

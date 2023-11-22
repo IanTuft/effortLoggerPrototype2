@@ -34,13 +34,31 @@ public class PlanningPoker extends Application {
 
     private Scene createPlanningPokerScene(Stage primaryStage) {
     	
+    	//Andrew's Work Zone
     	String projectNameDefault = "Project";
     	String lifecycleDefault = "Life Cycle Step";
     	String effortDefault = "Effort Category";
     	
+        String[] currentProjects = new String[Main.llm.getProjectCount()];
+        
+        Text output = new Text();
+    	
     	Button exitButton = new Button("EXIT");
     	Button backButton = new Button("Back");
     	Button clearButton = new Button("Clear search terms");
+        Button nextButton = new Button("Next");
+        Button prevButton = new Button("Previous");
+        Button searchButton = new Button("Search");
+        
+        HBox nextAndPrevButton = new HBox(20);
+        nextAndPrevButton.setAlignment(Pos.CENTER);
+        nextAndPrevButton.getChildren().addAll(
+                prevButton, nextButton
+        );
+        
+        nextButton.setDisable(true);
+        prevButton.setDisable(true);
+    	//End Andrew's Work Zone
     	
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
@@ -57,8 +75,7 @@ public class PlanningPoker extends Application {
         ComboBox<String> projectDropdown = new ComboBox<>();
         projectDropdown.setPromptText(projectNameDefault);
         
-        String[] currentProjects = new String[Main.llm.getProjectCount()];
-        
+        //Andrew's Work Zone
         for(int i = 0; i < (Main.llm.getProjectCount()); i++) {
         	
         	currentProjects[i] = Main.llm.getProjectName(i+1); //adding "project" somewhere by accident...
@@ -66,6 +83,7 @@ public class PlanningPoker extends Application {
         }
         
         projectDropdown.getItems().addAll(currentProjects);
+        //Andrew's Work Zone
 
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
         lifecycleDropdown.setPromptText(lifecycleDefault);
@@ -136,32 +154,15 @@ public class PlanningPoker extends Application {
         		"Defects",
         		"Others"
         		);
-        
-        //TextField tagInput = new TextField();
-        //tagInput.setPromptText("Enter tags separated by commas");
-        
-        Button nextButton = new Button("Next");
-        Button prevButton = new Button("Previous");
-        
-        nextButton.setDisable(true);
-        prevButton.setDisable(true);
-        
-        HBox nextAndPrevButton = new HBox(20);
-        nextAndPrevButton.setAlignment(Pos.CENTER);
-        nextAndPrevButton.getChildren().addAll(
-                prevButton, nextButton
-        );
 
-        Text output = new Text();
-
-        Button searchButton = new Button("Search");
-
+        //Andrew's Work Zone
         searchButton.setOnAction(e -> {
         	
         	nextButton.setDisable(true);
         	prevButton.setDisable(true);
             
-        	searching = Main.llm.searchUserData(projectDropdown.getValue(), lifecycleDropdown.getValue(), effortCategoryDropdown.getValue());
+        	searching = Main.llm.searchUserData(projectDropdown.getValue(), lifecycleDropdown.getValue(), 
+        			effortCategoryDropdown.getValue());
         	
         	if(searching != null) {
         		
@@ -255,42 +256,7 @@ public class PlanningPoker extends Application {
         	primaryStage.close();
         	
         });
-
-
-        /*Text section2 = new Text("2. Search up to 3 tags separated by a comma to find relative data.");
-        section2.setFont(javafx.scene.text.Font.font("Arial", FontWeight.NORMAL, 14));
-
-        TextField tagInput = new TextField();
-        tagInput.setPromptText("Enter tags separated by commas");
-
-        Text output = new Text();
-
-        Button searchButton = new Button("Search");
-        tagInput.setPromptText("Enter tags separated by commas");
-
-        searchButton.setOnAction(e -> {
-            String userInput = tagInput.getText().trim();
-            if (userInput.isEmpty()) {
-                output.setText("Please enter tags.");
-                return;
-            }
-
-            String[] tags = userInput.split(",");
-            if (tags.length > 3) {
-                output.setText("Too many tags, please enter a max of 3.");
-            } else {
-                if (tags.length >= 1) {
-                    String tag1 = tags[0].trim();
-                }
-                if (tags.length >= 2) {
-                    String tag2 = tags[1].trim();
-                }
-                if (tags.length == 3) {
-                    String tag3 = tags[2].trim();
-                }
-                output.setText("Tags: " + Arrays.toString(tags));
-            }
-        });*/
+        //End Andrew's Work Zone
 
         Text section3 = new Text("3. Pick a number 1-10:");
         ChoiceBox<Integer> numberChoiceBox = new ChoiceBox<>();
@@ -318,7 +284,7 @@ public class PlanningPoker extends Application {
         centerBox.getChildren().addAll(exitButton, backButton, title, section1, createLabeledRow("Project:", projectDropdown),
                 createLabeledRow("Life Cycle Step:", lifecycleDropdown),
                 createLabeledRow("Effort Category:", effortCategoryDropdown),
-                /*section2,*/ /*tagInput,*/ searchButton, clearButton, output, nextAndPrevButton, section3, numberChoiceBox, submitButton);
+                searchButton, clearButton, output, nextAndPrevButton, section3, numberChoiceBox, submitButton);
 
         root.setCenter(centerBox);
 

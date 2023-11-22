@@ -13,10 +13,12 @@ import java.util.List;
 
 public class LogIn extends Application {
     private Stage primaryStage;
-    // private List<User> userAccounts = new ArrayList<>();
+
     private Runnable loginSuccessCallback;
     
+    //Andrew's Work Zone
     private ProcessInput processInput = new ProcessInput();
+    //End Andrew's Work Zone
 
     public static void main(String[] args) {
         launch(args);
@@ -42,13 +44,14 @@ public class LogIn extends Application {
         Button loginButton = new Button("Log In");
         Button signUpButton = new Button("Sign Up");
         
+        //Andrew's Work Zone
         exitButton.setOnAction(e -> {
         	
         	Main.llm.save();
         	System.exit(0);
         	
         });
-
+        //End Andrew's Work Zone
 
         loginBox.getChildren().addAll(
                 exitButton,
@@ -103,9 +106,8 @@ public class LogIn extends Application {
 
         Button signUpConfirmButton = new Button("Sign Up");
         signUpConfirmButton.setOnAction(e -> {
-            // Existing sign-up code
+
         	//Andrew's Work Zone
-        	
         	if(!Main.llm.checkDuplicateEmployee(processInput.processInt(employeeIdField.getText(), 9))) {
         		
             	Main.llm.addNewEmployeeLogin(firstNameField.getText(), lastNameField.getText(), 
@@ -119,7 +121,6 @@ public class LogIn extends Application {
         		duplicateEmployee.setText("Employee already exists.");
         		
         	}
-
         	//End Andrew's Work Zone
         });
 
@@ -152,15 +153,13 @@ public class LogIn extends Application {
     }
 
     private boolean isLoginValid(String employeeId, String password) {
-//        for (User user : userAccounts) {
-//            if (user.getEmployeeId().equals(employeeId) && user.getPassword().equals(password)) {
-//                return true;
-//            }
-//        }
+    	
+    	//Andrew's Work Zone
     	boolean credentials = false;
     	
     	credentials = Main.llm.lockUser(processInput.processInt(employeeId, 9), password);
     	
     	return credentials;
+    	//End Andrew's Work Zone
     }
 }

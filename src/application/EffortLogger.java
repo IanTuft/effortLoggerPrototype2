@@ -20,14 +20,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.time.format.DateTimeFormatter;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.Instant;
 
 public class EffortLogger extends Application {
 
@@ -58,11 +51,6 @@ public class EffortLogger extends Application {
 	
     private Runnable effortLoggerCallback;
 
-	public void storeLog(String[] log) {
-		database.add(log);
-	}
-
-    
     public static void main(String[] args) {
         launch(args);
     }
@@ -79,8 +67,12 @@ public class EffortLogger extends Application {
         Button stopButton = new Button("Stop this Activity");
         stopButton.setDisable(true);
         
+        //Andrew's Work Zone
         Button exitButton = new Button("EXIT");
         Button backButton = new Button("Back");
+        
+        String[] currentProjects = new String[Main.llm.getProjectCount()];        
+        //End Andrew's Work Zone
     	
     	BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
@@ -113,8 +105,8 @@ public class EffortLogger extends Application {
         ComboBox<String> projectDropdown = new ComboBox<>();
         projectDropdown.setPromptText("Project");
 
-        String[] currentProjects = new String[Main.llm.getProjectCount()];
-        
+
+        //Andrew's Work Zone
         for(int i = 0; i < (Main.llm.getProjectCount()); i++) {
         	
         	currentProjects[i] = Main.llm.getProjectName(i+1); //adding "project" somewhere by accident...
@@ -122,6 +114,7 @@ public class EffortLogger extends Application {
         }
         
         projectDropdown.getItems().addAll(currentProjects);
+        //End Andrew's Work Zone
 
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
         lifecycleDropdown.getItems().addAll(
@@ -207,11 +200,13 @@ public class EffortLogger extends Application {
         VBox effortCategoryBox = createLabeledRow("Effort Category:", effortCategoryDropdown, addEffortCategoryButton);
         effortCategoryBox.setAlignment(Pos.CENTER);
         
+        //Andrew's Work Zone
         projectDropdown.setOnAction(e -> {
         	
         	logCounter = Main.llm.getLogCount(projectDropdown.getValue());
         	
         });
+        //End Andrew's Work Zone
 
         Text section3 = new Text("3. Press the 'Stop this Activity' button to generate an effort log entry using the attributes above.");
         stopButton.setOnAction(e -> {
@@ -230,7 +225,7 @@ public class EffortLogger extends Application {
             log[5] = projectDropdown.getValue();
             log[6] = lifecycleDropdown.getValue();
             log[7] = effortCategoryDropdown.getValue();
-            //database.add(log);
+
             //Andrew's Work Zone
             if(log[5] != null) {
             	
@@ -245,12 +240,13 @@ public class EffortLogger extends Application {
 	            
             }
             //End Andrew's Work Zone
-            //System.out.println(Arrays.toString(database.get(logCounter-1)));
+            
             clockStatus.setText("Clock is stopped");
             clockStatus.setFill(Color.RED);
             stopButton.setDisable(true);
         });
         
+        //Andrew's Work Zone
         exitButton.setOnAction(e -> {
         	
         	Main.llm.save();
@@ -263,7 +259,7 @@ public class EffortLogger extends Application {
         	primaryStage.close();
         	
         });
-
+        //End Andrew's Work Zone
 
         centerBox.getChildren().addAll(exitButton, backButton, title, clockStatus, section1, startButton, section2,
                 projectAndLifecycleBox,
