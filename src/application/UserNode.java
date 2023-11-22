@@ -61,19 +61,19 @@ public class UserNode {
 	 * @param time Time to report.
 	 * @param defect Defect count to report.
 	 */
-	public void addNewData(String name, int logNumber, int duration, String date, String startTime, 
+	public void addNewData(String projectName, int logNumber, int duration, String date, String startTime, 
 			String endTime, String lifeCycleStep, String effortCategory) {
 		
 		if(dataHead == null) {
 			
-			DataNode projectData = new DataNode(name, logNumber, duration, date, startTime, endTime,
+			DataNode projectData = new DataNode(projectName, logNumber, duration, date, startTime, endTime,
 					lifeCycleStep, effortCategory);
 			dataHead = projectData;
 			
 		}
 		else {
 			
-			DataNode projectData = new DataNode(name, logNumber, duration, date, startTime, endTime,
+			DataNode projectData = new DataNode(projectName, logNumber, duration, date, startTime, endTime,
 					lifeCycleStep, effortCategory);
 			dataHead.setPrevious(projectData);
 			projectData.setNext(dataHead);
@@ -102,13 +102,6 @@ public class UserNode {
 		out = this.employeeName + "\n" + this.employeeID + "\n" + this.password + "\n";
 		
 		return out;
-		
-	}
-	
-	@Override
-	public String toString() {
-		
-		return "Employee Name: " + employeeName + "/n";
 		
 	}
 
