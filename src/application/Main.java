@@ -60,7 +60,5 @@ public class Main extends Application {
         
      // Set the EffortLogger callback to re-open EffortLogger
         planningPoker.setPlanningPokerCallback(this::openEffortLogger);   
-        PlanningPoker planningPoker = new PlanningPoker();
-        planningPoker.start(new Stage());
     }
 }
