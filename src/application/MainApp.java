@@ -2,6 +2,7 @@ package application;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -13,13 +14,18 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class MainApp extends Application {
+	
+	private Stage primaryStage;
+    private Runnable effortLoggerSuccessCallback;
+    private Runnable planningPokerSuccessCallback;
 
-    public static void launchApp(String[] args) {
-        launch(args);
+    public static void launchApp() {
+        launch();
     }
 
     @Override
     public void start(Stage primaryStage) {
+    	this.primaryStage = primaryStage;
         primaryStage.setTitle("Planning Poker & Effort Logger");
 
         BorderPane root = new BorderPane();
@@ -31,15 +37,13 @@ public class MainApp extends Application {
         // Create box for Planning Poker (traditional poker colors)
         VBox planningPokerBox = createClickableBox("Planning Poker", Color.DARKGREEN, Color.LIGHTGREEN, Color.WHITE);
         planningPokerBox.setOnMouseClicked(e -> {
-            PlanningPoker planningPoker = new PlanningPoker();
-            planningPoker.start(new Stage());
+        	planningPokerSuccessCallback.run();
         });
 
         // Create box for Effort Logger (complementary colors)
         VBox effortLoggerBox = createClickableBox("Effort Logger", Color.DARKORANGE, Color.LIGHTCORAL, Color.WHITE);
         effortLoggerBox.setOnMouseClicked(e -> {
-            EffortLogger effortLogger = new EffortLogger();
-            effortLogger.start(new Stage());
+        	effortLoggerSuccessCallback.run();
         });
 
         centerBox.getChildren().addAll(planningPokerBox, effortLoggerBox);
@@ -49,22 +53,32 @@ public class MainApp extends Application {
         primaryStage.setScene(new Scene(root, 600, 400)); // Larger window size
         primaryStage.show();
     }
+    
+    public void setEffortLoggerCallback(Runnable callback) {
+        this.effortLoggerSuccessCallback = callback;
+    }
+
+    public void setPlanningPokerCallback(Runnable callback) {
+        this.planningPokerSuccessCallback = callback;
+    }
+    
 
     private VBox createClickableBox(String text, Color bgColor, Color borderColor, Color textColor) {
         VBox box = new VBox();
         box.setAlignment(Pos.CENTER);
-        box.setPrefSize(250, 150); // Increase box size
+        box.setPrefSize(250, 150);
         box.setStyle(
                 "-fx-background-color: " + toRGBCode(bgColor) + "; " +
                 "-fx-border-color: " + toRGBCode(Color.BLACK) + "; " +
                 "-fx-border-width: 2px; " +
-                "-fx-background-radius: 10; -fx-border-radius: 10;"); // Rounded corners
+                "-fx-background-radius: 10; -fx-border-radius: 10;");
         Text label = new Text(text);
         label.setFill(textColor);
-        label.setFont(Font.font("Arial", FontWeight.BOLD, 20)); // Larger and bold text
+        label.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         box.getChildren().add(label);
         return box;
     }
+    
 
     private String toRGBCode(Color color) {
         return String.format("#%02X%02X%02X",

@@ -85,31 +85,19 @@ public class ProjectNode {
 	 * @param time Time to add.
 	 * @param defect Defect count to add.
 	 */
-	public void addNewData2(String name, int time, int defect, String primaryTag) {
+	public void addNewData(String name, int logNumber, int duration, String date, String startTime, 
+			String endTime, String lifeCycleStep, String effortCategory, String etc) {
 		
 		if(dataHead == null) {
 			
-			DataNode projectData = new DataNode(name, time, defect, primaryTag);
+			DataNode projectData = new DataNode(name, logNumber, duration, date, startTime, endTime,
+					lifeCycleStep, effortCategory, etc);
 			dataHead = projectData;
 			
 		}
 		
-		DataNode projectData = new DataNode(name, time, defect, primaryTag);
-		dataHead.setPrevious(projectData);
-		projectData.setNext(dataHead);
-		dataHead = projectData;
-		
-	}
-	public void addNewData(String name, int time, int defect) {
-		
-		if(dataHead == null) {
-			
-			DataNode projectData = new DataNode(name, time, defect);
-			dataHead = projectData;
-			
-		}
-		
-		DataNode projectData = new DataNode(name, time, defect);
+		DataNode projectData = new DataNode(name, logNumber, duration, date, startTime, endTime,
+				lifeCycleStep, effortCategory, etc);
 		dataHead.setPrevious(projectData);
 		projectData.setNext(dataHead);
 		dataHead = projectData;

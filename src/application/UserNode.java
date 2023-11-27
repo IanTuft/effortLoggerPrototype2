@@ -7,6 +7,7 @@ public class UserNode {
 	private DataNode dataHead; //The head of the data linked list the user will be attached to.
 	private UserNode next; //The next user in the linked list of users.
 	private UserNode previous; //The previous user in the linked list of users.
+	private String password;
 	
 	//Default constructor. Never use.
 	public UserNode() {
@@ -16,19 +17,21 @@ public class UserNode {
 		dataHead = null;
 		next = null;
 		previous = null;
+		password = null;
 		
 	}
 	
 	//Additional Constructors
 	
 	//Primary constructor. Always use.
-	public UserNode(String nameIn, int idIn) {
+	public UserNode(String nameIn, int idIn, String passwordIn) {
 		
 		employeeName = nameIn;
 		employeeID = idIn;
 		dataHead = null;
 		next = null;
 		previous = null;
+		password = passwordIn;
 		
 	}
 	
@@ -58,34 +61,34 @@ public class UserNode {
 	 * @param time Time to report.
 	 * @param defect Defect count to report.
 	 */
-	public void addNewData2(String name, int time, int defect, String primaryTag) {
+	public void addNewData(String name, int logNumber, int duration, String date, String startTime, 
+			String endTime, String lifeCycleStep, String effortCategory, String etc) {
 		
 		if(dataHead == null) {
 			
-			DataNode projectData = new DataNode(name, time, defect, primaryTag);
+			DataNode projectData = new DataNode(name, logNumber, duration, date, startTime, endTime,
+					lifeCycleStep, effortCategory, etc);
 			dataHead = projectData;
 			
 		}
 		
-		DataNode projectData = new DataNode(name, time, defect, primaryTag);
+		DataNode projectData = new DataNode(name, logNumber, duration, date, startTime, endTime,
+				lifeCycleStep, effortCategory, etc);
 		dataHead.setPrevious(projectData);
 		projectData.setNext(dataHead);
 		dataHead = projectData;
 		
 	}
-	public void addNewData(String name, int time, int defect) {
+	
+	public boolean passwordCheck(String passwordCheck) {
 		
-		if(dataHead == null) {
-			
-			DataNode projectData = new DataNode(name, time, defect);
-			dataHead = projectData;
-			
-		}
+		boolean check = false;
 		
-		DataNode projectData = new DataNode(name, time, defect);
-		dataHead.setPrevious(projectData);
-		projectData.setNext(dataHead);
-		dataHead = projectData;
+		if(this.password.equals(passwordCheck))
+			check = true;
+		
+		
+		return check;
 		
 	}
 	
@@ -93,7 +96,7 @@ public class UserNode {
 		
 		String out = "";
 		
-		out = this.employeeName + "\n" + this.employeeID + "\n";
+		out = this.employeeName + "\n" + this.employeeID + "\n" + this.password + "\n";
 		
 		return out;
 		

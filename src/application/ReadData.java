@@ -10,6 +10,9 @@ public class ReadData {
 	private FileReader users;
 	private FileReader projects;
 	
+	private File userTest;
+	private File projectTest;
+	
 	//Default Constructor. DO NOT USE.
 	
 	public ReadData() {
@@ -39,18 +42,32 @@ public class ReadData {
 		try {
 			
 			users = new FileReader("users.txt");
-			projects = new FileReader("projects.txt");
 			
 			usersIn = new BufferedReader(users);
-			projectsIn = new BufferedReader(projects);
 			
-			addUsers(manager);
-			addProjects(manager);
+			if(userTest.length() != 0)
+				addUsers(manager);
 			
 		}
 		catch(FileNotFoundException e) {
 		
-			System.out.println("One or more files not found.");
+			System.out.println("users.txt not found.");
+		
+		}
+		
+		try {
+			
+			projects = new FileReader("projects.txt");
+			
+			projectsIn = new BufferedReader(projects);
+			
+			if(projectTest.length() != 0)
+				addProjects(manager);
+			
+		}
+		catch(FileNotFoundException e) {
+		
+			System.out.println("projects.txt not found.");
 		
 		}
 		
@@ -59,11 +76,25 @@ public class ReadData {
 	private void addUsers(LinkedListManager manager) {
 		
 		String endString = "";
-		String project = "";
-		int time = 0;
-		int defect = 0;
 		int userCount = 0;
+		
+		String name = "";
+		int id = 0;
+		String password = "";
+		
+		String projectName = "";
+		int logNumber = 0;
+		int duration = 0;
+		String date = "";
+		String startTime = "";
+		String endTime = "";
+		String lifeCycleStep = "";
+		String effortCategory = "";
+		String etc = "";
+		
 		String primaryTag = "";
+		String secondaryTag = "";
+		String additionalTag = "";
 		
 		try {
 			
@@ -80,22 +111,33 @@ public class ReadData {
 			
 			try {
 				
-				String name = usersIn.readLine();
-				int id = Integer.parseInt(usersIn.readLine());
+				name = usersIn.readLine();
+				id = Integer.parseInt(usersIn.readLine());
+				password = usersIn.readLine();
 				
-				manager.addNewEmployee(name, id);
-				manager.lockUser(id);
+				manager.addNewEmployee(name, id, password);
+				manager.lockUser(id, password);
 				
 				endString = usersIn.readLine();
 				
 				while(!endString.equals("NEXT")) {
 					
-					project = endString;
-					time = Integer.parseInt(usersIn.readLine());
-					defect = Integer.parseInt(usersIn.readLine());
-					primaryTag = usersIn.readLine();
+					projectName = endString;
+					logNumber = Integer.parseInt(usersIn.readLine());
+					duration = Integer.parseInt(usersIn.readLine());
+					date = usersIn.readLine();
+					startTime = usersIn.readLine();
+					endTime = usersIn.readLine();
+					lifeCycleStep = usersIn.readLine();
+					effortCategory = usersIn.readLine();
+					etc = usersIn.readLine();
 					
-					manager.addNewData(project, time, defect, primaryTag);
+					primaryTag = usersIn.readLine();
+					secondaryTag = usersIn.readLine();
+					additionalTag = usersIn.readLine();
+					
+					manager.addNewData(projectName, logNumber, duration, date, startTime, endTime,
+							lifeCycleStep, effortCategory, etc, primaryTag, secondaryTag, additionalTag);
 					
 					endString = usersIn.readLine();
 					
@@ -123,6 +165,21 @@ public class ReadData {
 		
 		int projectCount = 0;
 		
+		String storyTitle = "";
+		String story = "";
+		
+		int logNumber = 0;
+		int duration = 0;
+		String date = "";
+		String startTime = "";
+		String endTime = "";
+		String lifeCycleStep = "";
+		String effortCategory = "";
+		String etc = "";
+		String primaryTag = "";
+		String secondaryTag = "";
+		String additionalTag = "";
+		
 		try {
 			
 			projectCount = Integer.parseInt(projectsIn.readLine());
@@ -142,15 +199,17 @@ public class ReadData {
 				employeeCount = Integer.parseInt(projectsIn.readLine());
 				storyCount = Integer.parseInt(projectsIn.readLine());
 				
-				manager.loadNewProject(projectName, employeeCount, storyCount);
+				manager.addNewProject(projectName, employeeCount, storyCount);
 				
 				endString = projectsIn.readLine();
 				
 				while(!endString.equals("NEXT")) {
 					
-					//story variables
+					projectName = projectsIn.readLine();
+					storyTitle = projectsIn.readLine();
+					story = projectsIn.readLine();
 					
-					//add the story
+					manager.addNewStory(projectName, storyTitle, story);
 					
 					endString = projectsIn.readLine();
 					
@@ -160,9 +219,22 @@ public class ReadData {
 				
 				while(!endString.equals("NEXT")) {
 					
-					//data variables
+					projectName = endString;
+					logNumber = Integer.parseInt(usersIn.readLine());
+					duration = Integer.parseInt(usersIn.readLine());
+					date = usersIn.readLine();
+					startTime = usersIn.readLine();
+					endTime = usersIn.readLine();
+					lifeCycleStep = usersIn.readLine();
+					effortCategory = usersIn.readLine();
+					etc = usersIn.readLine();
 					
-					//add data
+					primaryTag = usersIn.readLine();
+					secondaryTag = usersIn.readLine();
+					additionalTag = usersIn.readLine();
+					
+					manager.addNewData(projectName, logNumber, duration, date, startTime, endTime,
+							lifeCycleStep, effortCategory, etc, primaryTag, secondaryTag, additionalTag);
 					
 					endString = projectsIn.readLine();
 					
