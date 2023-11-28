@@ -194,9 +194,9 @@ public class StoreData {
 			
 			try {
 				
-				user.write("0 \n"); //Dummy character to be checked first by ReadData.
-				user.write(Integer.toString(projectCount)); //Save the project count.
-				user.write("\n"); //New line
+				project.write("0 \n"); //Dummy character to be checked first by ReadData.
+				project.write(Integer.toString(projectCount)); //Save the project count.
+				project.write("\n"); //New line
 				
 			}
 			catch(IOException e) {

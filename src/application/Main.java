@@ -21,7 +21,8 @@ public class Main extends Application {
     	if(llm == null) {
     		
     		llm = new LinkedListManager();
-    		ReadData readData = new ReadData(llm);
+    		ReadData readData = new ReadData(llm); //This object is not used, but by created it we load the saved
+    												//data into the LinkedListManager object
     		
     	}
     	
