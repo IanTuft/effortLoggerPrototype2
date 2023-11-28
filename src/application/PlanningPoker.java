@@ -34,31 +34,30 @@ public class PlanningPoker extends Application {
 
     private Scene createPlanningPokerScene(Stage primaryStage) {
     	
-    	//Andrew's Work Zone
-    	String projectNameDefault = "Project";
-    	String lifecycleDefault = "Life Cycle Step";
-    	String effortDefault = "Effort Category";
-    	
+    	//Array to hold the names of the current projects. Initialized length is equal to the number of current projects
         String[] currentProjects = new String[Main.llm.getProjectCount()];
         
+        //To display found data
         Text output = new Text();
     	
-    	Button exitButton = new Button("EXIT");
-    	Button backButton = new Button("Back");
-    	Button clearButton = new Button("Clear search terms");
-        Button nextButton = new Button("Next");
-        Button prevButton = new Button("Previous");
-        Button searchButton = new Button("Search");
+        //Buttons to manipulate the program
+    	Button exitButton = new Button("EXIT"); //Exit the program
+    	Button backButton = new Button("Back"); //Go back to the previous screen
+    	Button clearButton = new Button("Clear search terms"); //Reset search terms
+        Button nextButton = new Button("Next"); //View next item found in search
+        Button prevButton = new Button("Previous"); //View previous item found in search
+        Button searchButton = new Button("Search"); //Search based on given parameters
         
+        //Formatting
         HBox nextAndPrevButton = new HBox(20);
         nextAndPrevButton.setAlignment(Pos.CENTER);
         nextAndPrevButton.getChildren().addAll(
                 prevButton, nextButton
         );
         
+        //Next and previous disabled by default to avoid bad inputs
         nextButton.setDisable(true);
         prevButton.setDisable(true);
-    	//End Andrew's Work Zone
     	
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
@@ -73,20 +72,21 @@ public class PlanningPoker extends Application {
         section1.setFont(javafx.scene.text.Font.font("Arial", FontWeight.NORMAL, 14));
 
         ComboBox<String> projectDropdown = new ComboBox<>();
-        projectDropdown.setPromptText(projectNameDefault);
+        projectDropdown.setPromptText("Project");
         
-        //Andrew's Work Zone
+        //Get the Strings to populate the ComboBox
         for(int i = 0; i < (Main.llm.getProjectCount()); i++) {
         	
-        	currentProjects[i] = Main.llm.getProjectName(i+1); //adding "project" somewhere by accident...
+        	//i+1 is used because "Project" is being added somewhere in the code.
+        	currentProjects[i] = Main.llm.getProjectName(i+1); //adding "Project" somewhere by accident...
         	
         }
         
+        //Populate the ComboBox
         projectDropdown.getItems().addAll(currentProjects);
-        //Andrew's Work Zone
 
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
-        lifecycleDropdown.setPromptText(lifecycleDefault);
+        lifecycleDropdown.setPromptText("Life Cycle Step");
         lifecycleDropdown.getItems().addAll(
         		"Problem Understanding",
         		"Conceptual Design Plan",
@@ -117,7 +117,7 @@ public class PlanningPoker extends Application {
         		);
 
         ComboBox<String> effortCategoryDropdown = new ComboBox<>();
-        effortCategoryDropdown.setPromptText(effortDefault);
+        effortCategoryDropdown.setPromptText("Effort Category");
         effortCategoryDropdown.getItems().addAll(
         		"Project Plan",
     			"Risk Management Plan",
@@ -155,52 +155,55 @@ public class PlanningPoker extends Application {
         		"Others"
         		);
 
-        //Andrew's Work Zone
+        //Search button code
         searchButton.setOnAction(e -> {
         	
+        	//Disable next and previous buttons to prevent bad inputs
         	nextButton.setDisable(true);
         	prevButton.setDisable(true);
             
+        	//Search based on the given parameters
         	searching = Main.llm.searchUserData(projectDropdown.getValue(), lifecycleDropdown.getValue(), 
         			effortCategoryDropdown.getValue());
         	
-        	if(searching != null) {
+        	if(searching != null) { //Make sure something was returned
         		
-        		output.setText(searching.display());
+        		output.setText(searching.display()); //Display first result
         		
-        		if(searching.getNext() != null) {
+        		if(searching.getNext() != null) { //If there is at least one additional result, enable the next button
         			
         			nextButton.setDisable(false);
         			
         		}
         		
         	}
-        	else
+        	else //If no results, display an error
         		output.setText("No matches!");
             
         });
         
+        //Next button behavior
         nextButton.setOnAction(e -> {
         	
-        	if(searching.getNext() != null) {
+        	if(searching.getNext() != null) { //Make sure we don't run off the edge of the linked list
         		
         		searching = searching.getNext();
-        		output.setText(searching.display());
+        		output.setText(searching.display()); //Display the next item
         		
-        		if(searching.getNext() == null) {
+        		if(searching.getNext() == null) { //Disable the next button if there is no next item
         			
         			nextButton.setDisable(true);
         			
         		}
         		
-        		if(searching.getPrevious() != null) {
+        		if(searching.getPrevious() != null) { //Enable the previous button if there is at least one previous item
         			
         			prevButton.setDisable(false);
         			
         		}
         		
         	}
-        	else {
+        	else { //Fail safe message. Should not occur under normal operation. Indicates something with the next button broke.
         		
         		output.setText("No data entries this direction.");
         		
@@ -208,27 +211,28 @@ public class PlanningPoker extends Application {
         	
         });
         
+        //Previous button behavior
         prevButton.setOnAction(e -> {
         	
-        	if(searching.getPrevious() != null) {
+        	if(searching.getPrevious() != null) { //Make sure we don't run off the edge of the linked list
         		
         		searching = searching.getPrevious();
-        		output.setText(searching.display());
+        		output.setText(searching.display()); //Display the previous item
         		
-        		if(searching.getPrevious() == null) {
+        		if(searching.getPrevious() == null) {//Disable the previous button if there is no previous item
         			
         			prevButton.setDisable(true);
         			
         		}
         		
-        		if(searching.getNext() != null) {
+        		if(searching.getNext() != null) { //Enable the next button if there is at least one next item
         			
         			nextButton.setDisable(false);
         			
         		}
         		
         	}
-        	else {
+        	else { //Fail safe message. Should not occur under normal operation. Indicates something with the previous button broke.
         		
         		output.setText("No data entries this direction.");
         		
@@ -236,27 +240,30 @@ public class PlanningPoker extends Application {
         	
         });
         
+        //Clear search terms button functionality
         clearButton.setOnAction(e -> {
         	
+        	//Reset the ComboBox values
         	projectDropdown.setValue(null);
         	lifecycleDropdown.setValue(null);
         	effortCategoryDropdown.setValue(null);
         	
         });
         
+        //Exit button
         exitButton.setOnAction(e -> {
         	
-        	Main.llm.save();
-        	System.exit(0);
+        	Main.llm.save(); //Save data
+        	System.exit(0); //Exit program
         	
         });
         
+        //Back button
         backButton.setOnAction(e -> {
         	
-        	primaryStage.close();
+        	primaryStage.close(); //Close Planning Poker stage to see MainApp stage
         	
         });
-        //End Andrew's Work Zone
 
         Text section3 = new Text("3. Pick a number 1-10:");
         ChoiceBox<Integer> numberChoiceBox = new ChoiceBox<>();

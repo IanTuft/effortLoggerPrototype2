@@ -7,10 +7,10 @@ public class LinkedListManager {
 	private ProjectNode projectNodeHead; //for managing the linked list of projects
 	private int locked; //for if someone is currently logged in
 	private ProcessInput processInput = new ProcessInput(); //to process input for bad input
-	private SearchData searchData = new SearchData();
-	private StoreData save;
-	private int projectCount;
-	private int employeeCount;
+	private SearchData searchData = new SearchData(); //To search data
+	private StoreData save; //To save data. DO NOT INITIALIZE UNTIL READY TO SAVE DATA. OVERWRITES FILES.
+	private int projectCount; //Number of projects.
+	private int employeeCount; //Number of employees.
 	
 	//Default constructor. Use this one.
 	public LinkedListManager() {
@@ -28,6 +28,10 @@ public class LinkedListManager {
 	
 	//Public Methods
 	
+	/**
+	 * Saves all the data managed by the LinkedListManager in preparation of program shutdown.
+	 * Overwrites previously written data to prevent duplication of data.
+	 */
 	public void save() {
 		
 		save = new StoreData();
@@ -49,7 +53,7 @@ public class LinkedListManager {
 		int employeeID = employeeIDIn;	
 		String password = processInput.processString(passwordIn, 30);
 		
-		if(userNodeHead == null) {
+		if(userNodeHead == null) { //If no employees were in the list previously
 			
 			UserNode firstUser = new UserNode(employeeName, employeeID, password);
 			userNodeHead = firstUser;
@@ -57,7 +61,7 @@ public class LinkedListManager {
 			employeeCount++;
 			
 		}
-		else {
+		else { //If at least one employee was in the list previously
 		
 			UserNode newEmployee = new UserNode(employeeName, employeeID, password);
 			userNodeHead.setPrevious(newEmployee);
@@ -72,18 +76,21 @@ public class LinkedListManager {
 	
 	/**
 	 * To add a new employee for the login screen. Combines first name and last name into one string.
-	 * @param firstName
-	 * @param lastName
-	 * @param employeeIDIn
-	 * @param passwordIn
+	 * Otherwise functions identically to addNewEmployee.
+	 * @param firstName First name of employee.
+	 * @param lastName Last name of employee.
+	 * @param employeeIDIn ID of employee.
+	 * @param passwordIn Password of employee.
 	 */
 	public void addNewEmployeeLogin(String firstName, String lastName, int employeeIDIn, String passwordIn) {
 		
 		String employeeName = processInput.processString(firstName, 30) + " " + processInput.processString(lastName, 30);
+			//Combines the first and last name into a single String
+		
 		int employeeID = employeeIDIn;	
 		String password = processInput.processString(passwordIn, 30);
 		
-		if(userNodeHead == null) {
+		if(userNodeHead == null) { //If no employees were in the list previously
 			
 			UserNode firstUser = new UserNode(employeeName, employeeID, password);
 			userNodeHead = firstUser;
@@ -91,7 +98,7 @@ public class LinkedListManager {
 			employeeCount++;
 			
 		}
-		else {
+		else { //If at least one employee was in the list previously
 		
 			UserNode newEmployee = new UserNode(employeeName, employeeID, password);
 			userNodeHead.setPrevious(newEmployee);
@@ -104,21 +111,29 @@ public class LinkedListManager {
 		
 	}
 	
+	/**
+	 * Checks by employee ID for if the given ID already exists.
+	 * @param idCheck ID to check for.
+	 * @return Returns true if there is a duplicate. Returns false if there is no duplicate.
+	 */
 	public boolean checkDuplicateEmployee(int idCheck) {
 		
 		UserNode findUser = userNodeHead;
 		
-		if(findUser != null) {
+		if(findUser != null) { //Ensure there is at least one employee. There can be no duplicates if there are no
+								//employees so returns false if there are no employees.
 			
+			//Edge Case: There is only one employee and it is a match.
 			if(findUser.getNext() == null && findUser.getEmployeeID() == idCheck) {
 				
 				return true;
 				
 			}
 			
+			//Edge Case: There are multiple employees.
 			while(findUser.getNext() != null) {
 				
-				if(findUser.getEmployeeID() == idCheck) {
+				if(findUser.getEmployeeID() == idCheck) { //If there is a match, return true.
 					
 					return true;
 					
@@ -131,6 +146,7 @@ public class LinkedListManager {
 				
 			}
 			
+			//Edge Case: There are multiple employees and we need to check the last one in the list.
 			if(findUser.getNext() == null && findUser.getEmployeeID() == idCheck) {
 				
 				return true;
@@ -144,17 +160,16 @@ public class LinkedListManager {
 	}
 	
 	/**
-	 * To add a new project. Added to front of linked list.
-	 * Used by ReadData to load the saved project data.
-	 * @param projectName Name of project. Has built in input checking.
-	 * @param employeeCount Number of employees on project. No input checking.
-	 * @param storyCount Number of user stories in project. No input checking.
+	 * To add a new project. Added to the front of the linked list.
+	 * Each project is auto-assigned a project ID based on the project count.
+	 * This ID is used when pulling project names for populating the project ComboBoxes.
+	 * @param projectNameIn Name of project to be added.
 	 */
 	public void addNewProject(String projectNameIn) {
 		
 		String projectName = processInput.processString(projectNameIn, 30);		
 		
-		if(projectNodeHead == null) {
+		if(projectNodeHead == null) { //If there are no other projects in the list yet
 			
 			projectCount++;
 			
@@ -163,7 +178,7 @@ public class LinkedListManager {
 			projectNodeHead = firstProject;
 			
 		}
-		else {
+		else { //If there is at least one project in the list
 		
 			projectCount++;
 			
@@ -177,14 +192,20 @@ public class LinkedListManager {
 		
 	}
 	
+	/**
+	 * Gets how many logs the currently logged in user has generated under the given project name.
+	 * @param projectName The project name to check under.
+	 * @return Returns an integer value of the number of previous logs.
+	 */
 	public int getLogCount(String projectName) {
 		
 		DataNode findData = userNodeHead.getDataHead();
 		
 		int out = 0;
 		
-		if(findData != null) {
+		if(findData != null) { //If there is no previous data, then there are no previous logs so return 0.
 			
+			//Edge Case: There is one previous data entry and it matches the project of interest.
 			if(findData.getNext() == null && findData.getProjectName().equals(projectName)) {
 				
 				out = 1;
@@ -192,6 +213,7 @@ public class LinkedListManager {
 				
 			}
 			
+			//Edge Case: There are multiple previous data entries and we need to find which ones match the project of interest.
 			while(findData.getNext() != null) {
 				
 				if(findData.getProjectName().equals(projectName)) {
@@ -204,6 +226,7 @@ public class LinkedListManager {
 				
 			}
 			
+			//Edge Case: There are multiple previous data entries and we need to check the last one in the list.
 			if(findData.getNext() == null && findData.getProjectName().equals(projectName)) {
 				
 				out++;
@@ -217,18 +240,26 @@ public class LinkedListManager {
 		
 	}
 	
+	/**
+	 * Returns the project name of the matching project ID.
+	 * Used to populate Project ComboBoxes.
+	 * @param projectID Project ID to find the name of.
+	 * @return The name of the project.
+	 */
 	public String getProjectName(int projectID) {
 		
 		ProjectNode temp = projectNodeHead;
 		
-		if(temp != null) {
+		if(temp != null) { //Ensure there is at least one project.
 			
+			//Edge Case: There is only one project and it has the correct project ID.
 			if(temp.getNext() == null && temp.getProjectID() == projectID) {
 				
 				return temp.getProjectName();
 				
 			}
 			
+			//Edge Case: There are multiple projects and we need to find the project with the correct ID.
 			while(temp.getNext() != null) {
 				
 				if(temp.getProjectID() == projectID) {
@@ -244,6 +275,7 @@ public class LinkedListManager {
 				
 			}
 			
+			//Edge Case: There are multiple projects and we need to check the last project in the list.
 			if(temp.getNext() == null && temp.getProjectID() == projectID) {
 				
 				return temp.getProjectName();
@@ -256,18 +288,27 @@ public class LinkedListManager {
 		
 	}
 	
+	/**
+	 * Checks for duplicate project names.
+	 * Returns true if there is a duplicate.
+	 * @param nameToCheck Project name to check.
+	 * @return Returns true if there is a duplicate. Returns false if there is no duplicate.
+	 */
 	public boolean checkDuplicateProject(String nameToCheck) {
 		
 		ProjectNode findProject = projectNodeHead;
 		
-		if(findProject != null) {
+		if(findProject != null) { //Ensure there is at least one project to check for.
+									//If there is not, return false because there cannot be a duplicate.
 			
+			//Edge Case: There is one project and it has the matching name.
 			if(findProject.getNext() == null && findProject.getProjectName().equals(nameToCheck)) {
 				
 				return true;
 				
 			}
 			
+			//Edge Case: There are multiple projects and one might have the matching name.
 			while(findProject.getNext() != null) {
 				
 				if(findProject.getProjectName().equals(nameToCheck)) {
@@ -283,6 +324,7 @@ public class LinkedListManager {
 				
 			}
 			
+			//Edge Case: There are multiple projects and the last one in the list might have the matching name.
 			if(findProject.getNext() == null && findProject.getProjectName().equals(nameToCheck)) {
 				
 				return true;
@@ -308,7 +350,6 @@ public class LinkedListManager {
 	 * @param endTime End time of log.
 	 * @param lifeCycleStep Life cycle step of log.
 	 * @param effortCategory Effort category of log.
-	 * @param etc Various.
 	 * @return returns 1 for success, 0 otherwise.
 	 */
 	public int addNewData(String name, int logNumber, int duration, String date, String startTime, 
@@ -316,7 +357,7 @@ public class LinkedListManager {
 		
 		ProjectNode findProject = projectNodeHead;
 		
-		if(locked == 0) {
+		if(locked == 0) { //Ensure we are logged in.
 			
 			System.out.println("Error. Please login to an account first.");
 			
@@ -325,12 +366,13 @@ public class LinkedListManager {
 		}
 		else {
 			
-			if(findProject == null) {
+			if(findProject == null) { //If there is no project with the matching name, nothing is saved.
 				
 				return 0;
 				
 			}
 			
+			//Edge Case: There is one project and it has the matching name.
 			if(findProject.getNext() == null && findProject.getProjectName().equals(name)) {
 				
 				currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
@@ -340,6 +382,7 @@ public class LinkedListManager {
 				
 			}
 			
+			//Edge Case: There are multiple projects and one might have the matching name.
 			while(findProject.getNext() != null) {
 				
 				if(findProject.getProjectName().equals(name)) {
@@ -355,6 +398,7 @@ public class LinkedListManager {
 			
 			}
 			
+			//Edge Case: There are multiple projects and the last one might have the matching name.
 			if(findProject.getNext() == null && findProject.getProjectName().equals(name)) {
 				
 				currentUser.addNewData(name, logNumber, duration, date, startTime, endTime,
@@ -394,63 +438,83 @@ public class LinkedListManager {
 	}
 	
 	/**
-	 * Starts the search functionality.
-	 * Use instead of calling SearchData directly.
-	 * Serves as the way to call the search and the logic handler.
-	 * Has no actual functionality.
+	 * Given up to three parameters, searches for DataNodes with data matching.
+	 * @param projectName Name of project to search for.
+	 * @param lifecycle Life cycle to search for.
+	 * @param effort Effort category to search for.
+	 * @return Returns a linked list of DataNodes that all match all given filters.
 	 */
 	public DataNode searchUserData(String projectName, String lifecycle, String effort) {
 		
 		DataNode searchedData = null;
-		System.out.println("Passed in: projectName: " + projectName + " lifecycle: " + lifecycle + " effort: " +effort);
 		
-		if(locked == 0) {
+		if(locked == 0) { //Will not run if a user is not logged in.
 			
 			return null;
 			
 		}
 		else {
 			
-			if(currentUser == null) {
+			if(currentUser == null) { //Will not run if not logged into a real user.
 				
 				return null;
 				
 			}
 			else {
 				
-				if(projectName != null) {
+				if(projectName != null) { //If there is a project name parameter
 					
 					searchData.setDataNode(currentUser.getDataHead());
+					
+					//searchedData now holds all DataNodes that match the project name given
 					searchedData = searchData.findProjects(projectName);
 					
 				}
-				if(lifecycle != null) {
+				if(lifecycle != null) { //If there is a life cycle parameter
 					
-					if(searchedData == null) {
+					if(searchedData == null) { //This will trigger if there was no project name parameter given (could happen)
+												//Or if no data matched the project name parameter (should not happen)
 						
 						searchData.setDataNode(currentUser.getDataHead());
+						
+						//searchedData now holds all DataNodes that match the life cycle given
 						searchedData = searchData.findLifecycles(lifecycle);
 						
 					}
-					else {
+					else { //This will trigger if there was a project name parameter given and some data matched the project name
 						
+						//We search from the already reduced list created by searching by project name
 						searchData.setDataNode(searchedData);
+						
+						//searchedData now holds all DataNodes that match the project name and the life cycle given
 						searchedData = searchData.findLifecycles(lifecycle);
 					
 					}
 					
 				}
-				if(effort != null) {
+				if(effort != null) { //If there is an effort category parameter
 					
-					if(searchedData == null) {
+					if(searchedData == null) { //This will trigger if there is no project name parameter given
+												//and no life cycle parameter given or if no data matched the
+												//combination of project name and life cycle parameters given
 						
 						searchData.setDataNode(currentUser.getDataHead());
+						
+						//searchedData now holds all DataNodes that match the effort category given.
+						//If searchedData was passed into the previous line as null, searchedData is still null.
 						searchedData = searchData.findEfforts(effort);
 						
 					}
-					else {
+					else { //This will trigger if there was a project name parameter given and some data matched the project name
+							//Or if there was no project name parameter but there was a life cycle parameter and some data
+							//matched the life cycle, or if there was both a project name parameter and a life cycle parameter
+							//and some data matched both parameters
 						
+						//We search from the already reduced list created by searching by project name and/or life cycle
 						searchData.setDataNode(searchedData);
+						
+						//searchedData now holds all DataNodes that match the project name and/or the life cycle given
+						//and the effort category given
 						searchedData = searchData.findEfforts(effort);
 					
 					}
@@ -473,36 +537,34 @@ public class LinkedListManager {
 	 * Support method. Has no input scrub.
 	 * Does the password check.
 	 * @param employeeID User to log in as.
+	 * @param password Password to check.
+	 * @return Returns true if the password matches the password stored for the given employee ID. Returns false otherwise.
 	 */
 	private boolean lockUserPrivate(int employeeID, String password) {
 		
-		if(locked == 0) {
+		if(locked == 0) { //Can only login if not already logged in
 			
-			currentUser = findUser(employeeID);
+			currentUser = findUser(employeeID); //Find the user that matches the given ID.
 			
-			if(currentUser != null) {
+			if(currentUser != null) { //If the user exists
 			
-				if(!(currentUser.passwordCheck(password))) {
+				if(!(currentUser.passwordCheck(password))) { //Check the password. If the password does not match:
 					
-					currentUser = null;
-					System.out.println("Invalid password.");
+					currentUser = null; //we do not log in.
 					
-					return false;
+					return false; //Return true if the user exists but the password does not match.
 					
 				}
 				
-				return true;
+				return true; //Return true if the password matches and the user exists.
 				
 			}
 			
-			return false;
+			return false; //Return false if the user does not exist.
 		}
 		else {
 			
-			System.out.println("Already logged into user " + currentUser.getEmployeeName() + ". Please logout"
-					+ "before attempting to access a different user.");
-			
-			return false;
+			return false; //Return false if the program is already logged into a user.
 			
 		}
 		
@@ -519,18 +581,19 @@ public class LinkedListManager {
 		UserNode foundUser = userNodeHead;
 		int findSuccess = 0;
 		
-		if(foundUser != null) {
+		if(foundUser != null) { //Checks there is at least one user in the linked list
 			
+			//Edge Case: There is one user in the list and it is the employee we are looking for.
 			if(foundUser.getNext() == null && foundUser.getEmployeeID() == employeeID) {
 				
 				findSuccess = 1;
 				locked = 1;
-				System.out.println("Log in with user ID: " + foundUser.getEmployeeID() + " successful.");
 				
 				return foundUser;
 				
 			}
-
+			
+			//Edge Case: There are multiple users in the list and one of them might be the employee we are looking for.
 			while(foundUser.getNext() != null && findSuccess == 0) { //Search for user in the linked list.
 				
 				if(foundUser.getEmployeeID() == employeeID){
@@ -547,6 +610,7 @@ public class LinkedListManager {
 				
 			}
 			
+			//Edge Case: There are multiple users in the list and the last one might be the employee we are looking for.
 			if(foundUser.getEmployeeID() == employeeID) {
 				
 				findSuccess = 1;
@@ -568,45 +632,6 @@ public class LinkedListManager {
 	}
 	
 	/**
-	 * Finds a project in the linked list of projects.
-	 * Support method. No input scrub.
-	 * @param projectName Project to look for.
-	 * @return Returns the projectNode of interest.
-	 */
-	private ProjectNode findProject(String projectName) {
-		
-		ProjectNode foundProject = projectNodeHead;	
-		
-		if(foundProject != null) {
-		
-			if(foundProject.getNext() == null && foundProject.getProjectName().equals(projectName)) {
-				
-				return foundProject;
-				
-			}
-			
-			while(foundProject.getNext() != null) {
-				
-				if(foundProject.getProjectName().compareTo(projectName) == 0)
-					return foundProject;
-				else
-					foundProject = foundProject.getNext();
-				
-			}
-			
-			if(foundProject.getNext() == null && foundProject.getProjectName().equals(projectName)) {
-				
-				return foundProject;
-				
-			}
-		
-		}
-		
-		return null;
-		
-	}
-	
-	/**
 	 * The logout support method.
 	 */
 	private void unlockUserPrivate() {
@@ -620,8 +645,8 @@ public class LinkedListManager {
 	
 	//Getters and Setters
 	//There are intentionally few of these to preserve the data security of this class.
-	public UserNode getCurrentUser() {return currentUser;} //check who is currently logged in.
-	public int getProjectCount() {return projectCount;}
-	public int getEmployeeCount() {return employeeCount;}
+	public UserNode getCurrentUser() {return currentUser;} //Check who is currently logged in.
+	public int getProjectCount() {return projectCount;} //Get the number of projects.
+	public int getEmployeeCount() {return employeeCount;} //Get the number of users.
 
 }

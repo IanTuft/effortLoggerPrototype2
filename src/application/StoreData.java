@@ -15,6 +15,9 @@ public class StoreData {
 		
 		try {
 			
+			//We intentionally overwrite the files here to ensure no data duplication occurs.
+			//This does mean we need to be careful not to call StoreData() until we have loaded all the data
+			//that was saved in the files.
 			userWrite = new FileWriter("users.txt");
 			projectWrite = new FileWriter("projects.txt");
 			
@@ -34,19 +37,27 @@ public class StoreData {
 	//Additional Constructors.
 	
 	//Public Methods
+	
+	/**
+	 * Saves all the users and their associated data.
+	 * @param userNodeHead The head of the linked list of UserNodes to be processed for saving.
+	 */
 	public void saveUsers(UserNode userNodeHead) {
 		
 		int userCount = 0;
 		UserNode temp = userNodeHead;
 		
-		if(temp != null) {
+		if(temp != null) { //Ensure there is at least one user.
 		
+			//Count number of users
 			while(temp.getNext() != null) {
 				
 				userCount++;
 				temp = temp.getNext();
 				
 			}
+			//Edge Case: There are multiple users or only one user.
+			//Catches the last user who would otherwise be skipped and/or the only user if there is only one.
 			if(temp.getNext() == null) {
 				
 				userCount++;
@@ -55,9 +66,9 @@ public class StoreData {
 			
 			try {
 				
-				user.write("0 \n");
-				user.write(Integer.toString(userCount));
-				user.write("\n");
+				user.write("0 \n"); //Dummy character to be checked first by ReadData.
+				user.write(Integer.toString(userCount)); //Save the user count.
+				user.write("\n"); //New line
 				
 			}
 			catch(IOException e) {
@@ -66,14 +77,16 @@ public class StoreData {
 				
 			}
 			
+			//Write all the users to the file.
 			for(int i = 0; i < userCount; i++) {
 				
 				try {
 					
-					user.write(userNodeHead.save());
-					saveUsersData(userNodeHead.getDataHead());
+					user.write(userNodeHead.save()); //Save the user information.
+					saveUsersData(userNodeHead.getDataHead()); //Save all the user data.
 					
-					user.write("NEXT\n");
+					user.write("NEXT\n"); //Read by ReadData to know that the end of the user data is reached
+											//and to prepare for the next user.
 					
 				}
 				catch(IOException e){
@@ -82,7 +95,7 @@ public class StoreData {
 					
 				}
 				
-				if(userNodeHead.getNext() != null) {
+				if(userNodeHead.getNext() != null) { //Double check we won't run off the linked list.
 				
 					userNodeHead = userNodeHead.getNext();
 				
@@ -93,6 +106,7 @@ public class StoreData {
 		
 		try {
 			
+			//Close files so they are written.
 			user.close();
 			userWrite.close();
 			
@@ -105,10 +119,16 @@ public class StoreData {
 		
 	}
 	
+	/**
+	 * Saves all the data of a user.
+	 * @param dataNodeHead The head of the linked list of DataNodes to be processed for saving.
+	 */
 	private void saveUsersData(DataNode dataNodeHead) {
 		
-		if(dataNodeHead != null) {
+		if(dataNodeHead != null) { //Ensure there is at least one data entry
 		
+			//Edge Case: There are multiple data entries.
+			//Writes each data entry to file.
 			while(dataNodeHead.getNext() != null) {
 				
 				try {
@@ -126,6 +146,8 @@ public class StoreData {
 				
 			}
 			
+			//Edge Case: There are multiple data entries or only one data entry.
+			//Catches the last data entry that would otherwise be skipped and/or the only data entry if there is only one.
 			if(dataNodeHead.getNext() == null) {
 				
 				try {
@@ -144,20 +166,26 @@ public class StoreData {
 		}
 		
 	}
-	
+	/**
+	 * Saves all the projects.
+	 * @param projectNodeHead The head of the linked list of ProjectNodes to be processed for saving.
+	 */
 	public void saveProject(ProjectNode projectNodeHead) {
 		
 		int projectCount = 0;
 		ProjectNode temp = projectNodeHead;
 		
-		if(temp != null) {
+		if(temp != null) { //Ensure there is at least one project.
 		
+			//Count number of projects
 			while(temp.getNext() != null) {
 				
 				projectCount++;
 				temp = temp.getNext();
 				
 			}
+			//Edge Case: There are multiple projects or only one project.
+			//Catches the last project that would otherwise be skipped and/or the only project if there is only one.
 			if(temp.getNext() == null) {
 				
 				projectCount++;
@@ -166,9 +194,9 @@ public class StoreData {
 			
 			try {
 				
-				project.write("0 \n");
-				project.write(Integer.toString(projectCount));
-				project.write("\n");
+				user.write("0 \n"); //Dummy character to be checked first by ReadData.
+				user.write(Integer.toString(projectCount)); //Save the project count.
+				user.write("\n"); //New line
 				
 			}
 			catch(IOException e) {
@@ -177,11 +205,12 @@ public class StoreData {
 				
 			}
 			
+			//Write all the projects to the file.
 			for(int i = 0; i < projectCount; i++) {
 				
 				try {
 					
-					project.write(projectNodeHead.save());
+					project.write(projectNodeHead.save()); //Save project information.
 					
 				}
 				catch(IOException e) {
@@ -190,7 +219,7 @@ public class StoreData {
 					
 				}
 				
-				if(projectNodeHead.getNext() != null) {
+				if(projectNodeHead.getNext() != null) { //Double check we won't run off the linked list
 				
 					projectNodeHead = projectNodeHead.getNext();
 				
@@ -202,6 +231,7 @@ public class StoreData {
 		
 		try {
 			
+			//Close files so they are written
 			project.close();
 			projectWrite.close();
 			

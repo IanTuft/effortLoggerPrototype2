@@ -43,7 +43,10 @@ public class ProjectNode {
 	public String getProjectName() {return projectName;}
 	public int getProjectID() {return projectID;}
 	
-	
+	/**
+	 * Saves the data stored in the node by outputting it as a String formatted to match what StoreData expects.
+	 * @return Returns a String of specific format.
+	 */
 	public String save() {
 		
 		String out = "";
@@ -53,8 +56,5 @@ public class ProjectNode {
 		return out;
 		
 	}
-	
-	
-	//Additional Methods
 
 }

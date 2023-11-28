@@ -19,13 +19,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class EffortLogger extends Application {
 
 	private boolean isClockRunning = false;
-    private ArrayList<String[]> database = new ArrayList<String[]>(); //ArrayList to hold each log entry
 	private int logCounter = 0; //Log counter
 	private DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //Format dates
 	private DateTimeFormatter timeformat = DateTimeFormatter.ofPattern("HH:mm:ss"); //Format time
@@ -67,12 +65,12 @@ public class EffortLogger extends Application {
         Button stopButton = new Button("Stop this Activity");
         stopButton.setDisable(true);
         
-        //Andrew's Work Zone
+        //Buttons for closing the program with save functionality and going back a screen
         Button exitButton = new Button("EXIT");
         Button backButton = new Button("Back");
         
+        //For populating the project ComboBox
         String[] currentProjects = new String[Main.llm.getProjectCount()];        
-        //End Andrew's Work Zone
     	
     	BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
@@ -105,16 +103,15 @@ public class EffortLogger extends Application {
         ComboBox<String> projectDropdown = new ComboBox<>();
         projectDropdown.setPromptText("Project");
 
-
-        //Andrew's Work Zone
+        //Get the Strings to populate the ComboBox
         for(int i = 0; i < (Main.llm.getProjectCount()); i++) {
         	
-        	currentProjects[i] = Main.llm.getProjectName(i+1); //adding "project" somewhere by accident...
+        	//i+1 is used because "Project" is being added somewhere in the code.
+        	currentProjects[i] = Main.llm.getProjectName(i+1); //adding "Project" somewhere by accident...
         	
         }
-        
+        //Populate the ComboBox
         projectDropdown.getItems().addAll(currentProjects);
-        //End Andrew's Work Zone
 
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
         lifecycleDropdown.getItems().addAll(
@@ -187,26 +184,23 @@ public class EffortLogger extends Application {
         effortCategoryDropdown.setPromptText("Effort Category");
         
         Button addProjectButton = createAddButton(projectDropdown);
-        Button addLifecycleButton = createAddButton(lifecycleDropdown);
-        Button addEffortCategoryButton = createAddButton(effortCategoryDropdown);
 
         HBox projectAndLifecycleBox = new HBox(20);
         projectAndLifecycleBox.setAlignment(Pos.CENTER);
         projectAndLifecycleBox.getChildren().addAll(
                 createLabeledRow("Project:", projectDropdown, addProjectButton),
-                createLabeledRow("Life Cycle Step:", lifecycleDropdown, addLifecycleButton)
+                createLabeledRow("Life Cycle Step:", lifecycleDropdown)
         );
 
-        VBox effortCategoryBox = createLabeledRow("Effort Category:", effortCategoryDropdown, addEffortCategoryButton);
+        VBox effortCategoryBox = createLabeledRow("Effort Category:", effortCategoryDropdown);
         effortCategoryBox.setAlignment(Pos.CENTER);
         
-        //Andrew's Work Zone
+        //Load the number of logs that exist for the selected project
         projectDropdown.setOnAction(e -> {
         	
         	logCounter = Main.llm.getLogCount(projectDropdown.getValue());
         	
         });
-        //End Andrew's Work Zone
 
         Text section3 = new Text("3. Press the 'Stop this Activity' button to generate an effort log entry using the attributes above.");
         stopButton.setOnAction(e -> {
@@ -226,40 +220,40 @@ public class EffortLogger extends Application {
             log[6] = lifecycleDropdown.getValue();
             log[7] = effortCategoryDropdown.getValue();
 
-            //Andrew's Work Zone
-            if(log[5] != null) {
+            //Create new data and store it
+            if(log[5] != null) { //Ensure a project name was selected
             	
-	            if(!Main.llm.checkDuplicateProject(log[5])) {
+	            if(!Main.llm.checkDuplicateProject(log[5])) { //Check if project already exists
 	            	
-	                Main.llm.addNewProject(log[5]);
+	                Main.llm.addNewProject(log[5]); //If project does not already exist, add it as a new project
 	            	
 	            }
 	
+	            //Add the new data
 	            Main.llm.addNewData(log[5], logCounter, processInput.processInt(log[4], 9), date, startTime, endTime, 
 	            		log[6], log[7]);
 	            
             }
-            //End Andrew's Work Zone
             
             clockStatus.setText("Clock is stopped");
             clockStatus.setFill(Color.RED);
             stopButton.setDisable(true);
         });
         
-        //Andrew's Work Zone
+        //Exit button
         exitButton.setOnAction(e -> {
         	
-        	Main.llm.save();
-        	System.exit(0);
+        	Main.llm.save(); //Save data
+        	System.exit(0); //Close program
         	
         });
         
+        //Back button
         backButton.setOnAction(e -> {
         	
-        	primaryStage.close();
+        	primaryStage.close(); //Close effortlogger stage to show MainApp stage
         	
         });
-        //End Andrew's Work Zone
 
         centerBox.getChildren().addAll(exitButton, backButton, title, clockStatus, section1, startButton, section2,
                 projectAndLifecycleBox,
@@ -280,6 +274,19 @@ public class EffortLogger extends Application {
         HBox hbox = new HBox(10);
         hbox.setAlignment(Pos.CENTER);
         hbox.getChildren().addAll(labelText, dropdown, addButton);
+        row.getChildren().add(hbox);
+
+        return row;
+    }
+    
+    private VBox createLabeledRow(String label, ComboBox<String> dropdown) {
+        VBox row = new VBox(5);
+        row.setAlignment(Pos.CENTER);
+
+        Text labelText = new Text(label);
+        HBox hbox = new HBox(10);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.getChildren().addAll(labelText, dropdown);
         row.getChildren().add(hbox);
 
         return row;

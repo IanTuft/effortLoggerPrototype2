@@ -16,9 +16,7 @@ public class LogIn extends Application {
 
     private Runnable loginSuccessCallback;
     
-    //Andrew's Work Zone
     private ProcessInput processInput = new ProcessInput();
-    //End Andrew's Work Zone
 
     public static void main(String[] args) {
         launch(args);
@@ -29,6 +27,7 @@ public class LogIn extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Login Page");
         
+        //Button to close the program
         Button exitButton = new Button("EXIT");
 
         VBox loginBox = new VBox(10);
@@ -44,14 +43,12 @@ public class LogIn extends Application {
         Button loginButton = new Button("Log In");
         Button signUpButton = new Button("Sign Up");
         
-        //Andrew's Work Zone
         exitButton.setOnAction(e -> {
         	
-        	Main.llm.save();
-        	System.exit(0);
+        	Main.llm.save(); //Save data
+        	System.exit(0); //Exit
         	
         });
-        //End Andrew's Work Zone
 
         loginBox.getChildren().addAll(
                 exitButton,
@@ -107,21 +104,22 @@ public class LogIn extends Application {
         Button signUpConfirmButton = new Button("Sign Up");
         signUpConfirmButton.setOnAction(e -> {
 
-        	//Andrew's Work Zone
+        	//Check that the employee ID is unique to avoid duplicate employees
         	if(!Main.llm.checkDuplicateEmployee(processInput.processInt(employeeIdField.getText(), 9))) {
         		
+        		//Add the new employee
             	Main.llm.addNewEmployeeLogin(firstNameField.getText(), lastNameField.getText(), 
             			processInput.processInt(employeeIdField.getText(), 9), passwordField.getText());
             	
-            	signUpStage.close();
+            	signUpStage.close(); //Close the sign up screen
         		
         	}
-        	else {
+        	else { //Error if employee already exists
         		
         		duplicateEmployee.setText("Employee already exists.");
         		
         	}
-        	//End Andrew's Work Zone
+
         });
 
         // Text formatter to allow only integer input for Employee ID
@@ -152,14 +150,20 @@ public class LogIn extends Application {
         this.loginSuccessCallback = callback;
     }
 
+    /**
+     * Checks that the given employee login credentials are valid
+     * @param employeeId ID to check
+     * @param password Password associated with the given ID to check
+     * @return Returns true if the login is valid. Returns false otherwise.
+     */
     private boolean isLoginValid(String employeeId, String password) {
     	
-    	//Andrew's Work Zone
     	boolean credentials = false;
     	
+    	//Check credentials and log the user in
     	credentials = Main.llm.lockUser(processInput.processInt(employeeId, 9), password);
     	
     	return credentials;
-    	//End Andrew's Work Zone
+    	
     }
 }

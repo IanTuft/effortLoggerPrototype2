@@ -34,15 +34,21 @@ public class ReadData {
 	//Additional Constructors
 	
 	//ONLY USE THIS ONE
+	/**
+	 * ONLY USE THIS CONSTRUCTOR.
+	 * Pass in the LinkedListManager object to receive the data.
+	 * @param manager LinkedListManager object to receive file data.
+	 */
 	public ReadData(LinkedListManager manager) {
 		
 		try {
 			
-			projects = new FileReader("projects.txt");
+			projects = new FileReader("projects.txt"); //Projects first because we load like we're inputing new data
 			
 			projectsIn = new BufferedReader(projects);
 			
-			if(projectsIn.readLine() != null)
+			if(projectsIn.readLine() != null) //Check for a dummy character. If there is none, the file is empty
+												//or does not exist so there is nothing to read.
 				addProjects(manager);
 			
 		}
@@ -63,7 +69,8 @@ public class ReadData {
 			
 			usersIn = new BufferedReader(users);
 
-			if(usersIn.readLine() != null)
+			if(usersIn.readLine() != null) //Check for a dummy character. If there is none, the file is empty
+											//or does not exist so there is nothing to read.
 				addUsers(manager);
 			
 		}
@@ -80,6 +87,10 @@ public class ReadData {
 		
 	}
 	
+	/**
+	 * Loads all the user information and their data.
+	 * @param manager The LinkedListManager to be loaded with the information.
+	 */
 	private void addUsers(LinkedListManager manager) {
 		
 		String endString = "";
@@ -100,7 +111,7 @@ public class ReadData {
 		
 		try {
 			
-			userCount = Integer.parseInt(usersIn.readLine());
+			userCount = Integer.parseInt(usersIn.readLine()); //Read how many users there are
 			
 		}
 		catch(IOException e) {
@@ -109,9 +120,10 @@ public class ReadData {
 			
 		}
 		
+		//Load users and user data
 		for(int i = 0; i < userCount; i++) {
 			
-			try {
+			try { //Load users by creating new employees and logging in
 				
 				name = usersIn.readLine();
 				id = Integer.parseInt(usersIn.readLine());
@@ -122,7 +134,7 @@ public class ReadData {
 				
 				endString = usersIn.readLine();
 				
-				while(!endString.equals("NEXT")) {
+				while(!endString.equals("NEXT")) { //Load data until the flag string "NEXT" to indicate next user.
 					
 					projectName = endString;
 					logNumber = Integer.parseInt(usersIn.readLine());
@@ -140,7 +152,7 @@ public class ReadData {
 					
 				}
 				
-				manager.unlockUser();
+				manager.unlockUser(); //Logout of user so we can log into next one or so program is ready for login
 				
 			}
 			catch(IOException e) {
@@ -153,18 +165,22 @@ public class ReadData {
 		
 		try{
 			
-			usersIn.close();
+			usersIn.close(); //Close file afterwards so it can be written to later when saving.
 			
 		}
 		catch(IOException e) {
 			
-			System.out.println("uh...");
+			System.out.println("users.txt close issue");
 			
 		}
 		
 		
 	}
 	
+	/**
+	 * Loads all the project information.
+	 * @param manager The LinkedListManager to be loaded with the information.
+	 */
 	private void addProjects(LinkedListManager manager) {
 		
 		String projectName = "";
@@ -173,7 +189,7 @@ public class ReadData {
 		
 		try {
 			
-			projectCount = Integer.parseInt(projectsIn.readLine());
+			projectCount = Integer.parseInt(projectsIn.readLine()); //Number of projects to load
 			
 		}
 		catch(IOException e) {
@@ -182,13 +198,14 @@ public class ReadData {
 			
 		}
 		
+		//Read in projects
 		for(int i = 0; i < projectCount; i++) {
 			
 			try {
 				
 				projectName = projectsIn.readLine();
 				
-				manager.addNewProject(projectName);
+				manager.addNewProject(projectName); //Create new projects with the name
 				
 			}
 			catch(IOException e) {
@@ -201,12 +218,12 @@ public class ReadData {
 		
 		try{
 			
-			projectsIn.close();
+			projectsIn.close(); //Close file afterwards so it can be written to later when saving.
 			
 		}
 		catch(IOException e) {
 			
-			System.out.println("uh...");
+			System.out.println("projects.txt close issue");
 			
 		}
 		

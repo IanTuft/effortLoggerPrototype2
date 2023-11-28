@@ -10,22 +10,20 @@ import javafx.geometry.Insets;
 
 public class Main extends Application {
 	
-	//Andrew's Work Zone
-	public static LinkedListManager llm;
-	//End Andrew's Work Zone
+	public static LinkedListManager llm; //Static for access across the program.
 
     private Stage primaryStage;
 
     public static void main(String[] args) {
         
-    	//Andrew's Work Zone
+    	//Double check that the llm object hasn't already been created before creating it to avoid overwriting
+    	//data stored in the object.
     	if(llm == null) {
     		
     		llm = new LinkedListManager();
     		ReadData readData = new ReadData(llm);
     		
     	}
-    	//End Andrew's Work Zone
     	
     	launch(args);
     }

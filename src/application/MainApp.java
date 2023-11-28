@@ -28,9 +28,8 @@ public class MainApp extends Application {
     	this.primaryStage = primaryStage;
         primaryStage.setTitle("Planning Poker & Effort Logger");
         
-        //Andrew's Work Zone
+        //Button to close the program
         Button exitButton = new Button("EXIT");
-        //End Andrew's Work Zone
 
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20)); // Adding padding around the entire layout
@@ -50,14 +49,12 @@ public class MainApp extends Application {
         	effortLoggerSuccessCallback.run();
         });
         
-        //Andrew's Work Zone
         exitButton.setOnAction(e -> {
         	
-        	Main.llm.save();
-        	System.exit(0);
+        	Main.llm.save(); //Save data
+        	System.exit(0); //Exit
         	
         });
-        //End Andrew's Work Zone
 
         centerBox.getChildren().addAll(exitButton, planningPokerBox, effortLoggerBox);
 

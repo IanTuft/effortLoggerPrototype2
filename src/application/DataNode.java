@@ -85,6 +85,10 @@ public class DataNode {
 	public DataNode getPrevious() {return previous;}
 	
 	
+	/**
+	 * To extract all data about the current data point in a single string formatted for file saving.
+	 * @return The string to be saved. Each data point is separated by a new line character.
+	 */
 	public String save() {
 		
 		String out = "";
@@ -96,6 +100,10 @@ public class DataNode {
 		
 	}
 	
+	/**
+	 * To display all data about the current data point in a single string formatted for displaying.
+	 * @return The string to be displayed. Each data point is separated by a new line character.
+	 */
 	public String display() {
 		
 		String out = "";
@@ -108,6 +116,10 @@ public class DataNode {
 		
 	}
 	
+	/**
+	 * To copy all data (except pointers to other nodes) from the current data point to a different data point.
+	 * @param nodeIn The data point to receive the copy of the data.
+	 */
 	public void copy(DataNode nodeIn) {
 		
 		this.projectName = nodeIn.getProjectName();
