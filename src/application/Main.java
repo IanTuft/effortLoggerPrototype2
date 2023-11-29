@@ -9,11 +9,24 @@ import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
 public class Main extends Application {
+	
+	public static LinkedListManager llm; //Static for access across the program.
 
     private Stage primaryStage;
 
     public static void main(String[] args) {
-        launch(args);
+        
+    	//Double check that the llm object hasn't already been created before creating it to avoid overwriting
+    	//data stored in the object.
+    	if(llm == null) {
+    		
+    		llm = new LinkedListManager();
+    		ReadData readData = new ReadData(llm); //This object is not used, but by created it we load the saved
+    												//data into the LinkedListManager object
+    		
+    	}
+    	
+    	launch(args);
     }
     
     

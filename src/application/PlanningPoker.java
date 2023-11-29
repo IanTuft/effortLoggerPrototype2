@@ -3,6 +3,7 @@ package application;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -18,6 +19,9 @@ import java.util.Arrays;
 
 public class PlanningPoker extends Application {
 	
+
+	DataNode searching = null;
+
 	private Runnable planningPokerCallback;
 
     public static void main(String[] args) {
@@ -32,11 +36,37 @@ public class PlanningPoker extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Planning Poker");
-        primaryStage.setScene(createPlanningPokerScene());
+        primaryStage.setScene(createPlanningPokerScene(primaryStage));
         primaryStage.show();
     }
 
-    private Scene createPlanningPokerScene() {
+    private Scene createPlanningPokerScene(Stage primaryStage) {
+    	
+    	//Array to hold the names of the current projects. Initialized length is equal to the number of current projects
+        String[] currentProjects = new String[Main.llm.getProjectCount()];
+        
+        //To display found data
+        Text output = new Text();
+    	
+        //Buttons to manipulate the program
+    	Button exitButton = new Button("EXIT"); //Exit the program
+    	Button backButton = new Button("Back"); //Go back to the previous screen
+    	Button clearButton = new Button("Clear search terms"); //Reset search terms
+        Button nextButton = new Button("Next"); //View next item found in search
+        Button prevButton = new Button("Previous"); //View previous item found in search
+        Button searchButton = new Button("Search"); //Search based on given parameters
+        
+        //Formatting
+        HBox nextAndPrevButton = new HBox(20);
+        nextAndPrevButton.setAlignment(Pos.CENTER);
+        nextAndPrevButton.getChildren().addAll(
+                prevButton, nextButton
+        );
+        
+        //Next and previous disabled by default to avoid bad inputs
+        nextButton.setDisable(true);
+        prevButton.setDisable(true);
+    	
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
 
@@ -51,47 +81,196 @@ public class PlanningPoker extends Application {
 
         ComboBox<String> projectDropdown = new ComboBox<>();
         projectDropdown.setPromptText("Project");
+        
+        //Get the Strings to populate the ComboBox
+        for(int i = 0; i < (Main.llm.getProjectCount()); i++) {
+        	
+        	//i+1 is used because "Project" is being added somewhere in the code.
+        	currentProjects[i] = Main.llm.getProjectName(i+1); //adding "Project" somewhere by accident...
+        	
+        }
+        
+        //Populate the ComboBox
+        projectDropdown.getItems().addAll(currentProjects);
 
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
         lifecycleDropdown.setPromptText("Life Cycle Step");
+        lifecycleDropdown.getItems().addAll(
+        		"Problem Understanding",
+        		"Conceptual Design Plan",
+        		"Requirements",
+        		"Conceptual Design",
+        		"Conceptual Design Review",
+        		"Detailed Design Plan",
+        		"Detailed Design/Prototype",
+        		"Detailed Design Review",
+        		"Implementation Plan",
+        		"Test Case Generation",
+        		"Solution Specification",
+        		"Solution Review",
+        		"Solution Implementation",
+        		"Unit/System Test",
+        		"Reflection",
+        		"Repository Update",
+        		"Planning",
+        		"Information Gathering",
+        		"Information Understanding",
+        		"Verifying",
+        		"Outlining",
+        		"Drafting",
+        		"Finalizing",
+        		"Team Meeting",
+        		"Coach Meeting",
+        		"Stakeholder Meeting"
+        		);
 
         ComboBox<String> effortCategoryDropdown = new ComboBox<>();
         effortCategoryDropdown.setPromptText("Effort Category");
+        effortCategoryDropdown.getItems().addAll(
+        		"Project Plan",
+    			"Risk Management Plan",
+    			"Conceptual Design Plan",
+    			"Detailed Design Plan",
+    			"Implementation Plan",
+    			"Conceptual Design",
+    			"Detailed Design",
+    			"Test Cases",
+    			"Solution",
+    			"Reflection",
+    			"Outline",
+    			"Draft",
+    			"Report",
+    			"User Defined",
+    			"Break",
+    			"Phone",
+    			"Teammate",
+    			"Visitor",
+    			"Not specified",
+    			"10 Documentation",
+    			"20 Syntax",
+    			"30 Build, Package",
+    			"40 Assignment",
+    			"50 Interface",
+    			"60 Checking",
+    			"70 Data",
+    			"80 Function",
+    			"90 System",
+    			"100 Environment",
+        		"Plans",
+        		"Deliverables",
+        		"Interruptions",
+        		"Defects",
+        		"Others"
+        		);
 
-
-        Text section2 = new Text("2. Search up to 3 tags separated by a comma to find relative data.");
-        section2.setFont(javafx.scene.text.Font.font("Arial", FontWeight.NORMAL, 14));
-
-        TextField tagInput = new TextField();
-        tagInput.setPromptText("Enter tags separated by commas");
-
-        Text output = new Text();
-
-        Button searchButton = new Button("Search");
-        tagInput.setPromptText("Enter tags separated by commas");
-
+        //Search button code
         searchButton.setOnAction(e -> {
-            String userInput = tagInput.getText().trim();
-            if (userInput.isEmpty()) {
-                output.setText("Please enter tags.");
-                return;
-            }
-
-            String[] tags = userInput.split(",");
-            if (tags.length > 3) {
-                output.setText("Too many tags, please enter a max of 3.");
-            } else {
-                if (tags.length >= 1) {
-                    String tag1 = tags[0].trim();
-                }
-                if (tags.length >= 2) {
-                    String tag2 = tags[1].trim();
-                }
-                if (tags.length == 3) {
-                    String tag3 = tags[2].trim();
-                }
-                output.setText("Tags: " + Arrays.toString(tags));
-            }
+        	
+        	//Disable next and previous buttons to prevent bad inputs
+        	nextButton.setDisable(true);
+        	prevButton.setDisable(true);
+            
+        	//Search based on the given parameters
+        	searching = Main.llm.searchUserData(projectDropdown.getValue(), lifecycleDropdown.getValue(), 
+        			effortCategoryDropdown.getValue());
+        	
+        	if(searching != null) { //Make sure something was returned
+        		
+        		output.setText(searching.display()); //Display first result
+        		
+        		if(searching.getNext() != null) { //If there is at least one additional result, enable the next button
+        			
+        			nextButton.setDisable(false);
+        			
+        		}
+        		
+        	}
+        	else //If no results, display an error
+        		output.setText("No matches!");
+            
+        });
+        
+        //Next button behavior
+        nextButton.setOnAction(e -> {
+        	
+        	if(searching.getNext() != null) { //Make sure we don't run off the edge of the linked list
+        		
+        		searching = searching.getNext();
+        		output.setText(searching.display()); //Display the next item
+        		
+        		if(searching.getNext() == null) { //Disable the next button if there is no next item
+        			
+        			nextButton.setDisable(true);
+        			
+        		}
+        		
+        		if(searching.getPrevious() != null) { //Enable the previous button if there is at least one previous item
+        			
+        			prevButton.setDisable(false);
+        			
+        		}
+        		
+        	}
+        	else { //Fail safe message. Should not occur under normal operation. Indicates something with the next button broke.
+        		
+        		output.setText("No data entries this direction.");
+        		
+        	}
+        	
+        });
+        
+        //Previous button behavior
+        prevButton.setOnAction(e -> {
+        	
+        	if(searching.getPrevious() != null) { //Make sure we don't run off the edge of the linked list
+        		
+        		searching = searching.getPrevious();
+        		output.setText(searching.display()); //Display the previous item
+        		
+        		if(searching.getPrevious() == null) {//Disable the previous button if there is no previous item
+        			
+        			prevButton.setDisable(true);
+        			
+        		}
+        		
+        		if(searching.getNext() != null) { //Enable the next button if there is at least one next item
+        			
+        			nextButton.setDisable(false);
+        			
+        		}
+        		
+        	}
+        	else { //Fail safe message. Should not occur under normal operation. Indicates something with the previous button broke.
+        		
+        		output.setText("No data entries this direction.");
+        		
+        	}
+        	
+        });
+        
+        //Clear search terms button functionality
+        clearButton.setOnAction(e -> {
+        	
+        	//Reset the ComboBox values
+        	projectDropdown.setValue(null);
+        	lifecycleDropdown.setValue(null);
+        	effortCategoryDropdown.setValue(null);
+        	
+        });
+        
+        //Exit button
+        exitButton.setOnAction(e -> {
+        	
+        	Main.llm.save(); //Save data
+        	System.exit(0); //Exit program
+        	
+        });
+        
+        //Back button
+        backButton.setOnAction(e -> {
+        	
+        	primaryStage.close(); //Close Planning Poker stage to see MainApp stage
+        	
         });
 
         Text section3 = new Text("3. Pick a number 1-10:");
@@ -120,21 +299,16 @@ public class PlanningPoker extends Application {
             currentStage.close();
         });
         
-        
-<<<<<<< Updated upstream
-
         centerBox.getChildren().addAll(title, section1, createLabeledRow("Project:", projectDropdown),
-=======
         // Add elements to the center box
         centerBox.getChildren().addAll(exitButton, backButton, title, section1, createLabeledRow("Project:", projectDropdown),
->>>>>>> Stashed changes
                 createLabeledRow("Life Cycle Step:", lifecycleDropdown),
                 createLabeledRow("Effort Category:", effortCategoryDropdown),
-                section2, tagInput, searchButton, output, section3, numberChoiceBox, submitButton);
+                searchButton, clearButton, output, nextAndPrevButton, section3, numberChoiceBox, submitButton);
 
         root.setCenter(centerBox);
 
-        return new Scene(root, 600, 600);
+        return new Scene(root, 600, 900);
     }
 
     /**

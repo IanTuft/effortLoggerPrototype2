@@ -5,15 +5,25 @@ import java.util.Scanner;
 public class ProcessInput {
 	
 	private Scanner scan = new Scanner(System.in);
+	
+	//Array of allowed characters
 	private final char[] allowedChar = {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
 			'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 
 			'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 
 			'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
 
+	//Default constructor. Only constructor.
 	public ProcessInput() {}
 	
 	//NO Additional Constructors
 	
+	/**
+	 * Processes a String input and returns an integer.
+	 * Ensures that the input is of a length specified.
+	 * @param in Input to be processed.
+	 * @param numCharReturn Number of characters to return. Do not ask for more than 9 because int cannot handle more than 9 digits.
+	 * @return Returns an integer.
+	 */
 	public int processInt(String in, int numCharReturn) {
 		
 		int processedInt = -123321;
@@ -51,6 +61,13 @@ public class ProcessInput {
 		
 	}
 	
+	/**
+	 * Processes a String input and returns a String.
+	 * Ensures that the String is of a length specified.
+	 * @param in Input to be processed.
+	 * @param numCharReturn Number of characters to return.
+	 * @return Returns a String.
+	 */
 	public String processString(String in, int numCharReturn) {
 		
 		//String processedString = "";

@@ -14,10 +14,12 @@ import java.util.List;
 
 public class LogIn extends Application {
     private Stage primaryStage;
-    // private List<User> userAccounts = new ArrayList<>();
-    private Runnable loginSuccessCallback;
-    private LinkedListManager lm;
 
+    private Runnable loginSuccessCallback;
+    
+    private ProcessInput processInput = new ProcessInput();
+
+    private LinkedListManager lm;
 
     public static void main(String[] args) {
         launch(args);
@@ -38,12 +40,9 @@ public class LogIn extends Application {
     public void loginPage(Stage primaryStage, LinkedListManager lm) {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Login Page");
-<<<<<<< Updated upstream
-=======
 
         // Button to close the program
         Button exitButton = new Button("EXIT");
->>>>>>> Stashed changes
 
         VBox loginBox = new VBox(10);
         loginBox.setMinSize(300, 200);
@@ -57,23 +56,18 @@ public class LogIn extends Application {
 
         Button loginButton = new Button("Log In");
         Button signUpButton = new Button("Sign Up");
-<<<<<<< Updated upstream
-=======
-
-        // Action for the exit button
+        
         exitButton.setOnAction(e -> {
-            Main.llm.save(); // Save data
-            System.exit(0); // Exit
+        	
+        	Main.llm.save(); //Save data
+        	System.exit(0); //Exit
+        	
         });
->>>>>>> Stashed changes
 
         // Add elements to the login box
         loginBox.getChildren().addAll(
-<<<<<<< Updated upstream
-=======
                 exitButton,
->>>>>>> Stashed changes
-                new Label("Employee ID:"), employeeIdField,
+        		new Label("Employee ID:"), employeeIdField,
                 new Label("Password:"), passwordField,
                 loginButton,
                 signUpButton,
@@ -112,6 +106,10 @@ public class LogIn extends Application {
     
     // Method to open the sign-up page
     private void openSignUpPage() {
+    	
+    	Text duplicateEmployee = new Text();
+    	duplicateEmployee.setFill(Color.RED);
+    	
         Stage signUpStage = new Stage();
         signUpStage.setTitle("Sign Up");
 
@@ -126,13 +124,25 @@ public class LogIn extends Application {
         TextField employeeIdField = new TextField();
         PasswordField passwordField = new PasswordField();
         PasswordField verifyPasswordField = new PasswordField();
-        Text signUpErrorText = new Text("");
-        signUpErrorText.setFill(Color.RED);
 
         Button signUpConfirmButton = new Button("Sign Up");
         signUpConfirmButton.setOnAction(e -> {
-            // Existing sign-up code
-        	//add save function  for sign up here
+
+        	//Check that the employee ID is unique to avoid duplicate employees
+        	if(!Main.llm.checkDuplicateEmployee(processInput.processInt(employeeIdField.getText(), 9))) {
+        		
+        		//Add the new employee
+            	Main.llm.addNewEmployeeLogin(firstNameField.getText(), lastNameField.getText(), 
+            			processInput.processInt(employeeIdField.getText(), 9), passwordField.getText());
+            	
+            	signUpStage.close(); //Close the sign up screen
+        		
+        	}
+        	else { //Error if employee already exists
+        		
+        		duplicateEmployee.setText("Employee already exists.");
+        		
+        	}
 
         });
 
@@ -153,7 +163,7 @@ public class LogIn extends Application {
                 new Label("Password:"), passwordField,
                 new Label("Verify Password:"), verifyPasswordField,
                 signUpConfirmButton,
-                signUpErrorText);
+                duplicateEmployee);
 
         Scene signUpScene = new Scene(signUpBox);
         signUpStage.setScene(signUpScene);
@@ -165,12 +175,20 @@ public class LogIn extends Application {
         this.loginSuccessCallback = callback;
     }
 
+    /**
+     * Checks that the given employee login credentials are valid
+     * @param employeeId ID to check
+     * @param password Password associated with the given ID to check
+     * @return Returns true if the login is valid. Returns false otherwise.
+     */
     private boolean isLoginValid(String employeeId, String password) {
-//        for (User user : userAccounts) {
-//            if (user.getEmployeeId().equals(employeeId) && user.getPassword().equals(password)) {
-//                return true;
-//            }
-//        }
-        return true;
+    	
+    	boolean credentials = false;
+    	
+    	//Check credentials and log the user in
+    	credentials = Main.llm.lockUser(processInput.processInt(employeeId, 9), password);
+    	
+    	return credentials;
+    	
     }
 }

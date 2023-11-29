@@ -10,9 +10,6 @@ public class ReadData {
 	private FileReader users;
 	private FileReader projects;
 	
-	private File userTest;
-	private File projectTest;
-	
 	//Default Constructor. DO NOT USE.
 	
 	public ReadData() {
@@ -37,31 +34,21 @@ public class ReadData {
 	//Additional Constructors
 	
 	//ONLY USE THIS ONE
+	/**
+	 * ONLY USE THIS CONSTRUCTOR.
+	 * Pass in the LinkedListManager object to receive the data.
+	 * @param manager LinkedListManager object to receive file data.
+	 */
 	public ReadData(LinkedListManager manager) {
 		
 		try {
 			
-			users = new FileReader("users.txt");
-			
-			usersIn = new BufferedReader(users);
-			
-			if(userTest.length() != 0)
-				addUsers(manager);
-			
-		}
-		catch(FileNotFoundException e) {
-		
-			System.out.println("users.txt not found.");
-		
-		}
-		
-		try {
-			
-			projects = new FileReader("projects.txt");
+			projects = new FileReader("projects.txt"); //Projects first because we load like we're inputing new data
 			
 			projectsIn = new BufferedReader(projects);
 			
-			if(projectTest.length() != 0)
+			if(projectsIn.readLine() != null) //Check for a dummy character. If there is none, the file is empty
+												//or does not exist so there is nothing to read.
 				addProjects(manager);
 			
 		}
@@ -70,9 +57,40 @@ public class ReadData {
 			System.out.println("projects.txt not found.");
 		
 		}
+		catch(IOException e) {
+			
+			System.out.println("IO");
+			
+		}
+		
+		try {
+			
+			users = new FileReader("users.txt");
+			
+			usersIn = new BufferedReader(users);
+
+			if(usersIn.readLine() != null) //Check for a dummy character. If there is none, the file is empty
+											//or does not exist so there is nothing to read.
+				addUsers(manager);
+			
+		}
+		catch(FileNotFoundException e) {
+		
+			System.out.println("users.txt not found.");
+		
+		}
+		catch(IOException e) {
+			
+			System.out.println("IO");
+			
+		}
 		
 	}
 	
+	/**
+	 * Loads all the user information and their data.
+	 * @param manager The LinkedListManager to be loaded with the information.
+	 */
 	private void addUsers(LinkedListManager manager) {
 		
 		String endString = "";
@@ -90,15 +108,10 @@ public class ReadData {
 		String endTime = "";
 		String lifeCycleStep = "";
 		String effortCategory = "";
-		String etc = "";
-		
-		String primaryTag = "";
-		String secondaryTag = "";
-		String additionalTag = "";
 		
 		try {
 			
-			userCount = Integer.parseInt(usersIn.readLine());
+			userCount = Integer.parseInt(usersIn.readLine()); //Read how many users there are
 			
 		}
 		catch(IOException e) {
@@ -107,9 +120,10 @@ public class ReadData {
 			
 		}
 		
+		//Load users and user data
 		for(int i = 0; i < userCount; i++) {
 			
-			try {
+			try { //Load users by creating new employees and logging in
 				
 				name = usersIn.readLine();
 				id = Integer.parseInt(usersIn.readLine());
@@ -120,7 +134,7 @@ public class ReadData {
 				
 				endString = usersIn.readLine();
 				
-				while(!endString.equals("NEXT")) {
+				while(!endString.equals("NEXT")) { //Load data until the flag string "NEXT" to indicate next user.
 					
 					projectName = endString;
 					logNumber = Integer.parseInt(usersIn.readLine());
@@ -130,20 +144,15 @@ public class ReadData {
 					endTime = usersIn.readLine();
 					lifeCycleStep = usersIn.readLine();
 					effortCategory = usersIn.readLine();
-					etc = usersIn.readLine();
-					
-					primaryTag = usersIn.readLine();
-					secondaryTag = usersIn.readLine();
-					additionalTag = usersIn.readLine();
 					
 					manager.addNewData(projectName, logNumber, duration, date, startTime, endTime,
-							lifeCycleStep, effortCategory, etc, primaryTag, secondaryTag, additionalTag);
+							lifeCycleStep, effortCategory);
 					
 					endString = usersIn.readLine();
 					
 				}
 				
-				manager.unlockUser();
+				manager.unlockUser(); //Logout of user so we can log into next one or so program is ready for login
 				
 			}
 			catch(IOException e) {
@@ -154,35 +163,33 @@ public class ReadData {
 			
 		}
 		
+		try{
+			
+			usersIn.close(); //Close file afterwards so it can be written to later when saving.
+			
+		}
+		catch(IOException e) {
+			
+			System.out.println("users.txt close issue");
+			
+		}
+		
+		
 	}
 	
+	/**
+	 * Loads all the project information.
+	 * @param manager The LinkedListManager to be loaded with the information.
+	 */
 	private void addProjects(LinkedListManager manager) {
 		
-		String endString = "";
 		String projectName = "";
-		int employeeCount = 0;
-		int storyCount = 0;
 		
 		int projectCount = 0;
 		
-		String storyTitle = "";
-		String story = "";
-		
-		int logNumber = 0;
-		int duration = 0;
-		String date = "";
-		String startTime = "";
-		String endTime = "";
-		String lifeCycleStep = "";
-		String effortCategory = "";
-		String etc = "";
-		String primaryTag = "";
-		String secondaryTag = "";
-		String additionalTag = "";
-		
 		try {
 			
-			projectCount = Integer.parseInt(projectsIn.readLine());
+			projectCount = Integer.parseInt(projectsIn.readLine()); //Number of projects to load
 			
 		}
 		catch(IOException e) {
@@ -191,54 +198,14 @@ public class ReadData {
 			
 		}
 		
+		//Read in projects
 		for(int i = 0; i < projectCount; i++) {
 			
 			try {
 				
 				projectName = projectsIn.readLine();
-				employeeCount = Integer.parseInt(projectsIn.readLine());
-				storyCount = Integer.parseInt(projectsIn.readLine());
 				
-				manager.addNewProject(projectName, employeeCount, storyCount);
-				
-				endString = projectsIn.readLine();
-				
-				while(!endString.equals("NEXT")) {
-					
-					projectName = projectsIn.readLine();
-					storyTitle = projectsIn.readLine();
-					story = projectsIn.readLine();
-					
-					manager.addNewStory(projectName, storyTitle, story);
-					
-					endString = projectsIn.readLine();
-					
-				}
-				
-				endString = projectsIn.readLine();
-				
-				while(!endString.equals("NEXT")) {
-					
-					projectName = endString;
-					logNumber = Integer.parseInt(usersIn.readLine());
-					duration = Integer.parseInt(usersIn.readLine());
-					date = usersIn.readLine();
-					startTime = usersIn.readLine();
-					endTime = usersIn.readLine();
-					lifeCycleStep = usersIn.readLine();
-					effortCategory = usersIn.readLine();
-					etc = usersIn.readLine();
-					
-					primaryTag = usersIn.readLine();
-					secondaryTag = usersIn.readLine();
-					additionalTag = usersIn.readLine();
-					
-					manager.addNewData(projectName, logNumber, duration, date, startTime, endTime,
-							lifeCycleStep, effortCategory, etc, primaryTag, secondaryTag, additionalTag);
-					
-					endString = projectsIn.readLine();
-					
-				}
+				manager.addNewProject(projectName); //Create new projects with the name
 				
 			}
 			catch(IOException e) {
@@ -246,6 +213,17 @@ public class ReadData {
 				System.out.println("Unexpected read error. Position: load users.");
 				
 			}
+			
+		}
+		
+		try{
+			
+			projectsIn.close(); //Close file afterwards so it can be written to later when saving.
+			
+		}
+		catch(IOException e) {
+			
+			System.out.println("projects.txt close issue");
 			
 		}
 		

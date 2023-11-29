@@ -7,7 +7,7 @@ public class UserNode {
 	private DataNode dataHead; //The head of the data linked list the user will be attached to.
 	private UserNode next; //The next user in the linked list of users.
 	private UserNode previous; //The previous user in the linked list of users.
-	private String password;
+	private String password; //The password of the user.
 	
 	//Default constructor. Never use.
 	public UserNode() {
@@ -24,6 +24,12 @@ public class UserNode {
 	//Additional Constructors
 	
 	//Primary constructor. Always use.
+	/**
+	 * Always use this constructor.
+	 * @param nameIn Name of employee. Combine first and last name into a single string.
+	 * @param idIn ID of employee.
+	 * @param passwordIn Password of employee.
+	 */
 	public UserNode(String nameIn, int idIn, String passwordIn) {
 		
 		employeeName = nameIn;
@@ -55,31 +61,43 @@ public class UserNode {
 	//Additional methods
 	
 	/**
-	 * Creates a new DataNode and adds it to the front of the linked list of dataNodes
-	 * then adjusts the links.
-	 * @param name Name of associated project.
-	 * @param time Time to report.
-	 * @param defect Defect count to report.
+	 * Creates a new DataNode and adds it to this employee's linked list of data.
+	 * @param projectName Name of project associated with the data.
+	 * @param logNumber Log number of the data.
+	 * @param duration How long the activity took to complete (in minutes).
+	 * @param date Date of activity.
+	 * @param startTime Start time of activity.
+	 * @param endTime End time of activity.
+	 * @param lifeCycleStep The life cycle step of the activity.
+	 * @param effortCategory The effort category of the activity.
 	 */
-	public void addNewData(String name, int logNumber, int duration, String date, String startTime, 
-			String endTime, String lifeCycleStep, String effortCategory, String etc) {
+	public void addNewData(String projectName, int logNumber, int duration, String date, String startTime, 
+			String endTime, String lifeCycleStep, String effortCategory) {
 		
-		if(dataHead == null) {
+		if(dataHead == null) { //Only used if the user has no existing data
 			
-			DataNode projectData = new DataNode(name, logNumber, duration, date, startTime, endTime,
-					lifeCycleStep, effortCategory, etc);
-			dataHead = projectData;
+			DataNode projectData = new DataNode(projectName, logNumber, duration, date, startTime, endTime,
+					lifeCycleStep, effortCategory); //Create a new DataNode
+			dataHead = projectData; //Make it the head of the user's data linked list
 			
 		}
+		else { //Used if the user has existing data
+			
+			DataNode projectData = new DataNode(projectName, logNumber, duration, date, startTime, endTime,
+					lifeCycleStep, effortCategory); //Create a new DataNode
+			dataHead.setPrevious(projectData); //Add it to the front of the data linked list
+			projectData.setNext(dataHead); //Set it to point at the previous front of the linked list
+			dataHead = projectData; //Reestablish the head of the linked list
 		
-		DataNode projectData = new DataNode(name, logNumber, duration, date, startTime, endTime,
-				lifeCycleStep, effortCategory, etc);
-		dataHead.setPrevious(projectData);
-		projectData.setNext(dataHead);
-		dataHead = projectData;
+		}
 		
 	}
 	
+	/**
+	 * Checks if a given String matches the employee's password.
+	 * @param passwordCheck Password to check.
+	 * @return Returns true if the String matches. Returns false otherwise.
+	 */
 	public boolean passwordCheck(String passwordCheck) {
 		
 		boolean check = false;
@@ -92,6 +110,10 @@ public class UserNode {
 		
 	}
 	
+	/**
+	 *Saves the data stored in the node by outputting it as a String formatted to match what StoreData expects.
+	 * @return Returns a String of specific format.
+	 */
 	public String save() {
 		
 		String out = "";
@@ -99,13 +121,6 @@ public class UserNode {
 		out = this.employeeName + "\n" + this.employeeID + "\n" + this.password + "\n";
 		
 		return out;
-		
-	}
-	
-	@Override
-	public String toString() {
-		
-		return "Employee Name: " + employeeName + "/n";
 		
 	}
 
