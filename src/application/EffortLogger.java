@@ -22,20 +22,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.time.format.DateTimeFormatter;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.Instant;
 
 public class EffortLogger extends Application {
 
 	private boolean isClockRunning = false;
-    private ArrayList<String[]> database = new ArrayList<String[]>(); //ArrayList to hold each log entry
 	private int logCounter = 0; //Log counter
 	private DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //Format dates
 	private DateTimeFormatter timeformat = DateTimeFormatter.ofPattern("HH:mm:ss"); //Format time
@@ -44,6 +35,8 @@ public class EffortLogger extends Application {
 	private String date;
 	private Instant start;
 	private Instant end;
+	
+	private ProcessInput processInput = new ProcessInput();
 	
 	//Gets the local time
 	public String getTime() {
@@ -59,11 +52,6 @@ public class EffortLogger extends Application {
 	
     private Runnable effortLoggerCallback;
 
-	public void storeLog(String[] log) {
-		database.add(log);
-	}
-
-    
     public static void main(String[] args) {
         launch(args);
     }
@@ -71,12 +59,23 @@ public class EffortLogger extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Effort Logger");
-        primaryStage.setScene(createEffortLoggerScene());
+        primaryStage.setScene(createEffortLoggerScene(primaryStage));
         primaryStage.show();
     }
     
-    private Scene createEffortLoggerScene() {
-        BorderPane root = new BorderPane();
+    private Scene createEffortLoggerScene(Stage primaryStage) {
+        
+        Button stopButton = new Button("Stop this Activity");
+        stopButton.setDisable(true);
+        
+        //Buttons for closing the program with save functionality and going back a screen
+        Button exitButton = new Button("EXIT");
+        Button backButton = new Button("Back");
+        
+        //For populating the project ComboBox
+        String[] currentProjects = new String[Main.llm.getProjectCount()];        
+    	
+    	BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
 
         VBox centerBox = new VBox(20);
@@ -93,11 +92,13 @@ public class EffortLogger extends Application {
         //Start the clock
         Button startButton = new Button("Start Activity");
         startButton.setOnAction(e -> {
-            isClockRunning = true;
+        	stopButton.setDisable(false);
+        	isClockRunning = true;
             startTime = getTime();
             start = Instant.now();
             clockStatus.setText("Clock is running");
             clockStatus.setFill(Color.GREEN);
+            startButton.setDisable(true);
         });
 
         Text section2 = new Text("2. Select the Project, Lifecycle Step, Effort Category from the following lists:");
@@ -106,7 +107,18 @@ public class EffortLogger extends Application {
         ComboBox<String> projectDropdown = new ComboBox<>();
         projectDropdown.setPromptText("Project");
 
+        //Get the Strings to populate the ComboBox
+        for(int i = 0; i < (Main.llm.getProjectCount()); i++) {
+        	
+        	//i+1 is used because "Project" is being added somewhere in the code.
+        	currentProjects[i] = Main.llm.getProjectName(i+1); //adding "Project" somewhere by accident...
+        	
+        }
+        //Populate the ComboBox
+        projectDropdown.getItems().addAll(currentProjects);
+
         //Life Cycle Dropdown with lists from Definitions page on Effort Logger User Guide
+
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
         lifecycleDropdown.getItems().addAll(
         		"Problem Understanding",
@@ -188,17 +200,24 @@ public class EffortLogger extends Application {
         miscDropdown.setPromptText("Deliverable / Interruption / etc.");
         
         Button addProjectButton = createAddButton(projectDropdown);
-        Button addLifecycleButton = createAddButton(lifecycleDropdown);
-        Button addEffortCategoryButton = createAddButton(effortCategoryDropdown);
-        Button addMiscButton = createAddButton(miscDropdown);
         
         HBox projectAndLifecycleBox = new HBox(20);
         projectAndLifecycleBox.setAlignment(Pos.CENTER);
         projectAndLifecycleBox.getChildren().addAll(
                 createLabeledRow("Project:", projectDropdown, addProjectButton),
-                createLabeledRow("Life Cycle Step:", lifecycleDropdown, addLifecycleButton)
+                createLabeledRow("Life Cycle Step:", lifecycleDropdown)
         );
 
+        VBox effortCategoryBox = createLabeledRow("Effort Category:", effortCategoryDropdown);
+        effortCategoryBox.setAlignment(Pos.CENTER);
+        
+        //Load the number of logs that exist for the selected project
+        projectDropdown.setOnAction(e -> {
+        	
+        	logCounter = Main.llm.getLogCount(projectDropdown.getValue());
+        	
+        });
+      
         HBox effortAndMiscBox = new HBox(20);
         effortAndMiscBox.setAlignment(Pos.CENTER);
         effortAndMiscBox.getChildren().addAll(
@@ -211,41 +230,62 @@ public class EffortLogger extends Application {
 
         //Stop the clock button
         Text section3 = new Text("3. Press the 'Stop this Activity' button to generate an effort log entry using the attributes above.");
-        Button stopButton = new Button("Stop this Activity");
         stopButton.setOnAction(e -> {
-        	if(effortCategoryDropdown.getValue().charAt(0) == miscDropdown.getValue().charAt(0)){
-        		isClockRunning = false;
-                date = getDate();
-                endTime = getTime();
-                end = Instant.now();
-                logCounter++;
-                String[] log = new String[8];
-                log[0] = "" + logCounter;
-                log[1] = date;
-                log[2] = startTime;
-                log[3] = endTime;
-                log[4] = "" + Duration.between(start, end).toMinutes();
-                log[5] = projectDropdown.getValue();
-                log[6] = lifecycleDropdown.getValue();
-                log[7] = "" + effortCategoryDropdown.getValue() + ": " + miscDropdown.getValue().substring(2);
-                database.add(log);
-                System.out.println(Arrays.toString(database.get(logCounter-1)));
-                clockStatus.setText("Clock is stopped");
-                clockStatus.setFill(Color.RED);
-        	} else {
-        		System.out.println("Error: Effort Category and Deliverables/Interruptions/etc. do not match.");
-        	}
+
+            startButton.setDisable(false);
+        	isClockRunning = false;
+            date = getDate();
+            endTime = getTime();
+            end = Instant.now();
+            logCounter++;
+            String[] log = new String[8];
+            log[0] = "" + logCounter;
+            log[1] = date;
+            log[2] = startTime;
+            log[3] = endTime;
+            log[4] = "" + Duration.between(start, end).toMinutes();
+            log[5] = projectDropdown.getValue();
+            log[6] = lifecycleDropdown.getValue();
+            log[7] = effortCategoryDropdown.getValue();
+
+            //Create new data and store it
+            if(log[5] != null) { //Ensure a project name was selected
+            	
+	            if(!Main.llm.checkDuplicateProject(log[5])) { //Check if project already exists
+	            	
+	                Main.llm.addNewProject(log[5]); //If project does not already exist, add it as a new project
+	            	
+	            }
+	
+	            //Add the new data
+	            Main.llm.addNewData(log[5], logCounter, processInput.processInt(log[4], 9), date, startTime, endTime, 
+	            		log[6], log[7]);
+	            
+            }
+            
+            clockStatus.setText("Clock is stopped");
+            clockStatus.setFill(Color.RED);
+            stopButton.setDisable(true);
         });
         
-        Button exitButton = new Button("Save and Quit");
+        //Exit button
         exitButton.setOnAction(e -> {
-            //save(); // Call the save function before exiting
-            ((Stage) exitButton.getScene().getWindow()).close(); // Close the current stage
+        	
+        	Main.llm.save(); //Save data
+        	System.exit(0); //Close program
+        	
+        });
+        
+        //Back button
+        backButton.setOnAction(e -> {
+        	
+        	primaryStage.close(); //Close effortlogger stage to show MainApp stage
+
         });
         
         VBox bottomRightBox = createBottomRightBox(exitButton);
 
-        centerBox.getChildren().addAll(title, clockStatus, section1, startButton, section2,
+        centerBox.getChildren().addAll(exitButton, backButton, title, clockStatus, section1, startButton, section2,
                 projectAndLifecycleBox,
                 effortAndMiscBox,
                 section3,
@@ -272,6 +312,19 @@ public class EffortLogger extends Application {
         HBox hbox = new HBox(10);
         hbox.setAlignment(Pos.CENTER);
         hbox.getChildren().addAll(labelText, dropdown, addButton);
+        row.getChildren().add(hbox);
+
+        return row;
+    }
+    
+    private VBox createLabeledRow(String label, ComboBox<String> dropdown) {
+        VBox row = new VBox(5);
+        row.setAlignment(Pos.CENTER);
+
+        Text labelText = new Text(label);
+        HBox hbox = new HBox(10);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.getChildren().addAll(labelText, dropdown);
         row.getChildren().add(hbox);
 
         return row;
