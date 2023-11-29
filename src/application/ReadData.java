@@ -1,5 +1,5 @@
 package application;
-
+//All functionality: Andrew Thomas
 import java.io.*;
 
 public class ReadData {

@@ -1,12 +1,7 @@
 package application;
-	
+//LinkedListManager: Andrew Thomas
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import javafx.geometry.Insets;
 
 public class Main extends Application {
 	

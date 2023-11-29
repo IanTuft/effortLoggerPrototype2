@@ -1,5 +1,5 @@
 package application;
-
+//All functionality: Andrew Thomas
 public class UserNode {
 	
 	private String employeeName; //Name of user.

@@ -1,5 +1,6 @@
 //GUI: Ian Tuft
 //Functions: Gino Damerchi
+//Data management: Andrew Thomas
 
 package application;
 
@@ -36,7 +37,7 @@ public class EffortLogger extends Application {
 	private Instant start;
 	private Instant end;
 	
-	private ProcessInput processInput = new ProcessInput();
+	//private ProcessInput processInput = new ProcessInput();
 	
 	//Gets the local time
 	public String getTime() {
@@ -224,9 +225,6 @@ public class EffortLogger extends Application {
                 createLabeledRow("Effort Category:", effortCategoryDropdown),
                 createLabeledRow("", miscDropdown)
         );
-        
-        //VBox effortCategoryBox = createLabeledRow("Effort Category:", effortCategoryDropdown, addEffortCategoryButton);
-        //effortCategoryBox.setAlignment(Pos.CENTER);
 
         //Stop the clock button
         Text section3 = new Text("3. Press the 'Stop this Activity' button to generate an effort log entry using the attributes above.");
@@ -258,7 +256,7 @@ public class EffortLogger extends Application {
 	            }
 	
 	            //Add the new data
-	            Main.llm.addNewData(log[5], logCounter, processInput.processInt(log[4], 9), date, startTime, endTime, 
+	            Main.llm.addNewData(log[5], logCounter, Integer.parseInt(log[4]), date, startTime, endTime, 
 	            		log[6], log[7]);
 	            
             }

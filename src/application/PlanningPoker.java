@@ -1,5 +1,5 @@
 package application;
-
+//Data management: Andrew Thomas
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -10,12 +10,9 @@ import javafx.scene.text.Text;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
-
-import java.util.Arrays;
 
 public class PlanningPoker extends Application {
 	
@@ -278,8 +275,9 @@ public class PlanningPoker extends Application {
         
         submitButton.setOnAction(e -> {
         	
-        	//Call on save function here
-        	//save()
+        	//In a full implementation, there would be code here to display the other users' estimates.
+        	//One of the TA's said we did not need to simulate having multiple simultaneous users.
+        	//Therefore, this section just shows the user that their estimate was submitted successfully.
         	
             Stage successStage = new Stage();
             successStage.setTitle("Success");

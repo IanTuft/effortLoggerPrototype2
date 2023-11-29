@@ -1,5 +1,5 @@
 package application;
-//change
+//All functionality: Andrew Thomas
 public class DataNode {
 
 	private String projectName; //Name of project associated with.
