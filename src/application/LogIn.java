@@ -1,6 +1,7 @@
 package application;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -24,19 +25,23 @@ public class LogIn extends Application {
         launch(args);
     }
     
-    
+    /**
+     * Overrides the start method in Application, setting up the initial stage for the log in.
+     *
+     * @param primaryStage The primary stage for the Log in.
+     */
 
     @Override
     public void start(Stage primaryStage) {
     	loginPage(primaryStage, lm);
     }
     
-    public void loginPage (Stage primaryStage, LinkedListManager lm) {
-
+ // Method to set up the login page
+    public void loginPage(Stage primaryStage, LinkedListManager lm) {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Login Page");
-        
-        //Button to close the program
+
+        // Button to close the program
         Button exitButton = new Button("EXIT");
 
         VBox loginBox = new VBox(10);
@@ -59,6 +64,7 @@ public class LogIn extends Application {
         	
         });
 
+        // Add elements to the login box
         loginBox.getChildren().addAll(
                 exitButton,
         		new Label("Employee ID:"), employeeIdField,
@@ -71,26 +77,34 @@ public class LogIn extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        loginButton.setOnAction(e -> {
-            String employeeId = employeeIdField.getText();
-            String password = passwordField.getText();
-            if (employeeId.isEmpty() || password.isEmpty()) {
-                errorText.setText("Please enter your information.");
-            } else {
-                if (isLoginValid(employeeId, password)) {
-                    if (loginSuccessCallback != null) {
-                        loginSuccessCallback.run();
-                    }
-                    primaryStage.close();
-                } else {
-                    errorText.setText("Invalid credentials. Please try again.");
-                }
-            }
-        });
+        // Action for the login button
+        loginButton.setOnAction(e -> handleLogin(employeeIdField, passwordField, errorText));
 
+        // Action for the sign-up button. Calls openSignUpPage function
         signUpButton.setOnAction(e -> openSignUpPage());
     }
 
+    private void handleLogin(TextField employeeIdField, PasswordField passwordField, Text errorText) {
+        String employeeId = employeeIdField.getText();
+        String password = passwordField.getText();
+        if (employeeId.isEmpty() || password.isEmpty()) {
+            errorText.setText("Please enter your information.");
+        } else {
+            if (isLoginValid(employeeId, password)) {
+                System.out.println("Login successful!"); // Debug print
+                if (loginSuccessCallback != null) {
+                    loginSuccessCallback.run();
+                }
+                primaryStage.close();
+            } else {
+                System.out.println("Login failed."); // Debug print
+                errorText.setText("Invalid credentials. Please try again.");
+               
+            }
+        }
+    }
+    
+    // Method to open the sign-up page
     private void openSignUpPage() {
     	
     	Text duplicateEmployee = new Text();
@@ -104,6 +118,7 @@ public class LogIn extends Application {
         signUpBox.setStyle("-fx-background-color: #f0f0f0;");
         signUpBox.setSpacing(10);
 
+    	// Fields for sign-up information
         TextField firstNameField = new TextField();
         TextField lastNameField = new TextField();
         TextField employeeIdField = new TextField();
@@ -140,7 +155,7 @@ public class LogIn extends Application {
         });
 
         employeeIdField.setTextFormatter(intFormatter);
-
+        // Add elements to the sign-up box
         signUpBox.getChildren().addAll(
                 new Label("First Name:"), firstNameField,
                 new Label("Last Name:"), lastNameField,
@@ -155,6 +170,7 @@ public class LogIn extends Application {
         signUpStage.show();
     }
 
+    // Method to set the login success callback
     public void setLoginSuccessCallback(Runnable callback) {
         this.loginSuccessCallback = callback;
     }

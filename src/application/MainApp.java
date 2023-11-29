@@ -22,7 +22,13 @@ public class MainApp extends Application {
     public static void launchApp() {
         launch();
     }
-
+    
+    
+    /**
+     * Overrides the start method in Application, setting up the initial stage for the Main App.
+     *
+     * @param primaryStage The primary stage for the Main App.
+     */
     @Override
     public void start(Stage primaryStage) {
     	this.primaryStage = primaryStage;
@@ -64,15 +70,17 @@ public class MainApp extends Application {
         primaryStage.show();
     }
   
+    // Function to set the callback for opening the Effort Logger
     public void setEffortLoggerCallback(Runnable callback) {
         this.effortLoggerSuccessCallback = callback;
     }
-
+    
+    // Function to set the callback for opening the Planning Poker
     public void setPlanningPokerCallback(Runnable callback) {
         this.planningPokerSuccessCallback = callback;
     }
     
-
+    // Create the boxes for planning poker and effort logger
     private VBox createClickableBox(String text, Color bgColor, Color borderColor, Color textColor) {
         VBox box = new VBox();
         box.setAlignment(Pos.CENTER);
@@ -89,7 +97,7 @@ public class MainApp extends Application {
         return box;
     }
     
-
+    // Convert JavaFX Color to RGB code
     private String toRGBCode(Color color) {
         return String.format("#%02X%02X%02X",
                 (int) (color.getRed() * 255),
