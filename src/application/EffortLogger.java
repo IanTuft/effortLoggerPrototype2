@@ -221,8 +221,8 @@ public class EffortLogger extends Application {
         HBox effortAndMiscBox = new HBox(20);
         effortAndMiscBox.setAlignment(Pos.CENTER);
         effortAndMiscBox.getChildren().addAll(
-                createLabeledRow("Effort Category:", effortCategoryDropdown, addEffortCategoryButton),
-                createLabeledRow("", miscDropdown, addMiscButton)
+                createLabeledRow("Effort Category:", effortCategoryDropdown),
+                createLabeledRow("", miscDropdown)
         );
         
         //VBox effortCategoryBox = createLabeledRow("Effort Category:", effortCategoryDropdown, addEffortCategoryButton);
