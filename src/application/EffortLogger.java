@@ -1,3 +1,6 @@
+//GUI: Ian Tuft
+//Functions: Gino Damerchi
+
 package application;
 
 import javafx.application.Application;
@@ -86,6 +89,7 @@ public class EffortLogger extends Application {
 
         Text section1 = new Text("1. When you start an activity press the start activity button.");
 
+        //Start the clock
         Button startButton = new Button("Start Activity");
         startButton.setOnAction(e -> {
         	stopButton.setDisable(false);
@@ -112,6 +116,8 @@ public class EffortLogger extends Application {
         }
         //Populate the ComboBox
         projectDropdown.getItems().addAll(currentProjects);
+
+        //Life Cycle Dropdown with lists from Definitions page on Effort Logger User Guide
 
         ComboBox<String> lifecycleDropdown = new ComboBox<>();
         lifecycleDropdown.getItems().addAll(
@@ -144,47 +150,57 @@ public class EffortLogger extends Application {
         		);
         lifecycleDropdown.setPromptText("Life Cycle Step");
 
+        //Effory Category Dropdown with lists from Definitions page on Effort Logger User Guide
         ComboBox<String> effortCategoryDropdown = new ComboBox<>();
         effortCategoryDropdown.getItems().addAll(
-        		"Project Plan",
-    			"Risk Management Plan",
-    			"Conceptual Design Plan",
-    			"Detailed Design Plan",
-    			"Implementation Plan",
-    			"Conceptual Design",
-    			"Detailed Design",
-    			"Test Cases",
-    			"Solution",
-    			"Reflection",
-    			"Outline",
-    			"Draft",
-    			"Report",
-    			"User Defined",
-    			"Break",
-    			"Phone",
-    			"Teammate",
-    			"Visitor",
-    			"Not specified",
-    			"10 Documentation",
-    			"20 Syntax",
-    			"30 Build, Package",
-    			"40 Assignment",
-    			"50 Interface",
-    			"60 Checking",
-    			"70 Data",
-    			"80 Function",
-    			"90 System",
-    			"100 Environment",
-        		"Plans",
-        		"Deliverables",
-        		"Interruptions",
-        		"Defects",
-        		"Others"
+
+        		"1. Plans",
+    			"2. Deliverables",
+    			"3. Interruptions",
+    			"4. Defects",
+        		"5. Others"
+     		
         		);
         effortCategoryDropdown.setPromptText("Effort Category");
         
+        //Deliverables/Interruptions/Etc. Dropdown with lists from Definitions page on Effort Logger User Guide
+        ComboBox<String> miscDropdown = new ComboBox<>();
+        miscDropdown.getItems().addAll(
+        		"1. Project Plan",
+    			"1. Risk Management Plan",
+    			"1. Conceptual Design Plan",
+    			"1. Detailed Design Plan",
+    			"1. Implementation Plan",
+    			"2. Conceptual Design",
+    			"2. Detailed Design",
+    			"2. Test Cases",
+    			"2. Solution",
+    			"2. Reflection",
+    			"2. Outline",
+    			"2. Draft",
+    			"2. Report",
+    			"2. User Defined",
+    			"3. Break",
+    			"3. Phone",
+    			"3. Teammate",
+    			"3. Visitor",
+    			"4. Not specified",
+    			"4. 10 Documentation",
+    			"4. 20 Syntax",
+    			"4. 30 Build, Package",
+    			"4. 40 Assignment",
+    			"4. 50 Interface",
+    			"4. 60 Checking",
+    			"4. 70 Data",
+    			"4. 80 Function",
+    			"4. 90 System",
+    			"4. 100 Environment",
+        		"5. Other"
+        		);
+        miscDropdown.setPromptText("Deliverable / Interruption / etc.");
+        
         Button addProjectButton = createAddButton(projectDropdown);
-
+        
         HBox projectAndLifecycleBox = new HBox(20);
         projectAndLifecycleBox.setAlignment(Pos.CENTER);
         projectAndLifecycleBox.getChildren().addAll(
@@ -201,9 +217,21 @@ public class EffortLogger extends Application {
         	logCounter = Main.llm.getLogCount(projectDropdown.getValue());
         	
         });
+      
+        HBox effortAndMiscBox = new HBox(20);
+        effortAndMiscBox.setAlignment(Pos.CENTER);
+        effortAndMiscBox.getChildren().addAll(
+                createLabeledRow("Effort Category:", effortCategoryDropdown, addEffortCategoryButton),
+                createLabeledRow("", miscDropdown, addMiscButton)
+        );
+        
+        //VBox effortCategoryBox = createLabeledRow("Effort Category:", effortCategoryDropdown, addEffortCategoryButton);
+        //effortCategoryBox.setAlignment(Pos.CENTER);
 
+        //Stop the clock button
         Text section3 = new Text("3. Press the 'Stop this Activity' button to generate an effort log entry using the attributes above.");
         stopButton.setOnAction(e -> {
+
             startButton.setDisable(false);
         	isClockRunning = false;
             date = getDate();
@@ -252,18 +280,28 @@ public class EffortLogger extends Application {
         backButton.setOnAction(e -> {
         	
         	primaryStage.close(); //Close effortlogger stage to show MainApp stage
-        	
+
         });
+        
+        VBox bottomRightBox = createBottomRightBox(exitButton);
 
         centerBox.getChildren().addAll(exitButton, backButton, title, clockStatus, section1, startButton, section2,
                 projectAndLifecycleBox,
-                effortCategoryBox,
+                effortAndMiscBox,
                 section3,
                 stopButton);
+        centerBox.getChildren().add(bottomRightBox);
 
         root.setCenter(centerBox);
 
         return new Scene(root, 600, 600); // Larger window size for Effort Logger
+    }
+    
+    private VBox createBottomRightBox(Button exitButton) {
+    	VBox bottomRightBox = new VBox(5);
+        bottomRightBox.setAlignment(Pos.BOTTOM_RIGHT);
+        bottomRightBox.getChildren().add(exitButton);
+        return bottomRightBox;
     }
 
     private VBox createLabeledRow(String label, ComboBox<String> dropdown, Button addButton) {

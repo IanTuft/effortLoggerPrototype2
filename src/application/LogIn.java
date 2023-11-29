@@ -18,12 +18,21 @@ public class LogIn extends Application {
     
     private ProcessInput processInput = new ProcessInput();
 
+    private LinkedListManager lm;
+
     public static void main(String[] args) {
         launch(args);
     }
+    
+    
 
     @Override
     public void start(Stage primaryStage) {
+    	loginPage(primaryStage, lm);
+    }
+    
+    public void loginPage (Stage primaryStage, LinkedListManager lm) {
+
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Login Page");
         

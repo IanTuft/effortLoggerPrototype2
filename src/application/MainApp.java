@@ -63,7 +63,7 @@ public class MainApp extends Application {
         primaryStage.setScene(new Scene(root, 600, 400)); // Larger window size
         primaryStage.show();
     }
-
+  
     public void setEffortLoggerCallback(Runnable callback) {
         this.effortLoggerSuccessCallback = callback;
     }
@@ -72,6 +72,7 @@ public class MainApp extends Application {
         this.planningPokerSuccessCallback = callback;
     }
     
+
     private VBox createClickableBox(String text, Color bgColor, Color borderColor, Color textColor) {
         VBox box = new VBox();
         box.setAlignment(Pos.CENTER);
