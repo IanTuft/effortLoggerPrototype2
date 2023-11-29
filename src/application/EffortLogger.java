@@ -32,6 +32,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Instant;
 
+/**
+ * The EffortLogger class is responsible for tracking and logging user activities.
+ * It provides a graphical interface for users to start and stop logging, select project details,
+ * and log the time spent on various lifecycle steps and effort categories.
+ */
+
 public class EffortLogger extends Application {
 
 	private boolean isClockRunning = false;
@@ -68,6 +74,12 @@ public class EffortLogger extends Application {
         launch(args);
     }
 
+
+    /**
+     * Overrides the start method in Application, setting up the initial stage for the EffortLogger.
+     *
+     * @param primaryStage The primary stage for the EffortLogger.
+     */
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Effort Logger");
@@ -75,8 +87,30 @@ public class EffortLogger extends Application {
         primaryStage.show();
     }
     
+<<<<<<< Updated upstream
     private Scene createEffortLoggerScene() {
         BorderPane root = new BorderPane();
+=======
+    /**
+     * Creates the scene for the EffortLogger, including UI elements and functionality.
+     *
+     * @param primaryStage The primary stage for the EffortLogger.
+     * @return The Scene object representing the EffortLogger interface.
+     */
+    private Scene createEffortLoggerScene(Stage primaryStage) {
+        
+        Button stopButton = new Button("Stop this Activity");
+        stopButton.setDisable(true);
+        
+        //Buttons for closing the program with save functionality and going back a screen
+        Button exitButton = new Button("EXIT");
+        Button backButton = new Button("Back");
+        
+        //For populating the project ComboBox
+        String[] currentProjects = new String[Main.llm.getProjectCount()];        
+    	
+    	BorderPane root = new BorderPane();
+>>>>>>> Stashed changes
         root.setPadding(new Insets(20));
 
         VBox centerBox = new VBox(20);
@@ -199,6 +233,25 @@ public class EffortLogger extends Application {
                 createLabeledRow("Life Cycle Step:", lifecycleDropdown, addLifecycleButton)
         );
 
+<<<<<<< Updated upstream
+=======
+        /**
+         * Creates a VBox for the bottom-right corner with the given button.
+         *
+         * @param exitButton The button to be placed in the bottom-right corner.
+         * @return A VBox containing the exit button.
+         */
+        VBox effortCategoryBox = createLabeledRow("Effort Category:", effortCategoryDropdown);
+        effortCategoryBox.setAlignment(Pos.CENTER);
+        
+        //Load the number of logs that exist for the selected project
+        projectDropdown.setOnAction(e -> {
+        	
+        	logCounter = Main.llm.getLogCount(projectDropdown.getValue());
+        	
+        });
+      
+>>>>>>> Stashed changes
         HBox effortAndMiscBox = new HBox(20);
         effortAndMiscBox.setAlignment(Pos.CENTER);
         effortAndMiscBox.getChildren().addAll(
@@ -256,6 +309,8 @@ public class EffortLogger extends Application {
 
         return new Scene(root, 600, 600); // Larger window size for Effort Logger
     }
+    
+    
     
     private VBox createBottomRightBox(Button exitButton) {
     	VBox bottomRightBox = new VBox(5);
