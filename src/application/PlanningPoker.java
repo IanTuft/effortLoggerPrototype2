@@ -298,7 +298,6 @@ public class PlanningPoker extends Application {
             currentStage.close();
         });
         
-        centerBox.getChildren().addAll(title, section1, createLabeledRow("Project:", projectDropdown),
         // Add elements to the center box
         centerBox.getChildren().addAll(exitButton, backButton, title, section1, createLabeledRow("Project:", projectDropdown),
                 createLabeledRow("Life Cycle Step:", lifecycleDropdown),
