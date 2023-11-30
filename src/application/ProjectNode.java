@@ -1,5 +1,5 @@
 package application;
-
+//All functionality: Andrew Thomas
 public class ProjectNode {
 	
 	private ProjectNode next; //The next project in the linked list.

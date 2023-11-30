@@ -1,5 +1,5 @@
 package application;
-
+//All functionality: Andrew Thomas
 public class SearchData {
 	
 	private DataNode dataNodeHead;

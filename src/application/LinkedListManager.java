@@ -1,12 +1,11 @@
 package application;
-
+//All functionality: Andrew Thomas
 public class LinkedListManager {
 	
 	private UserNode currentUser; //for who is logged in presently
 	private UserNode userNodeHead; //for managing the linked list of employees
 	private ProjectNode projectNodeHead; //for managing the linked list of projects
 	private int locked; //for if someone is currently logged in
-	private ProcessInput processInput = new ProcessInput(); //to process input for bad input
 	private SearchData searchData = new SearchData(); //To search data
 	private StoreData save; //To save data. DO NOT INITIALIZE UNTIL READY TO SAVE DATA. OVERWRITES FILES.
 	private int projectCount; //Number of projects.
@@ -49,9 +48,9 @@ public class LinkedListManager {
 	 */
 	public void addNewEmployee(String employeeNameIn, int employeeIDIn, String passwordIn) {
 		
-		String employeeName = processInput.processString(employeeNameIn, 30);
+		String employeeName = employeeNameIn;
 		int employeeID = employeeIDIn;	
-		String password = processInput.processString(passwordIn, 30);
+		String password = passwordIn;
 		
 		if(userNodeHead == null) { //If no employees were in the list previously
 			
@@ -84,11 +83,11 @@ public class LinkedListManager {
 	 */
 	public void addNewEmployeeLogin(String firstName, String lastName, int employeeIDIn, String passwordIn) {
 		
-		String employeeName = processInput.processString(firstName, 30) + " " + processInput.processString(lastName, 30);
+		String employeeName = firstName + " " + lastName;
 			//Combines the first and last name into a single String
 		
 		int employeeID = employeeIDIn;	
-		String password = processInput.processString(passwordIn, 30);
+		String password = passwordIn;
 		
 		if(userNodeHead == null) { //If no employees were in the list previously
 			
@@ -167,7 +166,7 @@ public class LinkedListManager {
 	 */
 	public void addNewProject(String projectNameIn) {
 		
-		String projectName = processInput.processString(projectNameIn, 30);		
+		String projectName = projectNameIn;		
 		
 		if(projectNodeHead == null) { //If there are no other projects in the list yet
 			

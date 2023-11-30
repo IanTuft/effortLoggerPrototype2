@@ -1,5 +1,5 @@
 package application;
-
+//Data management: Andrew Thomas
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -9,15 +9,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class LogIn extends Application {
     private Stage primaryStage;
 
     private Runnable loginSuccessCallback;
-    
-    private ProcessInput processInput = new ProcessInput();
 
     private LinkedListManager lm;
 
@@ -77,8 +72,23 @@ public class LogIn extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        // Action for the login button
-        loginButton.setOnAction(e -> handleLogin(employeeIdField, passwordField, errorText));
+        loginButton.setOnAction(e -> {
+            String employeeId = employeeIdField.getText();
+            String password = passwordField.getText();
+            if (employeeId.isEmpty() || password.isEmpty()) {
+                errorText.setText("Please enter your information.");
+            } else {
+                if (isLoginValid(employeeId, password)) {
+                    if (loginSuccessCallback != null) {
+                        loginSuccessCallback.run();
+                    }
+                    primaryStage.close();
+                } else {
+                    errorText.setText("Invalid credentials. Please try again.");
+                    Main.llm.unlockUser();
+                }
+            }
+        });
 
         // Action for the sign-up button. Calls openSignUpPage function
         signUpButton.setOnAction(e -> openSignUpPage());
@@ -107,8 +117,10 @@ public class LogIn extends Application {
     // Method to open the sign-up page
     private void openSignUpPage() {
     	
-    	Text duplicateEmployee = new Text();
-    	duplicateEmployee.setFill(Color.RED);
+        Button signUpConfirmButton = new Button("Sign Up");
+    	
+    	Text signUpErrorText = new Text();
+    	signUpErrorText.setFill(Color.RED);
     	
         Stage signUpStage = new Stage();
         signUpStage.setTitle("Sign Up");
@@ -124,26 +136,45 @@ public class LogIn extends Application {
         TextField employeeIdField = new TextField();
         PasswordField passwordField = new PasswordField();
         PasswordField verifyPasswordField = new PasswordField();
-
-        Button signUpConfirmButton = new Button("Sign Up");
+        
         signUpConfirmButton.setOnAction(e -> {
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
+            String employeeId = employeeIdField.getText();
+            String password = passwordField.getText();
+            String verifyPassword = verifyPasswordField.getText();
 
-        	//Check that the employee ID is unique to avoid duplicate employees
-        	if(!Main.llm.checkDuplicateEmployee(processInput.processInt(employeeIdField.getText(), 9))) {
-        		
-        		//Add the new employee
-            	Main.llm.addNewEmployeeLogin(firstNameField.getText(), lastNameField.getText(), 
-            			processInput.processInt(employeeIdField.getText(), 9), passwordField.getText());
-            	
-            	signUpStage.close(); //Close the sign up screen
-        		
-        	}
-        	else { //Error if employee already exists
-        		
-        		duplicateEmployee.setText("Employee already exists.");
-        		
-        	}
-
+            if (firstName.isEmpty() || lastName.isEmpty() || employeeId.isEmpty() || password.isEmpty() || verifyPassword.isEmpty()) {
+                signUpErrorText.setText("Please fill in all fields.");
+            } else if (!password.equals(verifyPassword)) {
+                signUpErrorText.setText("Passwords do not match.");
+            } else {
+                try {
+                    int empId = Integer.parseInt(employeeId);
+                    
+                  //Check that the employee ID is unique to avoid duplicate employees
+                	if(!Main.llm.checkDuplicateEmployee(empId)) {
+                		
+                		//Add the new employee
+                		
+        	            	Main.llm.addNewEmployeeLogin(firstName, lastName, 
+        	            			empId, password);
+        	            	
+                            signUpErrorText.setFill(Color.GREEN);
+                            signUpErrorText.setText("Account created successfully!");
+                            signUpStage.close(); // Close the Sign Up window on successful account creation
+                		
+                	}
+                	else { //Error if employee already exists
+                		
+                		signUpErrorText.setText("Employee with that ID already exists.");
+                		
+                	}
+                	
+                } catch (NumberFormatException ex) {
+                    signUpErrorText.setText("Employee ID must be a number.");
+                }
+            }
         });
 
         // Text formatter to allow only integer input for Employee ID
@@ -163,7 +194,7 @@ public class LogIn extends Application {
                 new Label("Password:"), passwordField,
                 new Label("Verify Password:"), verifyPasswordField,
                 signUpConfirmButton,
-                duplicateEmployee);
+                signUpErrorText);
 
         Scene signUpScene = new Scene(signUpBox);
         signUpStage.setScene(signUpScene);
@@ -186,7 +217,7 @@ public class LogIn extends Application {
     	boolean credentials = false;
     	
     	//Check credentials and log the user in
-    	credentials = Main.llm.lockUser(processInput.processInt(employeeId, 9), password);
+    	credentials = Main.llm.lockUser(Integer.parseInt(employeeId), password);
     	
     	return credentials;
     	
