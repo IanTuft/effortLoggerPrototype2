@@ -25,6 +25,11 @@ public class PlanningPoker extends Application {
         launch(args);
     }
 
+    /**
+     * Overrides the start method in Application, setting up the initial stage for the Planning Poker.
+     *
+     * @param primaryStage The primary stage for the Planning Poker.
+     */
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Planning Poker");
@@ -293,8 +298,8 @@ public class PlanningPoker extends Application {
             currentStage.close();
         });
         
-        
-
+        centerBox.getChildren().addAll(title, section1, createLabeledRow("Project:", projectDropdown),
+        // Add elements to the center box
         centerBox.getChildren().addAll(exitButton, backButton, title, section1, createLabeledRow("Project:", projectDropdown),
                 createLabeledRow("Life Cycle Step:", lifecycleDropdown),
                 createLabeledRow("Effort Category:", effortCategoryDropdown),
@@ -305,6 +310,13 @@ public class PlanningPoker extends Application {
         return new Scene(root, 600, 900);
     }
 
+    /**
+     * Creates a labeled row with a text label and a ComboBox.
+     *
+     * @param label    The label text for the row.
+     * @param dropdown The ComboBox to be included in the row.
+     * @return A VBox containing the labeled row with specified spacing and alignment.
+     */
     private VBox createLabeledRow(String label, ComboBox<String> dropdown) {
         VBox row = new VBox(5);
         row.setAlignment(Pos.CENTER);
@@ -315,7 +327,7 @@ public class PlanningPoker extends Application {
         return row;
     }
     
-    
+    // Function to set the callback for opening the Planning Poker
     public void setPlanningPokerCallback(Runnable callback) {
         this.planningPokerCallback = callback;
     }
