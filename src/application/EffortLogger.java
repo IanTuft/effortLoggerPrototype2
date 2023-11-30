@@ -93,7 +93,8 @@ public class EffortLogger extends Application {
         
         //For populating the project ComboBox
         String[] currentProjects = new String[Main.llm.getProjectCount()];
-  
+        
+        BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
 
         VBox centerBox = new VBox(20);
