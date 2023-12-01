@@ -37,11 +37,11 @@ public class EffortLogger extends Application {
 	private int logCounter = 0; //Log counter
 	private DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //Format dates
 	private DateTimeFormatter timeformat = DateTimeFormatter.ofPattern("HH:mm:ss"); //Format time
-	private String startTime;
-	private String endTime;
-	private String date;
-	private Instant start;
-	private Instant end;
+	private String startTime; //Gets the time when "Start Activity" is clicked
+	private String endTime; //Gets the time when "Stop Activity" is clicked
+	private String date;  //Gets the date when "Stop Activity" is clicked
+	private Instant start; //Gets the time when "Start Activity" is clicked to calculate duration
+	private Instant end; //Gets the time when "Stop Activity" is clicked to calculate duration
 	
 	//private ProcessInput processInput = new ProcessInput();
 	
@@ -57,6 +57,7 @@ public class EffortLogger extends Application {
 		return dateformat.format(date);  
 	}
 	
+	//Allows for multiple windows to be created 
     private Runnable effortLoggerCallback;
 
     public static void main(String[] args) {
@@ -261,14 +262,14 @@ public class EffortLogger extends Application {
             end = Instant.now();
             logCounter++;
             String[] log = new String[8];
-            log[0] = "" + logCounter;
-            log[1] = date;
-            log[2] = startTime;
-            log[3] = endTime;
-            log[4] = "" + Duration.between(start, end).toMinutes();
-            log[5] = projectDropdown.getValue();
-            log[6] = lifecycleDropdown.getValue();
-            log[7] = effortCategoryDropdown.getValue();
+            log[0] = "" + logCounter; //where the log number is stored
+            log[1] = date;			  //where the date is stored
+            log[2] = startTime;       //where the start time is stored
+            log[3] = endTime;         //where the end time is stored
+            log[4] = "" + Duration.between(start, end).toMinutes(); //where the duration is stored (in minutes)
+            log[5] = projectDropdown.getValue();  //where the project name is stored
+            log[6] = lifecycleDropdown.getValue(); //where the lifecycle steps are stored
+            log[7] = effortCategoryDropdown.getValue();  //where the effort category is stored
 
             //Create new data and store it
             if(log[5] != null) { //Ensure a project name was selected
