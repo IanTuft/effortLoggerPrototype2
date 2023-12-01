@@ -270,7 +270,7 @@ public class PlanningPoker extends Application {
         	
         });
 
-        Text section3 = new Text("3. Pick a number 1-10:");
+        Text section3 = new Text("2. Pick a number 1-10:");
         ChoiceBox<Integer> numberChoiceBox = new ChoiceBox<>();
         for (int i = 1; i <= 10; i++) {
             numberChoiceBox.getItems().add(i);
